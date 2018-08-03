@@ -6,6 +6,10 @@
     <div v-for="(well, index) in wellNameList" :key="index">
       <div>{{well}}</div>
     </div>
+    <div>
+      well name object
+      {{wellData}}
+    </div>
   </div>
 </template>
 
@@ -47,7 +51,25 @@ export default {
     wellNameList() {
       return this.data.filter((v, i, a) =>
         a.findIndex(value => value.wellNameNo === v.wellNameNo) === i)
-        .map(x => ({ name: x.wellNameNo, value: x.medianWOB }));
+        .map(x => (x.wellNameNo));
+    },
+    wellData() {
+      return this.wellNameList.map((wellName) => {
+        const wellObj = {
+          wellNameNo: wellName,
+          cumulativeDepth: [],
+          cumulativeTime: [],
+          cumulativeCost: [],
+        };
+        this.data.forEach((well) => {
+          if (well.wellNameNo === wellName) {
+            wellObj.cumulativeDepth.push(well.cumulativeDepth);
+            wellObj.cumulativeTime.push(well.cumulativeTime);
+            wellObj.cumulativeCost.push(well.cumulativeCost);
+          }
+        });
+        return wellObj;
+      });
     },
   },
 };
