@@ -48,17 +48,14 @@ export default {
 };
 </script>
 
-<style scoped>
-  svg {
-    margin: 25px;
-  }
-  path {
-    fill: none;
-    stroke: #76BF8A;
-    stroke-width: 3px;
-  }
-  #line-chart {
-    border: 1px solid red;
-    margin: auto;
-  }
+<style lang="sass" scoped>
+  svg
+    margin: 25px
+  path
+    fill: none
+    stroke: #76BF8A
+    stroke-width: 3px
+  #line-chart
+    border: 1px solid red
+    margin: auto
 </style>

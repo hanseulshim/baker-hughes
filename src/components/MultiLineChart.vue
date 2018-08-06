@@ -10,9 +10,8 @@ export default {
 };
 </script>
 
-<style scoped>
-  #multi-line-chart {
-    border: 1px solid blue;
-    margin: auto;
-  }
+<style lang="sass" scoped>
+  #multi-line-chart
+    border: 1px solid blue
+    margin: auto
 </style>
