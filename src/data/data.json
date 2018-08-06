@@ -7,12 +7,6 @@
   },
   {
     "wellNameNo": "SHELLY 2H-3106X",
-    "cumulativeDepth": 0,
-    "cumulativeTime": 0,
-    "cumulativeCost": 0
-  },
-  {
-    "wellNameNo": "SHELLY 2H-3106X",
     "cumulativeDepth": 17.8,
     "cumulativeTime": 0.08333333333,
     "cumulativeCost": 5515.34

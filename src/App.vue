@@ -1,28 +1,21 @@
 <template>
   <div id="app">
-    <div class="logo-container"><img src="./assets/logo.png"></div>
-    <line-chart />
-    <multi-line-chart />
+    <cost-depth-chart :depth-cost-data="depthCostData" :data="data" />
     <div v-for="(well, index) in wellNameList" :key="index">
       <div>{{well}}</div>
-    </div>
-    <div>
-      {{depthCostData}}
     </div>
   </div>
 </template>
 
 <script>
-import LineChart from './components/LineChart';
-import MultiLineChart from './components/MultiLineChart';
+import CostDepthChart from './components/CostDepthChart';
 
 import data from './data/data.json';
 
 export default {
   name: 'app',
   components: {
-    LineChart,
-    MultiLineChart,
+    CostDepthChart,
   },
   data() {
     return {
@@ -36,10 +29,18 @@ export default {
         .map(x => (x.wellNameNo));
     },
     depthCostData() {
-      return this.data.map(well => ({
-        cumulativeDepth: well.cumulativeDepth,
-        [well.wellNameNo]: well.cumulativeCost,
-      }));
+      return this.wellNameList.map((wellNameNo) => {
+        const dataArray =
+          this.data.filter(well => well.wellNameNo === wellNameNo)
+            .map(well => ({
+              cumulativeDepth: well.cumulativeDepth,
+              cumulativeCost: well.cumulativeCost,
+            }));
+        return {
+          wellNameNo,
+          data: dataArray,
+        };
+      });
     },
   },
 };
