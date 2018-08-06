@@ -1,5 +1,5 @@
 <template>
-  <div id="#app">
+  <div id="line-chart">
     <svg width="500" height="270">
     <g style="transform: translate(0, 10px)">
       <path :d="line" />
@@ -52,9 +52,13 @@ export default {
   svg {
     margin: 25px;
   }
-path {
-  fill: none;
-  stroke: #76BF8A;
-  stroke-width: 3px;
-}
+  path {
+    fill: none;
+    stroke: #76BF8A;
+    stroke-width: 3px;
+  }
+  #line-chart {
+    border: 1px solid red;
+    margin: auto;
+  }
 </style>
