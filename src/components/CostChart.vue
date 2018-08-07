@@ -76,7 +76,7 @@ export default {
         .range([this.height, 0])
         .nice();
     },
-    colorScale() {
+    color() {
       return d3.scaleOrdinal(d3.schemeCategory10);
     },
   },
@@ -90,7 +90,7 @@ export default {
         this.svg.append('path')
           .datum(well.data)
           .attr('fill', 'none')
-          .attr('stroke', this.colorScale(i))
+          .attr('stroke', this.color(i))
           .attr('stroke-linejoin', 'round')
           .attr('stroke-linecap', 'round')
           .attr('stroke-width', 2)
@@ -149,7 +149,7 @@ export default {
       legend.append('rect')
         .attr('width', () => 15)
         .attr('height', () => 5)
-        .attr('fill', (d, i) => this.colorScale(i))
+        .attr('fill', (d, i) => this.color(i))
         .attr('y', (d, i) => i * 20);
       legend.append('text')
         .attr('y', (d, i) => (i * 20) + 7)
@@ -165,7 +165,7 @@ export default {
 <style lang='sass' scoped>
   .cost-chart-container
     border: 1px solid blue
-    margin: auto
+    margin: 10px auto
     width: 800px
     padding: 10px
   .chart-container

@@ -16,9 +16,6 @@
       xData='cumulativeDepth'
       chartAccessor='cumulative-depth'
     />
-    <div v-for='(well, index) in wellNameList' :key='index'>
-      <div>{{well}}</div>
-    </div>
   </div>
 </template>
 
@@ -78,12 +75,10 @@ export default {
 <style lang='sass' scoped>
 #app
   font-family: 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
   color: #2c3e50
   margin-top: 60px
   display: flex
-  flex-direction: column
+  flex-wrap: wrap
 
 .logo-container
   margin: auto
