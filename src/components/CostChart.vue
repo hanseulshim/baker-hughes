@@ -86,16 +86,33 @@ export default {
         .x(d => this.xScale(d[this.xData]))
         .y(d => this.yScale(d.cumulativeCost));
 
-      this.sortedData.forEach((well, i) => {
-        this.svg.append('path')
-          .datum(well.data)
-          .attr('fill', 'none')
-          .attr('stroke', this.color(i))
-          .attr('stroke-linejoin', 'round')
-          .attr('stroke-linecap', 'round')
-          .attr('stroke-width', 2)
-          .attr('d', line);
-      });
+      this.svg.append('g')
+        .selectAll('g')
+        .data(this.sortedData)
+        .enter()
+        .append('g')
+        .attr('class', 'test')
+        .on('mouseover', (d, i) => {
+          this.svg.append('text')
+            .attr('class', 'title-text')
+            .style('fill', this.color(i))
+            .text(d.wellNameNo)
+            .attr('text-anchor', 'middle')
+            .attr('x', this.width / 2)
+            .attr('y', this.margin.top * 3);
+        })
+        .on('mouseout', () => {
+          this.svg.select('.title-text').remove();
+        })
+        .append('path')
+        .datum(d => d.data)
+        .attr('fill', 'none')
+        .attr('stroke', (d, i) => this.color(i))
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
+        .attr('stroke-width', 3)
+        .attr('d', line);
+
       this.createAxis();
       this.createLabels();
       this.createLegend();
@@ -162,12 +179,13 @@ export default {
 };
 </script>
 
-<style lang='sass' scoped>
+<style lang='sass'>
   .cost-chart-container
-    border: 1px solid blue
     margin: 10px auto
-    width: 800px
+    width: 900px
     padding: 10px
   .chart-container
     width: 100%
+  .title-text
+    font-size: 50px
 </style>
