@@ -76,6 +76,9 @@ export default {
         .range([this.height, 0])
         .nice();
     },
+    colorScale() {
+      return d3.scaleOrdinal(d3.schemeCategory10);
+    },
   },
   methods: {
     createGraph() {
@@ -87,7 +90,7 @@ export default {
         this.svg.append('path')
           .datum(well.data)
           .attr('fill', 'none')
-          .attr('stroke', d3.schemeCategory10[i])
+          .attr('stroke', this.colorScale(i))
           .attr('stroke-linejoin', 'round')
           .attr('stroke-linecap', 'round')
           .attr('stroke-width', 2)
@@ -95,6 +98,7 @@ export default {
       });
       this.createAxis();
       this.createLabels();
+      this.createLegend();
     },
     createAxis() {
       const xAxis = d3.axisBottom()
@@ -134,7 +138,24 @@ export default {
         .text('Cost ($)');
     },
     createLegend() {
+      const legend = this.svg.append('g')
+        .attr('class', 'legend')
+        .attr('transform', `translate (${this.margin.left}, ${this.margin.top})`)
+        .selectAll('g')
+        .data(this.sortedData)
+        .enter()
+        .append('g');
 
+      legend.append('rect')
+        .attr('width', () => 15)
+        .attr('height', () => 5)
+        .attr('fill', (d, i) => this.colorScale(i))
+        .attr('y', (d, i) => i * 20);
+      legend.append('text')
+        .attr('y', (d, i) => (i * 20) + 7)
+        .attr('x', () => 20)
+        .style('font-size', '12px')
+        .text(d => d.wellNameNo);
     },
   },
 
