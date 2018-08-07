@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <cost-depth-chart :depth-cost-data="depthCostData" :data="data" />
+    <cost-time-chart :time-cost-data="timeCostData" :data="data" />
     <div v-for="(well, index) in wellNameList" :key="index">
       <div>{{well}}</div>
     </div>
@@ -9,6 +10,7 @@
 
 <script>
 import CostDepthChart from './components/CostDepthChart';
+import CostTimeChart from './components/CostTimeChart';
 
 import data from './data/data.json';
 
@@ -16,6 +18,7 @@ export default {
   name: 'app',
   components: {
     CostDepthChart,
+    CostTimeChart,
   },
   data() {
     return {
@@ -34,6 +37,20 @@ export default {
           this.data.filter(well => well.wellNameNo === wellNameNo)
             .map(well => ({
               cumulativeDepth: well.cumulativeDepth,
+              cumulativeCost: well.cumulativeCost,
+            }));
+        return {
+          wellNameNo,
+          data: dataArray,
+        };
+      });
+    },
+    timeCostData() {
+      return this.wellNameList.map((wellNameNo) => {
+        const dataArray =
+          this.data.filter(well => well.wellNameNo === wellNameNo)
+            .map(well => ({
+              cumulativeTime: well.cumulativeTime,
               cumulativeCost: well.cumulativeCost,
             }));
         return {
