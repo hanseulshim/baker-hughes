@@ -4,10 +4,7 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'HeaderContainer',
 };
 </script>
 
-<style>
-
-</style>

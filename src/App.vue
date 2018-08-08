@@ -1,36 +1,30 @@
 <template>
   <div id='app'>
-    <Header />
-    <cost-chart
-      title='Cost over Time'
-      xLabel='Time (hrs)'
-      xData='cumulativeTime'
-      chartAccessor='cumulative-time'
-    />
-    <cost-chart
-      title='Cost over Depth'
-      xLabel='Depth (ft)'
-      xData='cumulativeDepth'
-      chartAccessor='cumulative-depth'
-    />
+    <Sidebar />
+    <MainContainer />
   </div>
 </template>
 
 <script>
-import CostChart from './components/CostChart';
-import Header from './components/Header';
+import Sidebar from './components/Sidebar/Sidebar';
+import MainContainer from './components/MainContainer';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    CostChart,
-    Header,
+    Sidebar,
+    MainContainer,
   },
 };
 </script>
 
-<style lang='sass' scoped>
+<style lang='sass'>
+body
+  margin: 0
+  font-size: 12px
 #app
-  width: 1280px
   font-family: sans-serif
+  display: flex
+  max-width: 1440px
+  margin: auto
 </style>
