@@ -11,14 +11,6 @@ import * as d3 from 'd3';
 export default {
   name: 'cost-chart',
   props: {
-    sortedData: {
-      type: Array,
-      required: true,
-    },
-    rawData: {
-      type: Array,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
@@ -66,13 +58,13 @@ export default {
     },
     xScale() {
       return d3.scaleLinear()
-        .domain(d3.extent(this.rawData, d => d[this.xData]))
+        .domain(d3.extent(this.$store.state.data, d => d[this.xData]))
         .range([0, this.width])
         .nice();
     },
     yScale() {
       return d3.scaleLinear()
-        .domain(d3.extent(this.rawData, d => d.cumulativeCost))
+        .domain(d3.extent(this.$store.state.data, d => d.cumulativeCost))
         .range([this.height, 0])
         .nice();
     },
@@ -86,7 +78,7 @@ export default {
         .x(d => this.xScale(d[this.xData]))
         .y(d => this.yScale(d.cumulativeCost));
 
-      this.sortedData.forEach((well, i) => {
+      this.$store.getters.sortedData.forEach((well, i) => {
         this.svg.append('path')
           .datum(well.data)
           .attr('fill', 'none')
@@ -142,7 +134,7 @@ export default {
         .attr('class', 'legend')
         .attr('transform', `translate (${this.margin.left}, ${this.margin.top})`)
         .selectAll('g')
-        .data(this.sortedData)
+        .data(this.$store.getters.sortedData)
         .enter()
         .append('g');
 
