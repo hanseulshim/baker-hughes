@@ -1,6 +1,6 @@
 <template>
   <div id='app'>
-    <header />
+    <Header />
     <cost-chart
       title='Cost over Time'
       xLabel='Time (hrs)'
