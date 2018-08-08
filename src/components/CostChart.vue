@@ -7,6 +7,7 @@
 
 <script>
 import * as d3 from 'd3';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'cost-chart',
@@ -58,36 +59,50 @@ export default {
     },
     xScale() {
       return d3.scaleLinear()
-        .domain(d3.extent(this.$store.state.data, d => d[this.xData]))
+        .domain(d3.extent(this.data, d => d[this.xData]))
         .range([0, this.width])
         .nice();
     },
     yScale() {
       return d3.scaleLinear()
-        .domain(d3.extent(this.$store.state.data, d => d.cumulativeCost))
+        .domain(d3.extent(this.data, d => d.cumulativeCost))
         .range([this.height, 0])
         .nice();
     },
     color() {
       return d3.scaleOrdinal(d3.schemeCategory10);
     },
+    line() {
+      return d3.line()
+        .x(d => this.xScale(d[this.xData]))
+        .y(d => this.yScale(d.cumulativeCost));
+    },
+    ...mapGetters([
+      'sortedData',
+    ]),
+    ...mapState([
+      'data',
+    ]),
   },
   methods: {
     createGraph() {
-      const line = d3.line()
-        .x(d => this.xScale(d[this.xData]))
-        .y(d => this.yScale(d.cumulativeCost));
+      this.svg.append('g')
+        .selectAll('g')
+        .data(this.sortedData)
+        .enter()
+        .append('g')
+        .on('mouseover', this.wellNameMouseover)
+        .on('mouseout', this.wellNameMouseout)
+        .append('path')
+        .attr('class', `line-${this.chartAccessor}`)
+        .on('mouseover', this.lineMouseover)
+        .on('mouseout', this.lineMouseout)
+        .datum(d => d.data)
+        .attr('fill', 'none')
+        .attr('stroke', (d, i) => this.color(i))
+        .attr('stroke-width', 1.5)
+        .attr('d', this.line);
 
-      this.$store.getters.sortedData.forEach((well, i) => {
-        this.svg.append('path')
-          .datum(well.data)
-          .attr('fill', 'none')
-          .attr('stroke', this.color(i))
-          .attr('stroke-linejoin', 'round')
-          .attr('stroke-linecap', 'round')
-          .attr('stroke-width', 2)
-          .attr('d', line);
-      });
       this.createAxis();
       this.createLabels();
       this.createLegend();
@@ -134,7 +149,7 @@ export default {
         .attr('class', 'legend')
         .attr('transform', `translate (${this.margin.left}, ${this.margin.top})`)
         .selectAll('g')
-        .data(this.$store.getters.sortedData)
+        .data(this.sortedData)
         .enter()
         .append('g');
 
@@ -149,17 +164,45 @@ export default {
         .style('font-size', '12px')
         .text(d => d.wellNameNo);
     },
+    wellNameMouseover(d, i) {
+      this.svg.append('text')
+        .attr('class', 'well-name')
+        .style('fill', this.color(i))
+        .text(d.wellNameNo)
+        .attr('x', this.width / 2)
+        .attr('y', this.margin.top * 3);
+    },
+    wellNameMouseout() {
+      this.svg.select('.well-name').remove();
+    },
+    lineMouseover() {
+      d3.selectAll(`.line-${this.chartAccessor}`)
+        .style('opacity', 0.1);
+      d3.select(d3.event.target)
+        .style('opacity', 0.85)
+        .style('stroke-width', 2.5)
+        .style('cursor', 'pointer');
+    },
+    lineMouseout() {
+      d3.selectAll(`.line-${this.chartAccessor}`)
+        .style('opacity', 1);
+      d3.select(d3.event.target)
+        .style('stroke-width', 1.5)
+        .style('cursor', 'none');
+    },
   },
 
 };
 </script>
 
-<style lang='sass' scoped>
+<style lang='sass'>
   .cost-chart-container
-    border: 1px solid blue
     margin: 10px auto
-    width: 800px
+    width: 900px
     padding: 10px
   .chart-container
     width: 100%
+  .well-name
+    font-size: 14px
+    text-anchor: middle
 </style>
