@@ -1,7 +1,8 @@
 <template>
   <div id='main-container'>
     <Header />
-    <CostChart
+    <MainContent />
+    <!-- <CostChart
       title='Cost over Time'
       x-label='Time (hrs)'
       x-data='cumulativeTime'
@@ -12,18 +13,20 @@
       x-label='Depth (ft)'
       x-data='cumulativeDepth'
       chart-accessor='cumulative-depth'
-    />
+    /> -->
   </div>
 </template>
 
 <script>
 import Header from './Header';
-import CostChart from './CostChart';
+import MainContent from './MainContent';
+import CostChart from './MainContent/CostChart';
 
 export default {
   name: 'MainContainer',
   components: {
     Header,
+    MainContent,
     CostChart,
   },
 };
