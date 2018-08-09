@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Sidebar from './components/Sidebar/Sidebar';
+import Sidebar from './components/Sidebar';
 import MainContainer from './components/MainContainer';
 
 export default {
@@ -19,6 +19,8 @@ export default {
 </script>
 
 <style lang='sass'>
+html, body, #app
+  height: 100%
 body
   margin: 0
   font-size: 12px
