@@ -5,8 +5,10 @@
       v-for='menu in menuItems'
       :key='menu.name'
     >
-      <i class='material-icons'>{{menu.icon}}</i>
-      <span class='menu-item-name'>{{menu.name}}</span>
+      <router-link :to='menu.route' class='menu-route' exact>
+        <i class='material-icons'>{{menu.icon}}</i>
+        <span class='menu-item-name'>{{menu.name}}</span>
+      </router-link>
     </div>
   </div>
 </template>
@@ -20,22 +22,22 @@ export default {
         {
           name: 'Dashboard',
           icon: 'view_quilt',
-          route: '',
+          route: 'dashboard',
         },
         {
           name: 'My Fields',
           icon: 'view_list',
-          route: '',
+          route: 'myFields',
         },
         {
           name: 'Actions',
           icon: 'offline_bolt',
-          route: '',
+          route: 'actions',
         },
         {
           name: 'Performance',
           icon: 'trending_up',
-          route: '',
+          route: 'performance',
         },
       ],
     };
@@ -44,17 +46,20 @@ export default {
 </script>
 
 <style lang="sass">
-#menu-container
-  color: #C5C5C5
-.menu-item
+.menu-route
   display: flex
   align-items: center
   padding: 10px 0 10px 20px
   font-size: 1.3em
+  text-decoration: none
+  color: #C5C5C5
   &:hover
     cursor: pointer
     background: #000
     color: #FFF
+.router-link-active
+  background: #000
+  color: #FFF
 .menu-item-name
   margin-left: 10px
 </style>
