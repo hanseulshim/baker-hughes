@@ -34,12 +34,12 @@ export default {
   padding: 2%
   margin-bottom: 5%
   background: #FFF
-  box-shadow: 0 2px 4px 0 rgba(139,139,139,0.5)
+  box-shadow: 0 .2em .4em 0 rgba(139,139,139,0.5)
 .header-name
   font-size: 80%
 .header-option
-  margin-left: 1em
+  margin-left: 2%
   color: #919192
   cursor: pointer
-  font-size: 1.5em
+  font-size: 150%
 </style>
