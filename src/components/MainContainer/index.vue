@@ -35,4 +35,5 @@ export default {
 <style lang="sass">
 #main-container
   flex-grow: 1
+  background: #F1F6F9
 </style>

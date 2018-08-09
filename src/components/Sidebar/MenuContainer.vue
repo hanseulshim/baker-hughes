@@ -76,8 +76,8 @@ export default {
 .menu-route
   display: flex
   align-items: center
-  padding: 10px 0 10px 20px
-  font-size: 1.3em
+  padding: 5%
+  font-size: 100%
   text-decoration: none
   color: #C5C5C5
   &:hover
@@ -85,12 +85,12 @@ export default {
     background: #000
     color: #FFF
 .sub-menu
-  padding-left: 40px
+  padding-left: 10%
   background: #212121
   color: #BCBCBC
 .router-link-active
   background: #000
   color: #FFF
 .menu-item-name
-  margin-left: 10px
+  margin-left: 5%
 </style>

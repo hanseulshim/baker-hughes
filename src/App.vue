@@ -23,7 +23,7 @@ html, body, #app
   height: 100%
 body
   margin: 0
-  font-size: 12px
+  font-size: 100%
 #app
   font-family: sans-serif
   display: flex

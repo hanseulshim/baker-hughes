@@ -19,12 +19,11 @@ export default {
 <style lang="sass">
 #sidebar
   background-color: #3E3E3E
-  width: 20%
-  min-width: 250px
+  width: 25%
   box-sizing: border-box
 .sidebar-title
   color: #FFF
-  font-size: 2em
-  margin: 1em 1em 1em 20px
+  font-size: 150%
+  margin: 10%
 </style>
 

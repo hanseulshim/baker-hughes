@@ -7,6 +7,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     data,
+    user: {
+      name: 'Dunder Mifflin',
+      avatar: 'dunderMifflin.png',
+    },
   },
   getters: {
     wellNameList: state =>
