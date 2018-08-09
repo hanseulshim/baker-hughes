@@ -4,6 +4,9 @@ import Router from 'vue-router';
 import MainContent from '../components/MainContainer/MainContent';
 import Dashboard from '../components/MainContainer/MainContent/Dashboard';
 import MyFields from '../components/MainContainer/MainContent/MyFields';
+import Benchmarks from '../components/MainContainer/MainContent/MyFields/Benchmarks';
+import BenchmarkWells from '../components/MainContainer/MainContent/MyFields/BenchmarkWells';
+import WellData from '../components/MainContainer/MainContent/MyFields/WellData';
 import Actions from '../components/MainContainer/MainContent/Actions';
 import Performance from '../components/MainContainer/MainContent/Performance';
 
@@ -23,6 +26,20 @@ export default new Router({
     {
       path: '/myFields',
       component: MyFields,
+      children: [
+        {
+          path: 'benchmarks',
+          component: Benchmarks,
+        },
+        {
+          path: 'benchmarkWells',
+          component: BenchmarkWells,
+        },
+        {
+          path: 'wellData',
+          component: WellData,
+        },
+      ],
     },
     {
       path: '/actions',

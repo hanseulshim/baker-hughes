@@ -1,9 +1,11 @@
 <template>
-  <div>I am my fields!!</div>
+  <div>
+    well data
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'MyFields',
+  name: 'wellData',
 };
 </script>

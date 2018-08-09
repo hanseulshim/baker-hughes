@@ -5,7 +5,12 @@
       v-for='menu in menuItems'
       :key='menu.name'
     >
-      <router-link :to='menu.route' class='menu-route' exact>
+      <router-link
+        :to='menu.route'
+        class='menu-route'
+        :class='{"sub-menu": menu.subMenu}'
+        exact
+      >
         <i class='material-icons'>{{menu.icon}}</i>
         <span class='menu-item-name'>{{menu.name}}</span>
       </router-link>
@@ -22,22 +27,44 @@ export default {
         {
           name: 'Dashboard',
           icon: 'view_quilt',
-          route: 'dashboard',
+          route: '/dashboard',
+          subMenu: false,
         },
         {
           name: 'My Fields',
           icon: 'view_list',
-          route: 'myFields',
+          route: '/myFields',
+          subMenu: false,
+        },
+        {
+          name: 'Benchmarks',
+          icon: 'insert_chart',
+          route: '/myFields/benchmarks',
+          subMenu: true,
+        },
+        {
+          name: 'Benchmark Wells',
+          icon: 'view_compact',
+          route: '/myFields/benchmarkWells',
+          subMenu: true,
+        },
+        {
+          name: 'Well Data',
+          icon: 'mail',
+          route: '/myFields/wellData',
+          subMenu: true,
         },
         {
           name: 'Actions',
           icon: 'offline_bolt',
-          route: 'actions',
+          route: '/actions',
+          subMenu: false,
         },
         {
           name: 'Performance',
           icon: 'trending_up',
-          route: 'performance',
+          route: '/performance',
+          subMenu: false,
         },
       ],
     };
@@ -57,6 +84,10 @@ export default {
     cursor: pointer
     background: #000
     color: #FFF
+.sub-menu
+  padding-left: 40px
+  background: #212121
+  color: #BCBCBC
 .router-link-active
   background: #000
   color: #FFF
