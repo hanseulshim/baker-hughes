@@ -1,18 +1,18 @@
 <template>
-  <div id='menu-container'>
+  <div id="menu-container">
     <div
-      class='menu-item'
-      v-for='menu in menuItems'
-      :key='menu.name'
+      class="menu-item"
+      v-for="menu in menuItems"
+      :key="menu.name"
     >
       <router-link
-        :to='menu.route'
-        class='menu-route'
-        :class='{"sub-menu": menu.subMenu}'
+        :to="menu.route"
+        class="menu-route"
+        :class="{'sub-menu': menu.subMenu}"
         exact
       >
-        <i class='material-icons'>{{menu.icon}}</i>
-        <span class='menu-item-name'>{{menu.name}}</span>
+        <i class="material-icons">{{menu.icon}}</i>
+        <span class="menu-item-name">{{menu.name}}</span>
       </router-link>
     </div>
   </div>

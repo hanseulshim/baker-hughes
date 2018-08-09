@@ -1,18 +1,18 @@
 <template>
-  <div id='main-container'>
+  <div id="main-container">
     <header-container />
     <main-content />
     <!-- <cost-chart
-      title='Cost over Time'
-      x-label='Time (hrs)'
-      x-data='cumulativeTime'
-      chart-accessor='cumulative-time'
+      title="Cost over Time"
+      x-label="Time (hrs)"
+      x-data="cumulativeTime"
+      chart-accessor="cumulative-time"
     />
     <cost-chart
-      title='Cost over Depth'
-      x-label='Depth (ft)'
-      x-data='cumulativeDepth'
-      chart-accessor='cumulative-depth'
+      title="Cost over Depth"
+      x-label="Depth (ft)"
+      x-data="cumulativeDepth"
+      chart-accessor="cumulative-depth"
     /> -->
   </div>
 </template>

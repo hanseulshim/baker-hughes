@@ -1,6 +1,6 @@
 <template>
-  <div class='cost-chart-container'>
-    <div class='chart-container' :class='chartAccessor' :ref='chartAccessor'>
+  <div class="cost-chart-container">
+    <div class="chart-container" :class="chartAccessor" :ref="chartAccessor">
     </div>
   </div>
 </template>

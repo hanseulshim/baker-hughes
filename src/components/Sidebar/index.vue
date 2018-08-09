@@ -1,6 +1,6 @@
 <template>
-  <div id='sidebar'>
-    <div class='sidebar-title'>Phantom</div>
+  <div id="sidebar">
+    <div class="sidebar-title">Phantom</div>
     <menu-container />
   </div>
 </template>

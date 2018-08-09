@@ -1,9 +1,9 @@
 <template>
-  <div id='header-container'>
-    <div class='header-name'>{{name}}</div>
-    <avatar class='header-option' :username='name' :size=25 :src='`/static/${avatar}`'/>
-    <i class='material-icons header-option'>notifications</i>
-    <i class='material-icons header-option'>settings</i>
+  <div id="header-container">
+    <div class="header-name">{{name}}</div>
+    <avatar class="header-option" :username="name" :size=25 :src="`/static/${avatar}`"/>
+    <i class="material-icons header-option">notifications</i>
+    <i class="material-icons header-option">settings</i>
   </div>
 </template>
 
