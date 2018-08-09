@@ -53,6 +53,8 @@ export default {
   font-size: 1.3em
   &:hover
     cursor: pointer
+    background: #000
+    color: #FFF
 .menu-item-name
   margin-left: 10px
 </style>
