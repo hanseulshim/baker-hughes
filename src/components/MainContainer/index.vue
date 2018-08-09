@@ -20,7 +20,7 @@
 <script>
 import Header from './Header';
 import MainContent from './MainContent';
-import CostChart from './MainContent/CostChart';
+import CostChart from '../Charts/CostChart';
 
 export default {
   name: 'MainContainer',

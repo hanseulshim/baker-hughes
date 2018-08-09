@@ -24,6 +24,5 @@ export default {
 .sidebar-title
   color: #FFF
   font-size: 150%
-  margin: 10%
+  margin: 5%
 </style>
-
