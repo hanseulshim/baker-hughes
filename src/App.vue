@@ -25,6 +25,5 @@ body
 #app
   font-family: sans-serif
   display: flex
-  max-width: 1440px
   margin: auto
 </style>

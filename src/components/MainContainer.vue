@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id='main-container'>
     <Header />
     <CostChart
       title='Cost over Time'
@@ -28,3 +28,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+#main-container
+  flex-grow: 1
+</style>
