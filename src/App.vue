@@ -1,7 +1,7 @@
 <template>
   <div id='app'>
-    <Sidebar />
-    <MainContainer />
+    <sidebar />
+    <main-container />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import Sidebar from './components/Sidebar';
 import MainContainer from './components/MainContainer';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     Sidebar,
     MainContainer,

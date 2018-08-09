@@ -1,7 +1,7 @@
 <template>
   <div id='sidebar'>
     <div class='sidebar-title'>Phantom</div>
-    <MenuContainer />
+    <menu-container />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import MenuContainer from './MenuContainer';
 
 export default {
-  name: 'Sidebar',
+  name: 'sidebar',
   components: {
     MenuContainer,
   },

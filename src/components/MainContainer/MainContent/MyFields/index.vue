@@ -7,6 +7,6 @@
 
 <script>
 export default {
-  name: 'MyFields',
+  name: 'my-fields',
 };
 </script>

@@ -10,7 +10,7 @@ import * as d3 from 'd3';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
-  name: 'CostChart',
+  name: 'cost-chart',
   props: {
     title: {
       type: String,

@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: 'Performance',
+  name: 'performance',
 };
 </script>

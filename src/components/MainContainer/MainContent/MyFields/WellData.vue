@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'wellData',
+  name: 'well-data',
 };
 </script>

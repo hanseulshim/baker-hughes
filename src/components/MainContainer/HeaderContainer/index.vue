@@ -11,7 +11,7 @@
 import Avatar from 'vue-avatar';
 
 export default {
-  name: 'HeaderContainer',
+  name: 'header-container',
   components: {
     Avatar,
   },

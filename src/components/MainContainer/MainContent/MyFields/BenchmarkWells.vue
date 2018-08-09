@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'benchmarkWells',
+  name: 'benchmark-wells',
 };
 </script>
