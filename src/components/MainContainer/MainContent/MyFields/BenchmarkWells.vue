@@ -1,6 +1,14 @@
 <template>
   <div>
-    benchmark wells
+    <v-card class="card-container">
+      <v-card-title class="card-container-title">
+        <span>Input Cost</span>
+        <v-btn color="info">Info</v-btn>
+      </v-card-title>
+      <v-card-text>
+        test
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -9,3 +17,4 @@ export default {
   name: 'benchmark-wells',
 };
 </script>
+
