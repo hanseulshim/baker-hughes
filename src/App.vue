@@ -22,6 +22,7 @@ export default {
 
 <style lang="sass">
 @import "./assets/styles/cards.sass"
+@import "./assets/styles/button.sass"
 
 html, body, #app
   height: 100%
