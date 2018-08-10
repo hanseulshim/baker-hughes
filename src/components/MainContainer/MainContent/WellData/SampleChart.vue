@@ -1,11 +1,11 @@
 <template>
   <div>
-    well data
+    test
   </div>
 </template>
 
 <script>
 export default {
-  name: 'well-data',
+  name: 'sample-chart',
 };
 </script>

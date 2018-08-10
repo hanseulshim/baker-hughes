@@ -32,6 +32,7 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
+    selectedWell: (state, getters) => getters.sortedData[0],
   },
 });
 
