@@ -1,12 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import data from '../data/data.json';
+import benchmark from '../data/benchmark.json';
+import singleWell from '../data/singleWell.json';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     data,
+    benchmark,
+    singleWell,
     user: {
       name: 'Dunder Mifflin',
       avatar: 'dunderMifflin.png',
@@ -32,7 +36,6 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
-    selectedWell: (state, getters) => getters.sortedData[0],
   },
 });
 

@@ -1,23 +1,40 @@
 <template>
 <div>
   <info-card />
-  <sample-chart />
+  <chart-container
+    :axes="axes"
+    :layout="layout"
+    :chart-data="singleWell"
+  />
 </div>
 </template>
 
 <script>
 import InfoCard from './InfoCard';
-import SampleChart from './SampleChart';
+import ChartContainer from '../../../ChartContainer';
 
 export default {
   name: 'well-data',
   components: {
     InfoCard,
-    SampleChart,
+    ChartContainer,
+  },
+  data() {
+    return {
+      layout: {
+        width: 800,
+        height: 250,
+        marginTop: 45,
+        marginRight: 35,
+        marginBottom: 50,
+        marginLeft: 50,
+      },
+      axes: ['left', 'bottom'],
+    };
   },
   computed: {
-    selectedWell() {
-      return this.$store.getters.selectedWell;
+    singleWell() {
+      return this.$store.state.singleWell;
     },
   },
 };
