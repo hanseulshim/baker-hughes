@@ -6,20 +6,46 @@
 import * as d3 from 'd3';
 
 export default {
-  name: 'chart-line',
-  props: ['layout', 'series-data', 'scale', 'color', 'xPropName', 'yPropName'],
+  name: 'benchmark-line',
+  props: {
+    layout: {
+      type: Object,
+      required: true,
+    },
+    lineData: {
+      type: Array,
+      required: true,
+    },
+    scale: {
+      type: Object,
+      required: true,
+    },
+    xPropName: {
+      type: String,
+      required: true,
+    },
+    xMax: {
+      type: Number,
+      required: true,
+    },
+    yPropName: {
+      type: String,
+      required: true,
+    },
+  },
   mounted() {
     this.drawLine();
   },
   methods: {
     drawLine() {
       const line = d3.line()
-        .defined(d => d[this.xPropName] < this.max)
+        .defined(d => d[this.xPropName] < this.xMax)
         .x(d => this.scale.x(d[this.xPropName]))
         .y(d => this.scale.y(d[this.yPropName]));
       d3.select(this.$refs.line)
-        .data([this.seriesData.data.filter(d =>
+        .data([this.lineData.filter(d =>
           typeof d[this.yPropName] !== typeof null)])
+        .style('stroke-dasharray', ('7, 3'))
         .attr('d', line);
     },
   },
@@ -27,12 +53,9 @@ export default {
     style() {
       return {
         fill: 'none',
-        stroke: this.color,
+        stroke: '#858585',
         strokeWidth: 2,
       };
-    },
-    max() {
-      return d3.max(this.$store.state.singleWell.data.map(well => well[this.xPropName]));
     },
   },
   watch: {

@@ -1,16 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import data from '../data/data.json';
-import benchmark from '../data/benchmark.json';
-import singleWell from '../data/singleWell.json';
+import benchmarkData from '../data/benchmarkData.json';
+import singleWellData from '../data/singleWellData.json';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     data,
-    benchmark,
-    singleWell,
+    benchmarkData,
+    singleWellData,
     user: {
       name: 'Dunder Mifflin',
       avatar: 'dunderMifflin.png',
@@ -36,11 +36,5 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
-    wellDataTotalTime: state => [state.singleWell, state.benchmark],
-    bitChangeData: state => ({
-      well: state.singleWell.well,
-      data: state.singleWell.data.filter((well, index, array) =>
-        array[index - 1] && well.bitcounter !== array[index - 1].bitcounter),
-    }),
   },
 });

@@ -6,8 +6,21 @@
 import * as d3 from 'd3';
 
 export default {
-  name: 'chart-axis',
-  props: ['axis', 'layout', 'scale'],
+  name: 'line-chart-axis',
+  props: {
+    axis: {
+      type: String,
+      required: true,
+    },
+    layout: {
+      type: Object,
+      required: true,
+    },
+    scale: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       classList: ['axis'].concat(this.getAxisClasses()),
@@ -40,7 +53,7 @@ export default {
         top: d3.axisTop(scale.x),
         right: d3.axisRight(scale.y),
         bottom: d3.axisBottom(scale.x),
-        left: d3.axisLeft(scale.y),
+        left: d3.axisLeft(scale.y).ticks(3),
       };
       $axis.call(axisGenerator[this.axis]);
     },
