@@ -1,80 +1,90 @@
 <template>
   <div>
-    <d3__chart
-      :layout="layout"
-      :chart-data="chartData"
-      :axes="axes" />
+    <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
+      <g :style="stageStyle">
+        <chart-axis
+          v-for="(axis, index) in axes"
+          :key="index + axis"
+          :axis="axis"
+          :layout="layout"
+          :scale="scale"
+        />
+        <chart-series
+          v-for="(seriesData, index) in chartData"
+          :key="index + seriesData.well"
+          :series-data="seriesData"
+          :layout="layout"
+          :scale="scale"
+          :color="scale.color(index)"
+          :xPropName="xPropName"
+          :yPropName="yPropName"
+        />
+      </g>
+    </svg>
   </div>
 </template>
 
 <script>
+import * as d3 from 'd3';
+import ChartAxis from './ChartAxis';
+import ChartSeries from './ChartSeries';
+
 export default {
-  name: '#d3__chart',
+  name: 'chart-container',
+  components: {
+    ChartAxis,
+    ChartSeries,
+  },
   props: [
     'axes',
     'layout',
     'chart-data',
+    'xPropName',
+    'yPropName',
   ],
+  data() {
+    return {
+      scale: {
+        x: this.getScaleX(),
+        y: this.getScaleY(),
+        color: d3.scaleOrdinal(d3.schemeCategory10),
+      },
+    };
+  },
   computed: {
-    // SVG viewbox
     viewBox() {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;
-      return '0 0 ' + outerWidth + ' ' + outerHeight;
+      return `0 0 ${outerWidth} ${outerHeight}`;
     },
-
-  //   // Stage
-  //   stageStyle: function() {
-  //     return {
-  //       'transform': 'translate(' + this.layout.marginLeft + 'px,' + this.layout.marginTop + 'px)'
-  //     }
-  //   }
-  // },
-  // data: function() {
-  //   return {
-  //     scale: {
-  //       x: this.getScaleX(),
-  //       y: this.getScaleY(),
-  //       color: d3.scaleOrdinal()
-  //         .range(['#159078', '#999999'])
-  //         .domain(['Current', 'Previous'])
-  //     }
-  //   }
-  // },
-  // methods: {
-
-  //   // Get x-axis scale
-  //   getScaleX: function() {
-  //     return d3.scaleTime()
-  //       .range([0, this.layout.width])
-  //       .domain(d3.extent(chartData, function(d) {
-  //         return d3.utcParse("%Y-%m-%dT%H:%M:%S")(d[0]).setHours(0,0,0,0)
-  //       }));
-  //   },
-
-  //   // Get y-axis scale
-  //   getScaleY: function() {
-  //     return d3.scaleLinear()
-  //       .range([this.layout.height, 0])
-  //       .domain([
-  //         0,
-  //         d3.max(this.chartData, function(d) {
-  //           return d3.max(d.values, function(e) {
-  //             return e.value;
-  //           })
-  //         })
-  //       ]);
-  //   }
-  // },
-  // watch: {
-  //   // Watch for layout changes
-  //   layout: {
-  //     deep: true,
-  //     handler() {
-  //       this.scale.x = this.getScaleX();
-  //       this.scale.y = this.getScaleY();
-  //     },
-  //   },
+    stageStyle() {
+      return {
+        transform: `translate(${this.layout.marginLeft}px, ${this.layout.marginTop}px)`,
+      };
+    },
+  },
+  methods: {
+    getScaleX() {
+      return d3.scaleLinear()
+        .domain(d3.extent(this.chartData[0].data, d => d[this.xPropName]))
+        .range([0, this.layout.width]);
+    },
+    getScaleY() {
+      return d3.scaleLinear()
+        .domain(d3.extent(this.chartData.reduce((a, b) =>
+          a.concat(b.data), []), d => d[this.yPropName]))
+        .range([this.layout.height, 0])
+        .nice();
+    },
+  },
+  watch: {
+    layout: {
+      deep: true,
+      handler() {
+        this.scale.x = this.getScaleX();
+        this.scale.y = this.getScaleY();
+      },
+    },
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-card class="card-container">
     <v-card-title class="card-container-title-row">
-      <span class="title">{{selectedWell.wellNameNo}}</span>
+      <span class="title">{{singleWell.well}}</span>
     </v-card-title>
     <v-card-text>
       <div class="well-data-info-container">
@@ -24,8 +24,8 @@
 export default {
   name: 'info-card',
   computed: {
-    selectedWell() {
-      return this.$store.getters.selectedWell;
+    singleWell() {
+      return this.$store.state.singleWell;
     },
   },
 };

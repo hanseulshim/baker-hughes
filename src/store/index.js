@@ -36,6 +36,11 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
+    wellDataTotalTime: state => [state.singleWell, state.benchmark],
+    bitChangeData: state => ({
+      well: state.singleWell.well,
+      data: state.singleWell.data.filter((well, index, array) =>
+        array[index - 1] && well.bitcounter !== array[index - 1].bitcounter),
+    }),
   },
 });
-

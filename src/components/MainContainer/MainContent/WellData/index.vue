@@ -4,7 +4,9 @@
   <chart-container
     :axes="axes"
     :layout="layout"
-    :chart-data="singleWell"
+    :chart-data="wellDataTotalTime"
+    :xPropName="xPropName"
+    :yPropName="yPropName"
   />
 </div>
 </template>
@@ -30,11 +32,13 @@ export default {
         marginLeft: 50,
       },
       axes: ['left', 'bottom'],
+      xPropName: 'cumulativeDepth',
+      yPropName: 'cumulativeTime',
     };
   },
   computed: {
-    singleWell() {
-      return this.$store.state.singleWell;
+    wellDataTotalTime() {
+      return this.$store.getters.wellDataTotalTime;
     },
   },
 };
