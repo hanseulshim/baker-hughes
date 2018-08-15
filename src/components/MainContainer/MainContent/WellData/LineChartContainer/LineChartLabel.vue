@@ -25,6 +25,7 @@ export default {
         .attr('x', this.layout.width / 2)
         .attr('y', this.layout.height + this.layout.marginTop)
         .style('text-anchor', 'middle');
+
       d3.select(this.$refs.yLabel)
         .attr('y', 0 - this.layout.marginRight)
         .attr('x', 0 - (this.layout.height / 2))

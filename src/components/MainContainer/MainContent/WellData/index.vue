@@ -4,13 +4,14 @@
   <line-chart-container
     :axes="axes"
     :layout="layout"
-    :xPropName="xPropName"
-    :xMax="xMax"
-    :yPropName="yPropName"
-    :yMax="yMax"
-    :wellData="wellData"
-    :benchmarkData="benchmarkData"
-    :bitChangeData="bitChangeData"
+    :x-prop-name="xPropName"
+    :x-max="xMax"
+    :y-prop-name="yPropName"
+    :y-max="yMax"
+    :well-data="wellData"
+    :benchmark-data="benchmarkData"
+    :single-well-data="singleWellData"
+    :bit-change-data="bitChangeData"
   />
 </div>
 </template>

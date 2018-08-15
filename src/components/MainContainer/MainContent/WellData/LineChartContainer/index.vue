@@ -37,6 +37,14 @@
           :x-prop-name="xPropName"
           :y-prop-name="yPropName"
         />
+        <line-chart-tooltip
+          :benchmark-data="benchmarkData"
+          :layout="layout"
+          :scale="scale"
+          :single-well-data="singleWellData"
+          :x-prop-name="xPropName"
+          :y-prop-name="yPropName"
+        />
       </g>
     </svg>
   </div>
@@ -45,19 +53,21 @@
 <script>
 import * as d3 from 'd3';
 import BenchmarkLine from './BenchmarkLine';
+import BitChangePoints from './BitChangePoints';
 import LineChartAxis from './LineChartAxis';
 import LineChartLabel from './LineChartLabel';
 import LineChartSeries from './LineChartSeries';
-import BitChangePoints from './BitChangePoints';
+import LineChartTooltip from './LineChartTooltip';
 
 export default {
   name: 'line-chart-container',
   components: {
     BenchmarkLine,
+    BitChangePoints,
     LineChartAxis,
     LineChartLabel,
     LineChartSeries,
-    BitChangePoints,
+    LineChartTooltip,
   },
   props: {
     axes: {
@@ -74,6 +84,10 @@ export default {
     },
     layout: {
       type: Object,
+      required: true,
+    },
+    singleWellData: {
+      type: Array,
       required: true,
     },
     wellData: {

@@ -1,5 +1,5 @@
 <template>
-  <g class="points">
+  <g>
     <circle
       :style="style"
       v-for="(pointData, index) in bitChangeData"

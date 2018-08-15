@@ -1,5 +1,5 @@
 <template>
-  <path class="line" ref="line" :style="style"></path>
+  <path ref="line" :style="style"></path>
 </template>
 
 <script>
@@ -46,6 +46,7 @@ export default {
         .defined(d => d[this.xPropName] < this.xMax)
         .x(d => this.scale.x(d[this.xPropName]))
         .y(d => this.scale.y(d[this.yPropName]));
+
       d3.select(this.$refs.line)
         .data([this.lineData.filter(d =>
           typeof d[this.yPropName] !== typeof null)])
@@ -57,7 +58,7 @@ export default {
       return {
         fill: 'none',
         stroke: this.color,
-        strokeWidth: 2,
+        strokeWidth: 3,
       };
     },
   },
