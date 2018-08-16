@@ -1,5 +1,16 @@
 <template>
-  <path ref="line" :style="style"></path>
+  <g>
+    <text
+      :x="x"
+      :y="y"
+      :dy="-15"
+      :text-anchor="textAnchor"
+      :style="textStyle"
+    >
+      {{bitType}}
+    </text>
+    <path ref="line" :style="style"></path>
+  </g>
 </template>
 
 <script>
@@ -10,6 +21,10 @@ export default {
   props: {
     color: {
       type: String,
+      required: true,
+    },
+    index: {
+      type: Number,
       required: true,
     },
     layout: {
@@ -60,6 +75,25 @@ export default {
         stroke: this.color,
         strokeWidth: 3,
       };
+    },
+    textStyle() {
+      return {
+        fontSize: '.65em',
+        strokeWidth: 0.3,
+        stroke: this.color,
+      };
+    },
+    textAnchor() {
+      return this.index === 0 ? 'start' : 'middle';
+    },
+    x() {
+      return this.scale.x(this.lineData[0][this.xPropName]);
+    },
+    y() {
+      return this.scale.y(this.lineData[0][this.yPropName]);
+    },
+    bitType() {
+      return this.lineData[0].bitType;
     },
   },
   watch: {

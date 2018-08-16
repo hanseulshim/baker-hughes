@@ -2,6 +2,7 @@
   <g>
     <line-chart-line
       :color="color"
+      :index="index"
       :layout="layout"
       :line-data="lineData"
       :scale="scale"
@@ -23,6 +24,10 @@ export default {
   props: {
     color: {
       type: String,
+      required: true,
+    },
+    index: {
+      type: Number,
       required: true,
     },
     layout: {
@@ -49,13 +54,6 @@ export default {
       type: String,
       required: true,
     },
-  },
-  data() {
-    return {
-      style: {
-        display: 'none',
-      },
-    };
   },
 };
 </script>

@@ -23,6 +23,7 @@
         <line-chart-series
           v-for="(lineData, index) in wellData"
           :key="index + lineData[0].well"
+          :index="index"
           :color="scale.color(index)"
           :layout="layout"
           :line-data="lineData"
