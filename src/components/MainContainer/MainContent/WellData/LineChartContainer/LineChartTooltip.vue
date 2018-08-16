@@ -1,13 +1,12 @@
 <template>
-  <g ref="gContainer">
+  <g>
     <g ref="hoverWell" :style="style">
-      <circle :r="4.5"></circle>
-      <text text-anchor="middle" dy="-10">;olol</text>
+      <circle :r="5"></circle>
     </g>
     <g ref="hoverBenchmark" :style="style">
-      <circle :r="4.5"></circle>
-      <text text-anchor="middle" dy="-10">fadbiadfijboi</text>
+      <circle :r="5"></circle>
     </g>
+    <path ref="hoverLine" :style="style"/>
     <rect ref="rect"/>
   </g>
 </template>
@@ -46,7 +45,10 @@ export default {
   data() {
     return {
       style: {
-        display: 'none',
+        opacity: 0,
+        fill: 'none',
+        stroke: '#16B6C8',
+        strokeWidth: 1,
       },
     };
   },
@@ -56,6 +58,9 @@ export default {
     },
     hoverBenchmark() {
       return d3.select(this.$refs.hoverBenchmark);
+    },
+    hoverLine() {
+      return d3.select(this.$refs.hoverLine);
     },
   },
   mounted() {
@@ -69,32 +74,32 @@ export default {
         .attr('fill', 'none')
         .attr('pointer-events', 'all')
         .on('mouseover', () => {
-          this.hoverWell.style('display', null);
-          this.hoverBenchmark.style('display', null);
+          this.hoverWell.style('opacity', 1);
+          this.hoverBenchmark.style('opacity', 1);
+          this.hoverLine.style('opacity', 1);
         })
         .on('mouseout', () => {
-          this.hoverWell.style('display', 'none');
-          this.hoverBenchmark.style('display', 'none');
+          this.hoverWell.style('opacity', 0);
+          this.hoverBenchmark.style('opacity', 0);
+          this.hoverLine.style('opacity', 0);
         })
         .on('mousemove', this.mousemove);
     },
     mousemove() {
       const xValue = this.scale.x.invert(d3.mouse(this.$refs.rect)[0]);
       const bisector = d3.bisector(d => d[this.xPropName]).left;
-      const indexWell = bisector(this.singleWellData, xValue);
-      const indexBenchmark = bisector(this.benchmarkData, xValue);
+      const indexWell = bisector(this.singleWellData, xValue) === this.singleWellData.length ?
+        bisector(this.singleWellData, xValue) - 1 : bisector(this.singleWellData, xValue);
+      const indexBenchmark = bisector(this.benchmarkData, xValue) === this.benchmarkData.length ?
+        bisector(this.benchmarkData, xValue) - 1 : bisector(this.benchmarkData, xValue);
       const dataWell = this.singleWellData[indexWell];
       const dataBenchmark = this.benchmarkData[indexBenchmark];
       const xCoordWell = this.scale.x(dataWell[this.xPropName]);
-      const xCoordBenchmark = this.scale.x(dataBenchmark[this.xPropName]);
       const yCoordWell = this.scale.y(dataWell[this.yPropName]);
       const yCoordBenchmark = this.scale.y(dataBenchmark[this.yPropName]);
-      this.hoverWell
-        .attr('transform', `translate(${xCoordWell}, ${yCoordWell})`)
-        .select('text').text(dataWell[this.xPropName]);
-      this.hoverBenchmark
-        .attr('transform', `translate(${xCoordBenchmark}, ${yCoordBenchmark})`)
-        .select('text').text(dataBenchmark[this.xPropName]);
+      this.hoverWell.attr('transform', `translate(${xCoordWell}, ${yCoordWell})`);
+      this.hoverBenchmark.attr('transform', `translate(${xCoordWell}, ${yCoordBenchmark})`);
+      this.hoverLine.attr('d', () => `M${xCoordWell},${this.layout.height} ${xCoordWell},${yCoordWell}`);
     },
   },
 };

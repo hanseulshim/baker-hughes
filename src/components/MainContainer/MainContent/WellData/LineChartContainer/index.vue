@@ -31,20 +31,20 @@
           :x-max="xMax"
           :y-prop-name="yPropName"
         />
-        <bit-change-points
-          :bit-change-data="bitChangeData"
-          :scale="scale"
-          :x-prop-name="xPropName"
-          :y-prop-name="yPropName"
-        />
-        <!-- <line-chart-tooltip
+        <line-chart-tooltip
           :benchmark-data="benchmarkData"
           :layout="layout"
           :scale="scale"
           :single-well-data="singleWellData"
           :x-prop-name="xPropName"
           :y-prop-name="yPropName"
-        /> -->
+        />
+        <bit-change-points
+          :bit-change-data="bitChangeData"
+          :scale="scale"
+          :x-prop-name="xPropName"
+          :y-prop-name="yPropName"
+        />
       </g>
     </svg>
   </div>
