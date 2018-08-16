@@ -50,7 +50,6 @@ export default {
         stroke: '#006FFF',
         strokeWidth: 1,
       },
-      depth: 0,
     };
   },
   computed: {
