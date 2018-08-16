@@ -47,9 +47,10 @@ export default {
       style: {
         opacity: 0,
         fill: 'none',
-        stroke: '#16B6C8',
+        stroke: '#006FFF',
         strokeWidth: 1,
       },
+      depth: 0,
     };
   },
   computed: {
@@ -62,9 +63,22 @@ export default {
     hoverLine() {
       return d3.select(this.$refs.hoverLine);
     },
+    legend() {
+      return d3.select('#line-chart-legend');
+    },
+    legendDepth() {
+      return d3.select('#line-chart-legend-depth');
+    },
+    legendWellTime() {
+      return d3.select('#line-chart-legend-well-time');
+    },
+    legendBenchmarkTime() {
+      return d3.select('#line-chart-legend-benchmark-time');
+    },
   },
   mounted() {
     this.createTooltips();
+    this.createLegend();
   },
   methods: {
     createTooltips() {
@@ -77,11 +91,13 @@ export default {
           this.hoverWell.style('opacity', 1);
           this.hoverBenchmark.style('opacity', 1);
           this.hoverLine.style('opacity', 1);
+          this.legend.style('opacity', 1);
         })
         .on('mouseout', () => {
           this.hoverWell.style('opacity', 0);
           this.hoverBenchmark.style('opacity', 0);
           this.hoverLine.style('opacity', 0);
+          this.legend.style('opacity', 0);
         })
         .on('mousemove', this.mousemove);
     },
@@ -100,8 +116,10 @@ export default {
       this.hoverWell.attr('transform', `translate(${xCoordWell}, ${yCoordWell})`);
       this.hoverBenchmark.attr('transform', `translate(${xCoordWell}, ${yCoordBenchmark})`);
       this.hoverLine.attr('d', () => `M${xCoordWell},${this.layout.height} ${xCoordWell},${yCoordWell}`);
+      this.legendDepth.html(Math.round(xCoordWell * 100) / 100);
+      this.legendWellTime.html(Math.round(yCoordWell * 100) / 100);
+      this.legendBenchmarkTime.html(Math.round(yCoordBenchmark * 100) / 100);
     },
   },
 };
 </script>
-

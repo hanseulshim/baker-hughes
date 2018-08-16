@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="line-chart-container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <line-chart-label
@@ -47,6 +47,7 @@
         />
       </g>
     </svg>
+    <line-chart-legend />
   </div>
 </template>
 
@@ -58,6 +59,7 @@ import LineChartAxis from './LineChartAxis';
 import LineChartLabel from './LineChartLabel';
 import LineChartSeries from './LineChartSeries';
 import LineChartTooltip from './LineChartTooltip';
+import LineChartLegend from './LineChartLegend';
 
 export default {
   name: 'line-chart-container',
@@ -68,6 +70,7 @@ export default {
     LineChartLabel,
     LineChartSeries,
     LineChartTooltip,
+    LineChartLegend,
   },
   props: {
     axes: {
@@ -157,3 +160,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+#line-chart-container
+  position: relative
+</style>
