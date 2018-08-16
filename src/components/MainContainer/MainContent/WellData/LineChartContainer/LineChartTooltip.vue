@@ -78,7 +78,6 @@ export default {
   },
   mounted() {
     this.createTooltips();
-    this.createLegend();
   },
   methods: {
     createTooltips() {
