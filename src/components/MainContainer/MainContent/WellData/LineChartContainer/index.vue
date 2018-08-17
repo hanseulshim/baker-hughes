@@ -6,9 +6,9 @@
           v-for="(formationData, index) in formationsData"
           :key="index + formationData.formation"
           :color="scale.formationColor(index)"
-          :formationData="formationData"
+          :formation-data="formationData"
           :layout="layout"
-          :nextFormation="index !== formationsData.length - 1 ?
+          :next-formation="index !== formationsData.length - 1 ?
             formationsData[index + 1] : formationsData[index]"
           :scale="scale"
           :x-prop-name="xPropName"
@@ -35,16 +35,16 @@
           :x-prop-name="xPropName"
           :y-prop-name="yPropName"
         />
-        <line-chart-series
+        <line-chart-line
           v-for="(lineData, index) in wellData"
           :key="index + lineData[0].well"
-          :index="index"
           :color="scale.color(index)"
+          :index="index"
           :layout="layout"
           :line-data="lineData"
           :scale="scale"
-          :x-prop-name="xPropName"
           :x-max="xMax"
+          :x-prop-name="xPropName"
           :y-prop-name="yPropName"
         />
         <line-chart-tooltip
@@ -75,7 +75,7 @@ import LineChartAxis from './LineChartAxis';
 import LineChartFormation from './LineChartFormation';
 import LineChartLabel from './LineChartLabel';
 import LineChartLegend from './LineChartLegend';
-import LineChartSeries from './LineChartSeries';
+import LineChartLine from './LineChartLine';
 import LineChartTooltip from './LineChartTooltip';
 
 export default {
@@ -87,7 +87,7 @@ export default {
     LineChartFormation,
     LineChartLabel,
     LineChartLegend,
-    LineChartSeries,
+    LineChartLine,
     LineChartTooltip,
   },
   props: {

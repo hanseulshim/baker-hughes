@@ -29,7 +29,7 @@ export default {
   position: absolute
   top: 20%
   left: 10%
-  width: 25%
+  width: 20%
   opacity: 0
   padding: 1.5%
   background: #006FFF

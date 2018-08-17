@@ -3,17 +3,17 @@
   <!-- <info-card /> -->
   <line-chart-container
     :axes="axes"
+    :benchmark-data="benchmarkData"
+    :benchmark-max="benchmarkMax"
+    :bit-change-data="bitChangeData"
+    :single-well-data="singleWellData"
     :formations-data="formationsData"
     :layout="layout"
-    :x-prop-name="xPropName"
-    :x-max="xMax"
-    :y-prop-name="yPropName"
-    :y-max="yMax"
-    :benchmark-max="benchmarkMax"
     :well-data="wellData"
-    :benchmark-data="benchmarkData"
-    :single-well-data="singleWellData"
-    :bit-change-data="bitChangeData"
+    :x-max="xMax"
+    :x-prop-name="xPropName"
+    :y-max="yMax"
+    :y-prop-name="yPropName"
   />
 </div>
 </template>

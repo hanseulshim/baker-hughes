@@ -1,12 +1,12 @@
 <template>
   <g>
     <circle
-      :style="style"
       v-for="(pointData, index) in bitChangeData"
       :key="index + pointData.bitType"
       :cx="scale.x(pointData[xPropName])"
       :cy="scale.y(pointData[yPropName])"
       :r="5"
+      :style="style"
     />
   </g>
 </template>
