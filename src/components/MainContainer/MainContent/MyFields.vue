@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div>my fields</div>
+  <div id='my-fields'>
     <router-view></router-view>
   </div>
 </template>
@@ -10,3 +9,8 @@ export default {
   name: 'my-fields',
 };
 </script>
+
+<style lang="sass">
+#my-fields
+  margin: 0 5%
+</style>

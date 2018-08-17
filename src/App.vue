@@ -1,8 +1,10 @@
 <template>
-  <div id="app">
-    <sidebar />
-    <main-container />
-  </div>
+  <v-app>
+    <div id="app">
+      <sidebar />
+      <main-container />
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -18,14 +20,18 @@ export default {
 };
 </script>
 
-<style lang='sass'>
+<style lang="sass">
+@import "./assets/styles/cards.sass"
+@import "./assets/styles/button.sass"
+
 html, body, #app
   height: 100%
 body
   margin: 0
-  font-size: 100%
+  font-size: 16px
 #app
   font-family: sans-serif
   display: flex
   margin: auto
+  width: 100%
 </style>

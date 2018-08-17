@@ -20,6 +20,7 @@ export default {
 #sidebar
   background-color: #3E3E3E
   width: 25%
+  max-width: 500px
   box-sizing: border-box
 .sidebar-title
   color: #FFF

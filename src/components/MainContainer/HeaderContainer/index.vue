@@ -36,7 +36,7 @@ export default {
   background: #FFF
   box-shadow: 0 .2em .4em 0 rgba(139,139,139,0.5)
 .header-name
-  font-size: 80%
+  font-size: 100%
 .header-option
   margin-left: 2%
   color: #919192
