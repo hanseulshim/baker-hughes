@@ -2,8 +2,23 @@
   <div id="line-chart-container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <line-chart-label
+        <line-chart-formation
+          v-for="(formationData, index) in formationsData"
+          :key="index + formationData.formation"
+          :color="scale.formationColor(index)"
+          :formationData="formationData"
           :layout="layout"
+          :nextFormation="index !== formationsData.length - 1 ?
+            formationsData[index + 1] : formationsData[index]"
+          :scale="scale"
+          :x-prop-name="xPropName"
+        />
+        <line-chart-label
+          :benchmark-max="benchmarkMax"
+          :layout="layout"
+          :scale="scale"
+          :x-max="xMax"
+          :y-max="yMax"
         />
         <line-chart-axis
           v-for="(axis, index) in axes"
@@ -57,10 +72,11 @@ import * as d3 from 'd3';
 import BenchmarkLine from './BenchmarkLine';
 import BitChangePoints from './BitChangePoints';
 import LineChartAxis from './LineChartAxis';
+import LineChartFormation from './LineChartFormation';
 import LineChartLabel from './LineChartLabel';
+import LineChartLegend from './LineChartLegend';
 import LineChartSeries from './LineChartSeries';
 import LineChartTooltip from './LineChartTooltip';
-import LineChartLegend from './LineChartLegend';
 
 export default {
   name: 'line-chart-container',
@@ -68,10 +84,11 @@ export default {
     BenchmarkLine,
     BitChangePoints,
     LineChartAxis,
+    LineChartFormation,
     LineChartLabel,
+    LineChartLegend,
     LineChartSeries,
     LineChartTooltip,
-    LineChartLegend,
   },
   props: {
     axes: {
@@ -82,7 +99,15 @@ export default {
       type: Array,
       required: true,
     },
+    benchmarkMax: {
+      type: Number,
+      required: true,
+    },
     bitChangeData: {
+      type: Array,
+      required: true,
+    },
+    formationsData: {
       type: Array,
       required: true,
     },
@@ -121,6 +146,7 @@ export default {
         x: this.getScaleX(),
         y: this.getScaleY(),
         color: d3.scaleOrdinal(d3.schemeCategory10),
+        formationColor: d3.scaleOrdinal(d3.schemePastel1),
       },
     };
   },

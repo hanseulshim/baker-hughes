@@ -27,7 +27,7 @@ export default {
 <style lang="sass" scoped>
 #line-chart-legend
   position: absolute
-  top: 10%
+  top: 20%
   left: 10%
   width: 25%
   opacity: 0

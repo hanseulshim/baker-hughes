@@ -3,11 +3,13 @@
   <!-- <info-card /> -->
   <line-chart-container
     :axes="axes"
+    :formations-data="formationsData"
     :layout="layout"
     :x-prop-name="xPropName"
     :x-max="xMax"
     :y-prop-name="yPropName"
     :y-max="yMax"
+    :benchmark-max="benchmarkMax"
     :well-data="wellData"
     :benchmark-data="benchmarkData"
     :single-well-data="singleWellData"
@@ -68,7 +70,7 @@ export default {
     bitChangeData() {
       return this.singleWellData.filter(well => well.bitSwapped);
     },
-    formationData() {
+    formationsData() {
       return this.singleWellData.filter((well, index, array) =>
         array.findIndex(v => v.formation === well.formation) === index);
     },
@@ -77,6 +79,10 @@ export default {
     },
     yMax() {
       return d3.max(this.singleWellData, well => well[this.yPropName]);
+    },
+    benchmarkMax() {
+      return d3.max(this.benchmarkData.filter(benchmark => benchmark[this.xPropName] <= this.xMax),
+        well => well[this.yPropName]);
     },
   },
 };
