@@ -64,12 +64,12 @@ export default {
       d3.select(this.$refs.wellTime)
         .attr('x', this.leftPosition)
         .attr('y', this.scale.y(this.yMax))
-        .style('font-size', '.5em');
+        .style('font-size', '50%');
 
       d3.select(this.$refs.benchmarkTime)
         .attr('x', this.leftPosition)
         .attr('y', this.scale.y(this.benchmarkMax))
-        .style('font-size', '.5em');
+        .style('font-size', '50%');
     },
   },
 };

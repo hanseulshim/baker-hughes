@@ -1,5 +1,6 @@
 <template>
 <div>
+  <well-title />
   <!-- <info-card /> -->
   <line-chart-container
     :axes="axes"
@@ -23,12 +24,14 @@ import * as d3 from 'd3';
 import { mapState } from 'vuex';
 import InfoCard from './InfoCard';
 import LineChartContainer from './LineChartContainer';
+import WellTitle from './WellTitle';
 
 export default {
   name: 'well-data',
   components: {
     InfoCard,
     LineChartContainer,
+    WellTitle,
   },
   data() {
     return {

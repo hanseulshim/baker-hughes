@@ -36,5 +36,6 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
+    currentWell: (state, getters) => getters.sortedData[0],
   },
 });
