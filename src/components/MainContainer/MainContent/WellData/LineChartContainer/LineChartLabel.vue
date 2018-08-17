@@ -4,11 +4,11 @@
     <text ref='yLabel'>Time (hrs.)</text>
     <text ref='wellTime'>
       <tspan>- Complete Time</tspan>
-      <tspan :x="scale.x(xMax) + 20" dy="1em">{{Math.round(yMax)}} hrs</tspan>
+      <tspan :x="leftPosition + 5" dy="1em">{{Math.round(yMax)}} hrs</tspan>
     </text>
     <text ref='benchmarkTime'>
       <tspan>- Benchmark Time</tspan>
-      <tspan :x="scale.x(xMax) + 20" dy="1em">{{Math.round(benchmarkMax)}} hrs</tspan>
+      <tspan :x="leftPosition + 5" dy="1em">{{Math.round(benchmarkMax)}} hrs</tspan>
     </text>
   </g>
 </template>
@@ -43,6 +43,11 @@ export default {
   mounted() {
     this.drawLabels();
   },
+  computed: {
+    leftPosition() {
+      return this.scale.x(this.xMax) + 3;
+    },
+  },
   methods: {
     drawLabels() {
       d3.select(this.$refs.xLabel)
@@ -57,12 +62,12 @@ export default {
         .style('text-anchor', 'middle');
 
       d3.select(this.$refs.wellTime)
-        .attr('x', this.scale.x(this.xMax) + 15)
+        .attr('x', this.leftPosition)
         .attr('y', this.scale.y(this.yMax))
         .style('font-size', '.5em');
 
       d3.select(this.$refs.benchmarkTime)
-        .attr('x', this.scale.x(this.xMax) + 15)
+        .attr('x', this.leftPosition)
         .attr('y', this.scale.y(this.benchmarkMax))
         .style('font-size', '.5em');
     },

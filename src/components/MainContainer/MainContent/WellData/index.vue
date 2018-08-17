@@ -33,8 +33,8 @@ export default {
   data() {
     return {
       layout: {
-        width: 800,
-        height: 250,
+        width: 900,
+        height: 350,
         marginTop: 45,
         marginRight: 35,
         marginBottom: 50,

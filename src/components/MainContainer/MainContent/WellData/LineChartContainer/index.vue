@@ -171,7 +171,7 @@ export default {
     },
     getScaleY() {
       return d3.scaleLinear()
-        .domain([0, this.yMax])
+        .domain([0, this.yMax * 1.5])
         .range([this.layout.height, 0])
         .nice();
     },
