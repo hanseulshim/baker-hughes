@@ -1,21 +1,33 @@
 <template>
 <div>
-  <well-title />
-  <!-- <info-card /> -->
-  <line-chart-container
-    :axes="axes"
-    :benchmark-data="benchmarkData"
-    :benchmark-max="benchmarkMax"
-    :bit-change-data="bitChangeData"
-    :single-well-data="singleWellData"
-    :formations-data="formationsData"
-    :layout="layout"
-    :well-data="wellData"
-    :x-max="xMax"
-    :x-prop-name="xPropName"
-    :y-max="yMax"
-    :y-prop-name="yPropName"
-  />
+  <div>
+    <well-title
+      :current-view="currentView"
+      :current-well="currentWell"
+      @changeView="changeView"
+      @changeWell="changeWell"
+    />
+    <benchmark-title
+      :current-benchmark="currentBenchmark"
+      :current-well="currentWell"
+      @changeBenchmark="changeBenchmark"
+    />
+    <!-- <info-card /> -->
+    <line-chart-container
+      :axes="axes"
+      :benchmark-data="benchmarkData"
+      :benchmark-max="benchmarkMax"
+      :bit-change-data="bitChangeData"
+      :single-well-data="singleWellData"
+      :formations-data="formationsData"
+      :layout="layout"
+      :well-data="wellData"
+      :x-max="xMax"
+      :x-prop-name="xPropName"
+      :y-max="yMax"
+      :y-prop-name="yPropName"
+    />
+  </div>
 </div>
 </template>
 
@@ -25,6 +37,7 @@ import { mapState } from 'vuex';
 import InfoCard from './InfoCard';
 import LineChartContainer from './LineChartContainer';
 import WellTitle from './WellTitle';
+import BenchmarkTitle from './BenchmarkTitle';
 
 export default {
   name: 'well-data',
@@ -32,6 +45,7 @@ export default {
     InfoCard,
     LineChartContainer,
     WellTitle,
+    BenchmarkTitle,
   },
   data() {
     return {
@@ -46,6 +60,9 @@ export default {
       axes: ['left', 'bottom'],
       xPropName: 'cumulativeDepth',
       yPropName: 'cumulativeTime',
+      currentView: 'Overview',
+      currentWell: this.$store.getters.wellNameList[0],
+      currentBenchmark: this.$store.state.benchmarkList[0],
     };
   },
   computed: {
@@ -86,6 +103,17 @@ export default {
     benchmarkMax() {
       return d3.max(this.benchmarkData.filter(benchmark => benchmark[this.xPropName] <= this.xMax),
         well => well[this.yPropName]);
+    },
+  },
+  methods: {
+    changeBenchmark(benchmark) {
+      this.currentBenchmark = benchmark;
+    },
+    changeView(view) {
+      this.currentView = view;
+    },
+    changeWell(well) {
+      this.currentWell = well;
     },
   },
 };

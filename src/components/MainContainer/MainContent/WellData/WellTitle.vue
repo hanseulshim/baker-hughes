@@ -1,22 +1,45 @@
 <template>
-  <div class="well-title-container">
-    <i class="material-icons">mail</i>
-    <span class="well-title">{{currentWell.wellNameNo}}</span>
-    <v-menu offset-y left>
-      <i class="material-icons dropdown" slot="activator">arrow_drop_down</i>
+  <div>
+    <v-menu offset-y left min-width=0>
+      <div class="well-title-container" slot="activator">
+        <i class="material-icons">mail</i>
+        <span class="well-title">{{currentWell}}</span>
+        <i class="material-icons dropdown">arrow_drop_down</i>
+      </div>
       <v-card>
-        <v-card-text>
-          <div>
-            <span class="well-title-secondary">{{currentWell.wellNameNo}}</span>
+        <v-card-text class="well-title-content-container">
+          <div class="well-title-section">
+            <span class="well-title-secondary">{{currentWell}}</span>
             <v-list>
-              <v-list-tile @click.prevent class="well-tile-active">
+              <v-list-tile
+                @click="changeView('Overview')"
+                :class="{ 'well-tile-active': currentView === 'Overview' }"
+              >
                 <v-list-tile-content>
                   Overview
                 </v-list-tile-content>
               </v-list-tile>
-              <v-list-tile @click.prevent>
+              <v-list-tile
+                @click="changeView('Well Details')"
+                :class="{ 'well-tile-active': currentView === 'Well Details' }"
+              >
                 <v-list-tile-content>
                   Well Details
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </div>
+          <div class="well-title-section">
+            <span class="well-title-secondary">Other Wells in Field A</span>
+            <v-list>
+              <v-list-tile
+                v-for="(wellName, index) in wellNameList"
+                :key="index + wellName"
+                @click="changeWell(wellName)"
+                :class="{ 'well-tile-active': currentWell === wellName }"
+              >
+                <v-list-tile-content>
+                  {{wellName}}
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -28,13 +51,33 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'well-title',
-  computed: {
-    currentWell() {
-      return this.$store.getters.currentWell;
+  props: {
+    currentView: {
+      type: String,
+      required: true,
     },
-  }
+    currentWell: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    ...mapGetters([
+      'wellNameList',
+    ]),
+  },
+  methods: {
+    changeView(view) {
+      this.$emit('changeView', view);
+    },
+    changeWell(well) {
+      this.$emit('changeWell', well);
+    },
+  },
 };
 </script>
 
@@ -44,6 +87,7 @@ export default {
   align-items: center
   font-size: 250%
   color: #9B9B9B
+  width: 100%
 .well-title
   margin: 0 1%
 .material-icons
@@ -57,4 +101,10 @@ export default {
   background-color: #F9F9F9
   font-size: 112.5%
   color: #DE4747
+.well-title-content-container
+  display: flex
+.well-title-section
+  margin: 0 1em
+.v-menu--inline
+  display: block
 </style>

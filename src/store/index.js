@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import data from '../data/data.json';
 import benchmarkData from '../data/benchmarkData.json';
 import singleWellData from '../data/singleWellData.json';
+import benchmarkList from '../data/benchmarkList';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
     data,
     benchmarkData,
     singleWellData,
+    benchmarkList,
     user: {
       name: 'Dunder Mifflin',
       avatar: 'dunderMifflin.png',
