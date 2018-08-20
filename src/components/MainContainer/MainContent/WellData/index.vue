@@ -12,7 +12,12 @@
       :current-well="currentWell"
       @changeBenchmark="changeBenchmark"
     />
-    <!-- <info-card /> -->
+    <info-card
+      :bit-cost="bitCost"
+      :bit-change-time-loss="bitChangeTimeLoss"
+      :rig-operating-cost="rigOperatingCost"
+      @updateWellOptions="updateWellOptions"
+    />
     <line-chart-container
       :axes="axes"
       :benchmark-data="benchmarkData"
@@ -63,6 +68,9 @@ export default {
       currentView: 'Overview',
       currentWell: this.$store.getters.wellNameList[0],
       currentBenchmark: this.$store.state.benchmarkList[0],
+      bitCost: 15000,
+      bitChangeTimeLoss: 0,
+      rigOperatingCost: 1000,
     };
   },
   computed: {
@@ -114,6 +122,11 @@ export default {
     },
     changeWell(well) {
       this.currentWell = well;
+    },
+    updateWellOptions(options) {
+      this.bitCost = options.bitCost;
+      this.bitChangeTimeLoss = options.bitChangeTimeLoss;
+      this.rigOperatingCost = options.rigOperatingCost;
     },
   },
 };
