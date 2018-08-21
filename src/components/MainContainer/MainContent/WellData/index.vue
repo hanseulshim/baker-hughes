@@ -3,15 +3,9 @@
   <div>
     <well-title
       :current-view="currentView"
-      :current-well="currentWell"
       @changeView="changeView"
-      @changeWell="changeWell"
     />
-    <benchmark-title
-      :current-benchmark="currentBenchmark"
-      :current-well="currentWell"
-      @changeBenchmark="changeBenchmark"
-    />
+    <benchmark-title />
     <info-card
       :bit-cost="bitCost"
       :bit-change-time-loss="bitChangeTimeLoss"
@@ -25,8 +19,6 @@
         :benchmark-max="benchmarkMax"
         :bit-change-data="bitChangeData"
         :single-well-data="singleWellData"
-        :formations-data="formationsData"
-        :layout="layout"
         :well-data="wellData"
         :x-max="xMax"
         :x-prop-name="xPropName"
@@ -56,20 +48,10 @@ export default {
   },
   data() {
     return {
-      layout: {
-        width: 900,
-        height: 350,
-        marginTop: 45,
-        marginRight: 35,
-        marginBottom: 50,
-        marginLeft: 50,
-      },
       axes: ['left', 'bottom'],
       xPropName: 'cumulativeDepth',
       yPropName: 'cumulativeTime',
       currentView: 'Overview',
-      currentWell: this.$store.getters.wellNames[0],
-      currentBenchmark: this.$store.state.benchmarkList[0],
       bitCost: 15000,
       bitChangeTimeLoss: 0,
       rigOperatingCost: 1000,
@@ -79,6 +61,7 @@ export default {
     ...mapState([
       'benchmarkData',
       'singleWellData',
+      'currentWell',
     ]),
     wellData() {
       let indexArray = [];
@@ -98,11 +81,7 @@ export default {
       return splitArray;
     },
     bitChangeData() {
-      return this.singleWellData.filter(well => well.bitSwapped);
-    },
-    formationsData() {
-      return this.singleWellData.filter((well, index, array) =>
-        array.findIndex(v => v.formation === well.formation) === index);
+      return this.currentWell.drillBits;
     },
     xMax() {
       return d3.max(this.singleWellData, well => well[this.xPropName]);
@@ -116,14 +95,8 @@ export default {
     },
   },
   methods: {
-    changeBenchmark(benchmark) {
-      this.currentBenchmark = benchmark;
-    },
     changeView(view) {
       this.currentView = view;
-    },
-    changeWell(well) {
-      this.currentWell = well;
     },
     updateWellOptions(options) {
       this.bitCost = options.bitCost;

@@ -1,7 +1,24 @@
 <template>
   <g>
-    <rect ref="rect"></rect>
-    <text ref="formation" v-if="widthBetween > 230">{{formationData.formation}}</text>
+    <g
+      v-for="(formation, index) in formations"
+      :key="`${index}-${formation.formationName}`"
+    >
+      <rect
+        :width="getWidth(formation)"
+        :height="layout.height"
+        :x="getX(formation)"
+        :fill="formationColor(index)"
+      />
+      <text
+        v-if="getWidth(formation) > 230"
+        :x="-5"
+        :y="getX(formation) + 12"
+        text-anchor="end"
+        transform="rotate(-90)"
+        font-size="50%"
+      >{{formation.formationName}}</text>
+    </g>
   </g>
 </template>
 
@@ -11,19 +28,7 @@ import * as d3 from 'd3';
 export default {
   name: 'line-chart-formation',
   props: {
-    color: {
-      type: String,
-      required: true,
-    },
     layout: {
-      type: Object,
-      required: true,
-    },
-    formationData: {
-      type: Object,
-      required: true,
-    },
-    nextFormation: {
       type: Object,
       required: true,
     },
@@ -31,42 +36,23 @@ export default {
       type: Object,
       required: true,
     },
-    xPropName: {
-      type: String,
-      required: true,
-    },
   },
-  mounted() {
-    this.createFormation();
+  data() {
+    return {
+      formationColor: d3.scaleOrdinal(d3.schemePastel1),
+    };
   },
   computed: {
-    width() {
-      return this.layout.width - this.scale.x(this.formationData[this.xPropName]);
-    },
-    x() {
-      return this.scale.x(this.formationData[this.xPropName]);
-    },
-    widthBetween() {
-      const width = this.nextFormation[this.xPropName] - this.formationData[this.xPropName];
-      if (width === 0) {
-        return this.layout.width - width;
-      }
-      return width;
+    formations() {
+      return this.$store.state.currentWell.includedFormations;
     },
   },
   methods: {
-    createFormation() {
-      d3.select(this.$refs.rect)
-        .attr('width', this.width)
-        .attr('height', this.layout.height)
-        .attr('x', this.x)
-        .attr('fill', this.color);
-      d3.select(this.$refs.formation)
-        .attr('y', this.x + 12)
-        .attr('x', -5)
-        .attr('text-anchor', 'end')
-        .attr('transform', 'rotate(-90)')
-        .style('font-size', '50%');
+    getWidth(formation) {
+      return formation.endDepth - formation.startDepth;
+    },
+    getX(formation) {
+      return this.scale.x(formation.startDepth);
     },
   },
 };

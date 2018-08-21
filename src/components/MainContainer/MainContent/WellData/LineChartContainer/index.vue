@@ -3,17 +3,10 @@
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <line-chart-formation
-          v-for="(formationData, index) in formationsData"
-          :key="index + formationData.formation"
-          :color="scale.formationColor(index)"
-          :formation-data="formationData"
           :layout="layout"
-          :next-formation="index !== formationsData.length - 1 ?
-            formationsData[index + 1] : formationsData[index]"
           :scale="scale"
-          :x-prop-name="xPropName"
         />
-        <line-chart-label
+        <!-- <line-chart-label
           :benchmark-max="benchmarkMax"
           :layout="layout"
           :scale="scale"
@@ -54,12 +47,10 @@
           :single-well-data="singleWellData"
           :x-prop-name="xPropName"
           :y-prop-name="yPropName"
-        />
+        /> -->
         <bit-change-points
           :bit-change-data="bitChangeData"
           :scale="scale"
-          :x-prop-name="xPropName"
-          :y-prop-name="yPropName"
         />
       </g>
     </svg>
@@ -107,14 +98,6 @@ export default {
       type: Array,
       required: true,
     },
-    formationsData: {
-      type: Array,
-      required: true,
-    },
-    layout: {
-      type: Object,
-      required: true,
-    },
     singleWellData: {
       type: Array,
       required: true,
@@ -142,15 +125,25 @@ export default {
   },
   data() {
     return {
+      layout: {
+        width: 900,
+        height: 350,
+        marginTop: 45,
+        marginRight: 35,
+        marginBottom: 50,
+        marginLeft: 50,
+      },
       scale: {
         x: this.getScaleX(),
         y: this.getScaleY(),
         color: d3.scaleOrdinal(d3.schemeCategory10),
-        formationColor: d3.scaleOrdinal(d3.schemePastel1),
       },
     };
   },
   computed: {
+    currentWell() {
+      return this.$store.state.currentWell;
+    },
     viewBox() {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;

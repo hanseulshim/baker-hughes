@@ -3,8 +3,8 @@
     <circle
       v-for="(pointData, index) in bitChangeData"
       :key="index + pointData.bitType"
-      :cx="scale.x(pointData[xPropName])"
-      :cy="scale.y(pointData[yPropName])"
+      :cx="scale.x(pointData.depthOut)"
+      :cy="scale.y(pointData.drilledHours)"
       :r="5"
       :style="style"
     />
@@ -21,14 +21,6 @@ export default {
     },
     scale: {
       type: Object,
-      required: true,
-    },
-    xPropName: {
-      type: String,
-      required: true,
-    },
-    yPropName: {
-      type: String,
       required: true,
     },
   },
