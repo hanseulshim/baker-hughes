@@ -18,20 +18,22 @@
       :rig-operating-cost="rigOperatingCost"
       @updateWellOptions="updateWellOptions"
     />
-    <line-chart-container
-      :axes="axes"
-      :benchmark-data="benchmarkData"
-      :benchmark-max="benchmarkMax"
-      :bit-change-data="bitChangeData"
-      :single-well-data="singleWellData"
-      :formations-data="formationsData"
-      :layout="layout"
-      :well-data="wellData"
-      :x-max="xMax"
-      :x-prop-name="xPropName"
-      :y-max="yMax"
-      :y-prop-name="yPropName"
-    />
+    <v-card>
+      <line-chart-container
+        :axes="axes"
+        :benchmark-data="benchmarkData"
+        :benchmark-max="benchmarkMax"
+        :bit-change-data="bitChangeData"
+        :single-well-data="singleWellData"
+        :formations-data="formationsData"
+        :layout="layout"
+        :well-data="wellData"
+        :x-max="xMax"
+        :x-prop-name="xPropName"
+        :y-max="yMax"
+        :y-prop-name="yPropName"
+      />
+    </v-card>
   </div>
 </div>
 </template>
@@ -66,7 +68,7 @@ export default {
       xPropName: 'cumulativeDepth',
       yPropName: 'cumulativeTime',
       currentView: 'Overview',
-      currentWell: this.$store.getters.wellNameList[0],
+      currentWell: this.$store.getters.wellNames[0],
       currentBenchmark: this.$store.state.benchmarkList[0],
       bitCost: 15000,
       bitChangeTimeLoss: 0,

@@ -78,7 +78,7 @@ export default {
 
 <style lang="sass" scoped>
 .card-container
-  margin-top: 1em
+  margin: 1em 0
 .content-container
   display: flex
   align-items: center
