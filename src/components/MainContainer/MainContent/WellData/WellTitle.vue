@@ -33,7 +33,7 @@
             <span class="well-title-secondary">Other Wells in Field A</span>
             <v-list>
               <v-list-tile
-                v-for="(wellName, index) in wellNameList"
+                v-for="(wellName, index) in wellNames"
                 :key="index + wellName"
                 @click="changeWell(wellName)"
                 :class="{ 'well-tile-active': currentWell === wellName }"
@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'wellNameList',
+      'wellNames',
     ]),
   },
   methods: {
