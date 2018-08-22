@@ -1,21 +1,18 @@
 <template>
   <v-app>
     <div id="app">
-      <sidebar />
-      <main-container />
+      <well-data />
     </div>
   </v-app>
 </template>
 
 <script>
-import Sidebar from './components/Sidebar';
-import MainContainer from './components/MainContainer';
+import WellData from './components/WellData';
 
 export default {
   name: 'app',
   components: {
-    Sidebar,
-    MainContainer,
+    WellData,
   },
 };
 </script>
@@ -24,8 +21,6 @@ export default {
 @import "./assets/styles/cards.sass"
 @import "./assets/styles/button.sass"
 
-html, body, #app
-  height: 100%
 body
   margin: 0
   font-size: 16px

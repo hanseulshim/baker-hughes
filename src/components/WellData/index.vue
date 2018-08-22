@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="well-data-container">
   <div>
     <well-title
       :current-view="currentView"
@@ -53,3 +53,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+#well-data-container
+  margin: 5% auto
+</style>
