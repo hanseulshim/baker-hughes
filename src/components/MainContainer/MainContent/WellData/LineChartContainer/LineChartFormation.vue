@@ -5,16 +5,16 @@
       :key="`${index}-${formation.formationName}`"
     >
       <rect
-        :width="layout.width"
-        :height="getHeight(formation)"
-        :y="getY(formation)"
         :fill="formationColor(index)"
+        :height="getHeight(formation)"
+        :width="layout.width"
+        :y="getY(formation)"
       />
       <text
         class="chart-formation-label"
+        text-anchor="end"
         :x="layout.width - 10"
         :y="getY(formation) + 12"
-        text-anchor="end"
       >{{formation.formationName}}</text>
     </g>
   </g>
