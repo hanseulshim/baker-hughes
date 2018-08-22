@@ -1,10 +1,10 @@
 <template>
-  <g>
+  <g class='bit-change'>
     <circle
       v-for="(pointData, index) in bitChangeData"
       :key="index + pointData.bitType"
-      :cx="scale.x(pointData[xPropName])"
-      :cy="scale.y(pointData[yPropName])"
+      :cx="scale.x(pointData.drilledHours)"
+      :cy="scale.y(pointData.depthIn)"
       :r="5"
       :style="style"
     />
@@ -15,30 +15,23 @@
 export default {
   name: 'bit-change-points',
   props: {
-    bitChangeData: {
-      type: Array,
-      required: true,
-    },
     scale: {
       type: Object,
       required: true,
     },
-    xPropName: {
-      type: String,
-      required: true,
-    },
-    yPropName: {
-      type: String,
-      required: true,
-    },
   },
-  computed: {
-    style() {
-      return {
+  data() {
+    return {
+      style: {
         fill: '#000',
         stroke: '#000',
         strokeWidth: 2,
-      };
+      },
+    };
+  },
+  computed: {
+    bitChangeData() {
+      return this.$store.state.currentWell.drillBits;
     },
   },
   watch: {

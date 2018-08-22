@@ -1,6 +1,9 @@
 <template>
   <g>
-    <path ref="line" :style="style" />
+    <path
+      :d="line"
+      :style="style"
+    />
   </g>
 </template>
 
@@ -14,50 +17,37 @@ export default {
       type: Object,
       required: true,
     },
-    lineData: {
-      type: Array,
-      required: true,
-    },
     scale: {
       type: Object,
       required: true,
     },
-    xPropName: {
-      type: String,
-      required: true,
-    },
-    xMax: {
-      type: Number,
-      required: true,
-    },
-    yPropName: {
-      type: String,
-      required: true,
-    },
+  },
+  data() {
+    return {
+      line: '',
+    };
   },
   mounted() {
     this.drawLine();
   },
   methods: {
     drawLine() {
-      const line = d3.line()
-        .defined(d => d[this.xPropName] < this.xMax)
-        .x(d => this.scale.x(d[this.xPropName]))
-        .y(d => this.scale.y(d[this.yPropName]));
-
-      d3.select(this.$refs.line)
-        .data([this.lineData.filter(d =>
-          typeof d[this.yPropName] !== typeof null)])
-        .style('stroke-dasharray', ('7, 3'))
-        .attr('d', line);
+      const path = d3.line()
+        .x(d => this.scale.x(d.value))
+        .y(d => this.scale.y(d.startDepth));
+      this.line = path(this.benchmarkLine);
     },
   },
   computed: {
+    benchmarkLine() {
+      return this.$store.getters.benchmarks;
+    },
     style() {
       return {
         fill: 'none',
         stroke: '#858585',
         strokeWidth: 3,
+        strokeDasharray: '7, 3',
       };
     },
   },

@@ -1,7 +1,23 @@
 <template>
-  <g>
-    <rect ref="rect"></rect>
-    <text ref="formation" v-if="widthBetween > 230">{{formationData.formation}}</text>
+  <g class='formations'>
+    <g
+      v-for="(formation, index) in formations"
+      :key="`${index}-${formation.formationName}`"
+    >
+      <rect
+        :fill="formationColor(index)"
+        :height="getHeight(formation)"
+        :width="layout.width"
+        :y="getY(formation)"
+      />
+      <text
+        v-if="getHeight(formation) > 10"
+        class="chart-formation-label"
+        text-anchor="end"
+        :x="layout.width - 8"
+        :y="getY(formation) + 8"
+      >{{formation.formationName}}</text>
+    </g>
   </g>
 </template>
 
@@ -11,19 +27,7 @@ import * as d3 from 'd3';
 export default {
   name: 'line-chart-formation',
   props: {
-    color: {
-      type: String,
-      required: true,
-    },
     layout: {
-      type: Object,
-      required: true,
-    },
-    formationData: {
-      type: Object,
-      required: true,
-    },
-    nextFormation: {
       type: Object,
       required: true,
     },
@@ -31,43 +35,35 @@ export default {
       type: Object,
       required: true,
     },
-    xPropName: {
-      type: String,
+    yMax: {
+      type: Number,
       required: true,
     },
   },
-  mounted() {
-    this.createFormation();
+  data() {
+    return {
+      formationColor: d3.scaleOrdinal(d3.schemePastel1),
+    };
   },
   computed: {
-    width() {
-      return this.layout.width - this.scale.x(this.formationData[this.xPropName]);
-    },
-    x() {
-      return this.scale.x(this.formationData[this.xPropName]);
-    },
-    widthBetween() {
-      const width = this.nextFormation[this.xPropName] - this.formationData[this.xPropName];
-      if (width === 0) {
-        return this.layout.width - width;
-      }
-      return width;
+    formations() {
+      return this.$store.state.currentWell.includedFormations.filter(
+        formation => formation.startDepth <= this.yMax);
     },
   },
   methods: {
-    createFormation() {
-      d3.select(this.$refs.rect)
-        .attr('width', this.width)
-        .attr('height', this.layout.height)
-        .attr('x', this.x)
-        .attr('fill', this.color);
-      d3.select(this.$refs.formation)
-        .attr('y', this.x + 12)
-        .attr('x', -5)
-        .attr('text-anchor', 'end')
-        .attr('transform', 'rotate(-90)')
-        .style('font-size', '50%');
+    getHeight(formation) {
+      return this.scale.y(formation.endDepth - formation.startDepth);
+    },
+    getY(formation) {
+      return this.scale.y(formation.startDepth);
     },
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.chart-formation-label
+  fill: #9A9993
+  font-size: 40%
+</style>

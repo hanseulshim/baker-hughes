@@ -9,7 +9,7 @@
       <v-card>
         <v-card-text class="benchmark-title-content-container">
           <div class="benchmark-title-section">
-            <span class="benchmark-title-secondary">{{currentWell}} Benchmark</span>
+            <span class="benchmark-title-secondary">{{currentWell.wellName}} Benchmark</span>
             <v-list>
               <v-list-tile
                 v-for="(benchmarkName, index) in benchmarkList"
@@ -30,26 +30,22 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'benchmark-title',
-  props: {
-    currentBenchmark: {
-      type: String,
-      required: true,
-    },
-    currentWell: {
-      type: String,
-      required: true,
-    },
-  },
   computed: {
-    benchmarkList() {
-      return this.$store.state.benchmarkList;
+    ...mapState([
+      'benchmarkList',
+      'currentWell',
+    ]),
+    currentBenchmark() {
+      return this.$store.state.benchmarkList[0];
     },
   },
   methods: {
     changeBenchmark(benchmark) {
-      this.$emit('changeBenchmark', benchmark);
+      this.currentBenchmark = benchmark;
     },
   },
 };

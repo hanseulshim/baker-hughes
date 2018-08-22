@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import data from '../data/data.json';
+import dataPhantom from '../data/dataPhantom.json';
 import benchmarkData from '../data/benchmarkData.json';
 import singleWellData from '../data/singleWellData.json';
 import benchmarkList from '../data/benchmarkList';
@@ -10,6 +11,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     data,
+    dataPhantom,
     benchmarkData,
     singleWellData,
     benchmarkList,
@@ -17,16 +19,25 @@ export default new Vuex.Store({
       name: 'Dunder Mifflin',
       avatar: 'dunderMifflin.png',
     },
+    currentWell: dataPhantom.includedWells[0],
+    wells: dataPhantom.includedWells,
+  },
+  mutations: {
+    updateCurrentWell(state, payload) {
+      state.currentWell = state.wells.find(well => well.id === payload.id);
+    },
+  },
+  actions: {
+    updateCurrentWell(context, well) {
+      context.commit('updateCurrentWell', well);
+    },
   },
   getters: {
-    wellNameList: state =>
-      state.data.filter((well, index) =>
-        state.data.findIndex(wellIndex =>
-          wellIndex.wellNameNo === well.wellNameNo,
-        ) === index,
-      ).map(well => well.wellNameNo),
+    benchmarks: state => state.dataPhantom.benchmarkDetailsByFeet.filter(
+      benchmark => benchmark.name === 'minDrilledHours',
+    ),
     sortedData: (state, getters) =>
-      getters.wellNameList.map((wellNameNo) => {
+      getters.wellNames.map((wellNameNo) => {
         const dataArray = state.data.filter(well => well.wellNameNo === wellNameNo)
           .map(well => ({
             cumulativeCost: well.cumulativeCost,
@@ -38,6 +49,10 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
-    currentWell: (state, getters) => getters.sortedData[0],
+    wellNames: state =>
+      state.dataPhantom.includedWells.map(well => ({
+        id: well.id,
+        name: well.wellName,
+      })),
   },
 });

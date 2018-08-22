@@ -3,13 +3,13 @@
     <v-menu offset-y left min-width=0>
       <div class="well-title-container" slot="activator">
         <i class="material-icons">mail</i>
-        <span class="well-title">{{currentWell}}</span>
+        <span class="well-title">{{currentWell.wellName}}</span>
         <i class="material-icons dropdown">arrow_drop_down</i>
       </div>
       <v-card>
         <v-card-text class="well-title-content-container">
           <div class="well-title-section">
-            <span class="well-title-secondary">{{currentWell}}</span>
+            <span class="well-title-secondary">{{currentWell.wellName}}</span>
             <v-list>
               <v-list-tile
                 @click="changeView('Overview')"
@@ -33,13 +33,13 @@
             <span class="well-title-secondary">Other Wells in Field A</span>
             <v-list>
               <v-list-tile
-                v-for="(wellName, index) in wellNameList"
-                :key="index + wellName"
-                @click="changeWell(wellName)"
-                :class="{ 'well-tile-active': currentWell === wellName }"
+                v-for="(well, index) in wellNames"
+                :key="index + well.id"
+                @click="changeWell(well)"
+                :class="{ 'well-tile-active': currentWell.wellName === well.name }"
               >
                 <v-list-tile-content>
-                  {{wellName}}
+                  {{well.name}}
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -51,8 +51,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 export default {
   name: 'well-title',
   props: {
@@ -60,22 +58,21 @@ export default {
       type: String,
       required: true,
     },
-    currentWell: {
-      type: String,
-      required: true,
-    },
   },
   computed: {
-    ...mapGetters([
-      'wellNameList',
-    ]),
+    wellNames() {
+      return this.$store.getters.wellNames;
+    },
+    currentWell() {
+      return this.$store.state.currentWell;
+    },
   },
   methods: {
     changeView(view) {
       this.$emit('changeView', view);
     },
     changeWell(well) {
-      this.$emit('changeWell', well);
+      this.$store.dispatch('updateCurrentWell', well);
     },
   },
 };
