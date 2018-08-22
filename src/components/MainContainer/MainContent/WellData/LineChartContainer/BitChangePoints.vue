@@ -3,8 +3,8 @@
     <circle
       v-for="(pointData, index) in bitChangeData"
       :key="index + pointData.bitType"
-      :cx="scale.x(pointData.depthOut)"
-      :cy="scale.y(pointData.drilledHours)"
+      :cx="scale.x(pointData.drilledHours)"
+      :cy="scale.y(pointData.depthOut)"
       :r="5"
       :style="style"
     />
@@ -15,22 +15,23 @@
 export default {
   name: 'bit-change-points',
   props: {
-    bitChangeData: {
-      type: Array,
-      required: true,
-    },
     scale: {
       type: Object,
       required: true,
     },
   },
-  computed: {
-    style() {
-      return {
+  data() {
+    return {
+      style: {
         fill: '#000',
         stroke: '#000',
         strokeWidth: 2,
-      };
+      },
+    };
+  },
+  computed: {
+    bitChangeData() {
+      return this.$store.state.currentWell.drillBits;
     },
   },
   watch: {
