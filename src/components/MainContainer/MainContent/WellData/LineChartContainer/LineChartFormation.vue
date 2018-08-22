@@ -1,22 +1,20 @@
 <template>
-  <g>
+  <g class='formations'>
     <g
       v-for="(formation, index) in formations"
       :key="`${index}-${formation.formationName}`"
     >
       <rect
-        :width="getWidth(formation)"
-        :height="layout.height"
-        :x="getX(formation)"
+        :width="layout.width"
+        :height="getHeight(formation)"
+        :y="getY(formation)"
         :fill="formationColor(index)"
       />
       <text
-        v-if="getWidth(formation) > 230"
-        :x="-5"
-        :y="getX(formation) + 12"
+        class="chart-formation-label"
+        :x="layout.width - 10"
+        :y="getY(formation) + 12"
         text-anchor="end"
-        transform="rotate(-90)"
-        font-size="50%"
       >{{formation.formationName}}</text>
     </g>
   </g>
@@ -36,6 +34,10 @@ export default {
       type: Object,
       required: true,
     },
+    yMax: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -44,16 +46,23 @@ export default {
   },
   computed: {
     formations() {
-      return this.$store.state.currentWell.includedFormations;
+      return this.$store.state.currentWell.includedFormations.filter(
+        formation => formation.startDepth <= this.yMax);
     },
   },
   methods: {
-    getWidth(formation) {
-      return formation.endDepth - formation.startDepth;
+    getHeight(formation) {
+      return this.scale.y(formation.endDepth - formation.startDepth);
     },
-    getX(formation) {
-      return this.scale.x(formation.startDepth);
+    getY(formation) {
+      return this.scale.y(formation.startDepth);
     },
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.chart-formation-label
+  fill: #9A9993
+  font-size: 50%
+</style>
