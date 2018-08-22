@@ -11,10 +11,11 @@
         :y="getY(formation)"
       />
       <text
+        v-if="getHeight(formation) > 10"
         class="chart-formation-label"
         text-anchor="end"
-        :x="layout.width - 10"
-        :y="getY(formation) + 12"
+        :x="layout.width - 8"
+        :y="getY(formation) + 8"
       >{{formation.formationName}}</text>
     </g>
   </g>
@@ -64,5 +65,5 @@ export default {
 <style lang="sass" scoped>
 .chart-formation-label
   fill: #9A9993
-  font-size: 50%
+  font-size: 40%
 </style>

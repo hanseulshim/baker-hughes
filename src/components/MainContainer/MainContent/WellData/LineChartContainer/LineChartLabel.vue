@@ -1,14 +1,41 @@
 <template>
-  <g>
-    <text ref='xLabel'>Depth (ft.)</text>
-    <text ref='yLabel'>Time (hrs.)</text>
-    <text ref='wellTime'>
-      <tspan>- Complete Time</tspan>
-      <tspan :x="leftPosition + 5" dy="1em">{{Math.round(yMax)}} hrs</tspan>
+  <g class='labels'>
+    <text
+      class="chart-label"
+      text-anchor="middle"
+      :x="layout.width / 2"
+      :y="-(layout.marginTop / 2)"
+    >
+      Cumulative Time (hrs.)
     </text>
-    <text ref='benchmarkTime'>
-      <tspan>- Benchmark Time</tspan>
-      <tspan :x="leftPosition + 5" dy="1em">{{Math.round(benchmarkMax)}} hrs</tspan>
+    <text
+      class="chart-label"
+      text-anchor="middle"
+      transform="rotate(-90)"
+      :x="-(layout.height / 2)"
+      :y="-layout.marginTop"
+    >
+      Depth (ft.)
+    </text>
+    <text
+      class="chart-line-label"
+      :x="scale.x(xMax)"
+      :y="scale.y(yMax) + 10"
+      text-anchor="middle"
+    >
+      <tspan :x="leftPosition">|</tspan>
+      <tspan :x="leftPosition" dy="1em">Observed Time</tspan>
+      <tspan :x="leftPosition" dy="1em">{{Math.round(xMax)}} hrs</tspan>
+    </text>
+    <text
+      class="chart-line-label"
+      :x="scale.x(benchmarkMax)"
+      :y="scale.y(yMax) + 10"
+      text-anchor="middle"
+    >
+      <tspan :x="scale.x(benchmarkMax)">|</tspan>
+      <tspan :x="scale.x(benchmarkMax)" dy="1em">Benchmark Time</tspan>
+      <tspan :x="scale.x(benchmarkMax)" dy="1em">{{Math.round(benchmarkMax)}} hrs</tspan>
     </text>
   </g>
 </template>
@@ -50,17 +77,6 @@ export default {
   },
   methods: {
     drawLabels() {
-      d3.select(this.$refs.xLabel)
-        .attr('x', this.layout.width / 2)
-        .attr('y', this.layout.height + this.layout.marginTop)
-        .style('text-anchor', 'middle');
-
-      d3.select(this.$refs.yLabel)
-        .attr('y', 0 - this.layout.marginRight)
-        .attr('x', 0 - (this.layout.height / 2))
-        .attr('transform', 'rotate(-90)')
-        .style('text-anchor', 'middle');
-
       d3.select(this.$refs.wellTime)
         .attr('x', this.leftPosition)
         .attr('y', this.scale.y(this.yMax))
@@ -74,3 +90,11 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.chart-label
+  font-size: 60%
+  font-weight: bold
+.chart-line-label
+  font-size: 50%
+</style>

@@ -33,11 +33,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    wellNames: state =>
-      state.dataPhantom.includedWells.map(well => ({
-        id: well.id,
-        name: well.wellName,
-      })),
+    benchmarks: state => state.dataPhantom.benchmarkDetailsByFeet.filter(
+      benchmark => benchmark.name === 'minDrilledHours',
+    ),
     sortedData: (state, getters) =>
       getters.wellNames.map((wellNameNo) => {
         const dataArray = state.data.filter(well => well.wellNameNo === wellNameNo)
@@ -51,5 +49,10 @@ export default new Vuex.Store({
           data: dataArray,
         };
       }),
+    wellNames: state =>
+      state.dataPhantom.includedWells.map(well => ({
+        id: well.id,
+        name: well.wellName,
+      })),
   },
 });
