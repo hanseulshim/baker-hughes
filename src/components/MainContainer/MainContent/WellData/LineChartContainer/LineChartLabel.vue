@@ -46,10 +46,6 @@ import * as d3 from 'd3';
 export default {
   name: 'line-chart-label',
   props: {
-    benchmarkMax: {
-      type: Number,
-      required: true,
-    },
     layout: {
       type: Object,
       required: true,
@@ -67,25 +63,13 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    this.drawLabels();
-  },
   computed: {
     leftPosition() {
       return this.scale.x(this.xMax) + 3;
     },
-  },
-  methods: {
-    drawLabels() {
-      d3.select(this.$refs.wellTime)
-        .attr('x', this.leftPosition)
-        .attr('y', this.scale.y(this.yMax))
-        .style('font-size', '50%');
-
-      d3.select(this.$refs.benchmarkTime)
-        .attr('x', this.leftPosition)
-        .attr('y', this.scale.y(this.benchmarkMax))
-        .style('font-size', '50%');
+    benchmarkMax() {
+      return d3.max(this.$store.getters.benchmarks,
+        benchmark => benchmark.value);
     },
   },
 };

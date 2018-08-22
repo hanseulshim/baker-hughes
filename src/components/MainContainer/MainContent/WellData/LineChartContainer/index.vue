@@ -8,7 +8,6 @@
           :yMax="yMax"
         />
         <line-chart-label
-          :benchmark-max="benchmarkMax"
           :layout="layout"
           :scale="scale"
           :x-max="xMax"
@@ -82,10 +81,6 @@ export default {
     };
   },
   computed: {
-    benchmarkMax() {
-      return d3.max(this.$store.getters.benchmarks,
-        benchmark => benchmark.value);
-    },
     currentWell() {
       return this.$store.state.currentWell;
     },

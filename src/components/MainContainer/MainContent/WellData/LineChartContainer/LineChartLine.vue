@@ -1,12 +1,12 @@
 <template>
-  <g class='line'>
+  <g class='lines'>
     <g
       v-for="(line, index) in splitLines"
       :key="`${index}-line-section`"
     >
       <text
-        :x="getCoordinate(line).x"
-        :y="getCoordinate(line).y"
+        :x="getTextCoordinates(line).x"
+        :y="getTextCoordinates(line).y"
         :dy="index ? 0 : 10"
         :dx="15"
         :style="textStyle"
@@ -22,8 +22,8 @@
       />
       <circle
         v-if="index"
-        :cx="scale.x(line[0].drilledHours)"
-        :cy="scale.y(drillBits[index].depthIn)"
+        :cx="getCircleCoordinates(line, drillBits[index]).x"
+        :cy="getCircleCoordinates(line, drillBits[index]).y"
         :r="5"
         :style="circleStyle"
       />
@@ -64,10 +64,16 @@ export default {
     };
   },
   methods: {
-    getCoordinate(line) {
+    getTextCoordinates(line) {
       return {
         x: this.scale.x(line[0].drilledHours),
         y: this.scale.y(line[0].startDepth),
+      };
+    },
+    getCircleCoordinates(line, drillBit) {
+      return {
+        x: this.scale.x(line[0].drilledHours),
+        y: this.scale.y(drillBit.depthIn),
       };
     },
     drawLine(line) {
@@ -79,7 +85,7 @@ export default {
   },
   computed: {
     drillBits() {
-      return this.$store.state.currentWell.drillBits;
+      return this.$store.state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn);
     },
     lineData() {
       return this.$store.state.currentWell.benchmarkInputByPortionInfo;
@@ -103,7 +109,6 @@ export default {
     scale: {
       deep: true,
       handler() {
-        this.drawLine();
       },
     },
   },
