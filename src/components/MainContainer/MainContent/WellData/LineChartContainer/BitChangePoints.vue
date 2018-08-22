@@ -1,10 +1,10 @@
 <template>
-  <g>
+  <g class='bit-change'>
     <circle
       v-for="(pointData, index) in bitChangeData"
       :key="index + pointData.bitType"
       :cx="scale.x(pointData.drilledHours)"
-      :cy="scale.y(pointData.depthOut)"
+      :cy="scale.y(pointData.depthIn)"
       :r="5"
       :style="style"
     />
