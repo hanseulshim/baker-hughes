@@ -1,5 +1,5 @@
 <template>
-  <g>
+  <g class="benchmark">
     <path
       :d="line"
       :style="style"
@@ -13,10 +13,6 @@ import * as d3 from 'd3';
 export default {
   name: 'benchmark-line',
   props: {
-    layout: {
-      type: Object,
-      required: true,
-    },
     scale: {
       type: Object,
       required: true,
