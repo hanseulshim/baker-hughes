@@ -1,8 +1,6 @@
 <template>
   <v-app>
-    <div id="app">
-      <well-data />
-    </div>
+    <well-data />
   </v-app>
 </template>
 
@@ -24,9 +22,4 @@ export default {
 body
   margin: 0
   font-size: 16px
-#app
-  font-family: sans-serif
-  display: flex
-  margin: auto
-  width: 100%
 </style>
