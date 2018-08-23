@@ -6,10 +6,11 @@
       @changeView="changeView"
     />
     <benchmark-title />
-    <info-card
-      :bit-cost="bitCost"
-      :bit-change-time-loss="bitChangeTimeLoss"
-      :rig-operating-cost="rigOperatingCost"
+    <well-options
+      :operating-cost="operatingCost"
+      :fixed-cost="fixedCost"
+      :trip-rate="tripRate"
+      :trip-rate-unit="tripRateUnit"
       @updateWellOptions="updateWellOptions"
     />
     <v-card>
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-import InfoCard from './InfoCard';
+import WellOptions from './WellOptions';
 import LineChartContainer from './LineChartContainer';
 import WellTitle from './WellTitle';
 import BenchmarkTitle from './BenchmarkTitle';
@@ -28,7 +29,7 @@ import BenchmarkTitle from './BenchmarkTitle';
 export default {
   name: 'well-data',
   components: {
-    InfoCard,
+    WellOptions,
     LineChartContainer,
     WellTitle,
     BenchmarkTitle,
@@ -36,9 +37,10 @@ export default {
   data() {
     return {
       currentView: 'Overview',
-      bitCost: 15000,
-      bitChangeTimeLoss: 0,
-      rigOperatingCost: 1000,
+      operatingCost: 2500,
+      fixedCost: 15000,
+      tripRate: 1000,
+      tripRateUnit: 'ft',
     };
   },
   methods: {
@@ -46,9 +48,10 @@ export default {
       this.currentView = view;
     },
     updateWellOptions(options) {
-      this.bitCost = options.bitCost;
-      this.bitChangeTimeLoss = options.bitChangeTimeLoss;
-      this.rigOperatingCost = options.rigOperatingCost;
+      this.operatingCost = options.operatingCost;
+      this.fixedCost = options.fixedCost;
+      this.tripRate = options.tripRate;
+      this.tripRateUnit = options.tripRateUnit;
     },
   },
 };

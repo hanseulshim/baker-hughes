@@ -5,33 +5,42 @@
         <span>Rig Operating Cost</span>
         <div class="input-container">
           <v-text-field
+            class="unit-input-field"
             prefix="$"
-            v-model.number="bitCostLocal"
-            suffix="/ hr"
+            v-model.number="operatingCostLocal"
             type="number"
           />
+          <span>/ hr</span>
         </div>
       </div>
       <div class="info-section">
-        <span>Big Cost</span>
+        <span>Fixed Cost to Trip</span>
         <div class="input-container">
           <v-text-field
+            class="unit-input-field"
             prefix="$"
-            v-model.number="bitChangeTimeLossLocal"
-            suffix="/ unit"
+            v-model.number="fixedCostLocal"
             type="number"
           />
+          <span>/ unit</span>
         </div>
       </div>
       <div class="info-section">
-        <span>Bit Change Time Loss</span>
+        <span>Trip Rate</span>
         <div class="input-container">
           <v-text-field
-            prefix="$"
-            v-model.number="rigOperatingCostLocal"
-            suffix="hr / 1000 ft"
+            class="unit-input-field"
+            v-model.number="tripRateLocal"
             type="number"
           />
+          <div class="unit-select-container">
+            <v-select
+              class="unit-select"
+              :items="items"
+              v-model="tripRateUnitLocal"
+            />
+            <span>/ hr</span>
+          </div>
         </div>
       </div>
       <v-btn class="button-primary" @click="updateWellOptions()">update</v-btn>
@@ -41,34 +50,41 @@
 
 <script>
 export default {
-  name: 'info-card',
+  name: 'well-options',
   props: {
-    bitCost: {
+    operatingCost: {
       type: Number,
       required: true,
     },
-    bitChangeTimeLoss: {
+    fixedCost: {
       type: Number,
       required: true,
     },
-    rigOperatingCost: {
+    tripRate: {
       type: Number,
+      required: true,
+    },
+    tripRateUnit: {
+      type: String,
       required: true,
     },
   },
   data() {
     return {
-      bitCostLocal: this.bitCost,
-      bitChangeTimeLossLocal: this.bitChangeTimeLoss,
-      rigOperatingCostLocal: this.rigOperatingCost,
+      operatingCostLocal: this.operatingCost,
+      fixedCostLocal: this.fixedCost,
+      tripRateLocal: this.tripRate,
+      tripRateUnitLocal: this.tripRateUnit,
+      items: ['ft', 'm'],
     };
   },
   methods: {
     updateWellOptions() {
       const options = {
-        bitCost: this.bitCostLocal,
-        bitChangeTimeLoss: this.bitChangeTimeLossLocal,
-        rigOperatingCost: this.rigOperatingCostLocal,
+        operatingCost: this.operatingCostLocal,
+        fixedCost: this.fixedCostLocal,
+        tripRate: this.tripRateLocal,
+        tripRateUnit: this.tripRateUnitLocal,
       };
       this.$emit('updateWellOptions', options);
     },
@@ -76,7 +92,7 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .card-container
   margin: 1em 0
 .content-container
@@ -91,4 +107,19 @@ export default {
 .input-container
   display: flex
   align-items: center
+.unit-input-field
+  margin-right: 1em
+  input
+    color: #D0021B !important
+.unit-select-container
+  display: flex
+  align-items: center
+.unit-select
+  width: 2em
+  margin-right: 1em
+  .v-select__selection
+    color: #007AFF
+  .v-input__slot:before,
+  .v-input__slot:after
+    display: none
 </style>
