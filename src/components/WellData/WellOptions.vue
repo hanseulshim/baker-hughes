@@ -109,7 +109,7 @@ export default {
   align-items: center
 .unit-input-field
   margin-right: 1em
-  input
+  input, .v-text-field__prefix
     color: #D0021B !important
 .unit-select-container
   display: flex
