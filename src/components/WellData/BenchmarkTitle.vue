@@ -12,14 +12,19 @@
             <span class="benchmark-title-secondary">{{currentWell.wellName}} Benchmark</span>
             <v-list>
               <v-list-tile
-                v-for="(benchmarkName, index) in benchmarkList"
+                v-for="(benchmarkName, index) in benchmarkNames"
                 :key="index + benchmarkName"
                 @click="changeBenchmark(benchmarkName)"
                 :class="{ 'benchmark-title-active': currentBenchmark === benchmarkName }"
               >
-                <v-list-tile-content>
+                <v-list-tile-content
+                  :class="{ 'no-benchmark-title': benchmarkName === 'No Benchmark' }"
+                >
                   {{benchmarkName}}
                 </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile>
+                <span class='new-benchmark'>Create new benchmark</span>
               </v-list-tile>
             </v-list>
           </div>
@@ -36,12 +41,14 @@ export default {
   name: 'benchmark-title',
   computed: {
     ...mapState([
-      'benchmarkList',
+      'benchmarkNames',
       'currentWell',
     ]),
-    currentBenchmark() {
-      return this.$store.state.benchmarkList[0];
-    },
+  },
+  data() {
+    return {
+      currentBenchmark: this.$store.state.benchmarkNames[0],
+    };
   },
   methods: {
     changeBenchmark(benchmark) {
@@ -82,4 +89,10 @@ export default {
 .v-menu--inline
   display: block
   flex-grow: 1
+.no-benchmark-title
+  font-weight: bold
+.new-benchmark
+  margin-top: 1em
+  color: #007AFF
+  cursor: pointer
 </style>
