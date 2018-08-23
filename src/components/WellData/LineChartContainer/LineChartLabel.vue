@@ -58,10 +58,6 @@ export default {
       type: Number,
       required: true,
     },
-    yMax: {
-      type: Number,
-      required: true,
-    },
   },
   computed: {
     leftPosition() {
@@ -70,6 +66,9 @@ export default {
     benchmarkMax() {
       return d3.max(this.$store.getters.benchmarks,
         benchmark => benchmark.value);
+    },
+    yMax() {
+      return this.$store.getters.yMax;
     },
   },
 };

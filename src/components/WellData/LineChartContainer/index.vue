@@ -5,13 +5,11 @@
         <line-chart-formation
           :layout="layout"
           :scale="scale"
-          :yMax="yMax"
         />
         <line-chart-label
           :layout="layout"
           :scale="scale"
           :x-max="xMax"
-          :y-max="yMax"
         />
         <line-chart-axis
           v-for="(axis, index) in axes"
@@ -21,9 +19,7 @@
           :scale="scale"
         />
         <benchmark-line
-          :layout="layout"
           :scale="scale"
-          :x-max="xMax"
         />
         <line-chart-line
           :layout="layout"
@@ -47,7 +43,6 @@
 <script>
 import * as d3 from 'd3';
 import BenchmarkLine from './BenchmarkLine';
-import BitChangePoints from './BitChangePoints';
 import LineChartAxis from './LineChartAxis';
 import LineChartFormation from './LineChartFormation';
 import LineChartLabel from './LineChartLabel';
@@ -59,7 +54,6 @@ export default {
   name: 'line-chart-container',
   components: {
     BenchmarkLine,
-    BitChangePoints,
     LineChartAxis,
     LineChartFormation,
     LineChartLabel,
@@ -70,7 +64,7 @@ export default {
   data() {
     return {
       layout: {
-        width: 700,
+        width: 600,
         height: 500,
         marginTop: 45,
         marginRight: 35,
@@ -105,7 +99,7 @@ export default {
       return d3.max(this.currentWell.benchmarkInputByPortionInfo, well => well.drilledHours);
     },
     yMax() {
-      return d3.max(this.currentWell.benchmarkInputByPortionInfo, well => well.startDepth);
+      return this.$store.getters.yMax;
     },
   },
   methods: {
