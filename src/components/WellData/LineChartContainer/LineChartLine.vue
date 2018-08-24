@@ -4,26 +4,30 @@
       v-for="(line, index) in splitLines"
       :key="`${index}-line-section`"
     >
+      <path
+        :style="lineStyle"
+        :d="drawLine(line)"
+        :stroke="scale.color(index)"
+      />
+    </g>
+    <g
+      v-for="(bit, index) in drillBits"
+      :key="`${index}-${bit.bitType}`"
+    >
       <text
-        :x="getTextCoordinates(line).x"
-        :y="getTextCoordinates(line).y"
+        :x="getCoords(bit).x"
+        :y="getCoords(bit).y"
         :dy="index ? 0 : 10"
         :dx="15"
         :style="textStyle"
         :stroke="scale.color(index)"
         :fill="scale.color(index)"
       >
-        {{drillBits[index].bitType}}
+        {{bit.bitType}}
       </text>
-      <path
-        :style="lineStyle"
-        :d="drawLine(line)"
-        :stroke="scale.color(index)"
-      />
       <circle
-        v-if="index"
-        :cx="getCircleCoordinates(line, drillBits[index]).x"
-        :cy="getCircleCoordinates(line, drillBits[index]).y"
+        :cx="getCoords(bit).x"
+        :cy="getCoords(bit).y"
         :r="5"
         :style="circleStyle"
       />
@@ -64,17 +68,18 @@ export default {
     };
   },
   methods: {
-    getTextCoordinates(line) {
+    getCoords(bit) {
+      const x = this.findBisect(bit.depthIn);
       return {
-        x: this.scale.x(line[0].drilledHours),
-        y: this.scale.y(line[0].startDepth),
+        x: this.scale.x(x),
+        y: this.scale.y(bit.depthIn),
       };
     },
-    getCircleCoordinates(line, drillBit) {
-      return {
-        x: this.scale.x(line[0].drilledHours),
-        y: this.scale.y(drillBit.depthIn),
-      };
+    findBisect(depthIn) {
+      const bisector = d3.bisector(d => d.startDepth).left;
+      const indexWell = bisector(this.lineData, depthIn) === this.lineData.length ?
+        bisector(this.lineData, depthIn) - 1 : bisector(this.lineData, depthIn);
+      return this.lineData[indexWell].drilledHours;
     },
     drawLine(line) {
       const path = d3.line()
@@ -95,13 +100,10 @@ export default {
       const splitLines = [];
       this.drillBits.forEach((bit) => {
         const index = lineData.findIndex(line => line.startDepth > bit.depthIn);
-        if (index) {
-          splitLines.push(lineData.splice(0, index));
-        }
+        const slicedArray = lineData.splice(0, index);
+        if (slicedArray.length) { splitLines.push(slicedArray); }
       });
-      if (lineData.length > 0) {
-        splitLines.push(lineData);
-      }
+      if (lineData.length) { splitLines.push(lineData); }
       return splitLines;
     },
   },
