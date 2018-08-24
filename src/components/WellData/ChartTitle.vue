@@ -3,15 +3,15 @@
     <span class="chart-title">Well Performance vs. Benchmark</span>
     <div class="chart-legend-container">
       <div class="chart-legend">
-        <img src="/static/temp.png" />
+        <img src="/static/bitChange.png" />
         <span>Observed Bit Change</span>
       </div>
       <div class="chart-legend">
-        <img src="/static/temp.png" />
+        <img src="/static/well.png" />
         <span>Observed Well</span>
       </div>
       <div class="chart-legend">
-        <img src="/static/temp.png" />
+        <img src="/static/benchmark.png" />
         <span>Benchmark Well</span>
       </div>
     </div>
@@ -44,6 +44,5 @@ export default {
   display: flex
   align-items: center
   img
-    width: 1.5em
-    margin-right: .3em
+    margin-right: 1em
 </style>
