@@ -10,6 +10,10 @@
     <v-card>
       <v-card-text>
         <well-info-container />
+        <toggle-compare
+          :current-compare="currentCompare"
+          @toggleCompare="toggleCompare"
+        />
         <line-chart-container />
       </v-card-text>
     </v-card>
@@ -20,6 +24,7 @@
 <script>
 import BenchmarkTitle from './BenchmarkTitle';
 import LineChartContainer from './LineChartContainer';
+import ToggleCompare from './ToggleCompare';
 import WellInfoContainer from './WellInfoContainer';
 import WellOptions from './WellOptions';
 import WellTitle from './WellTitle';
@@ -29,6 +34,7 @@ export default {
   components: {
     BenchmarkTitle,
     LineChartContainer,
+    ToggleCompare,
     WellInfoContainer,
     WellOptions,
     WellTitle,
@@ -36,11 +42,15 @@ export default {
   data() {
     return {
       currentView: 'Overview',
+      currentCompare: 'time',
     };
   },
   methods: {
     changeView(view) {
       this.currentView = view;
+    },
+    toggleCompare(compare) {
+      this.currentCompare = compare;
     },
   },
 };
