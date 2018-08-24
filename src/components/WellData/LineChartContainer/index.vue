@@ -9,7 +9,6 @@
         <line-chart-label
           :layout="layout"
           :scale="scale"
-          :x-max="xMax"
         />
         <line-chart-axis
           v-for="(axis, index) in axes"
@@ -96,7 +95,7 @@ export default {
       return `0 0 ${outerWidth} ${outerHeight}`;
     },
     xMax() {
-      return d3.max(this.currentWell.benchmarkInputByPortionInfo, well => well.drilledHours);
+      return this.$store.getters.maxTime;
     },
     yMax() {
       return this.$store.getters.maxDepth;

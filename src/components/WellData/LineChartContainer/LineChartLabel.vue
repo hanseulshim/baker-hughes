@@ -54,10 +54,6 @@ export default {
       type: Object,
       required: true,
     },
-    xMax: {
-      type: Number,
-      required: true,
-    },
   },
   computed: {
     leftPosition() {
@@ -66,6 +62,9 @@ export default {
     benchmarkMax() {
       return d3.max(this.$store.getters.benchmarks,
         benchmark => benchmark.value);
+    },
+    xMax() {
+      return this.$store.getters.maxTime;
     },
     yMax() {
       return this.$store.getters.maxDepth;

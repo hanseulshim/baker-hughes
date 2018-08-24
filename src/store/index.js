@@ -45,5 +45,7 @@ export default new Vuex.Store({
       })),
     maxDepth: state =>
       Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.startDepth)),
+    maxTime: state =>
+      Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.drilledHours)),
   },
 });
