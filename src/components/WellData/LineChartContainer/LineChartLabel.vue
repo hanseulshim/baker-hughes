@@ -68,7 +68,7 @@ export default {
         benchmark => benchmark.value);
     },
     yMax() {
-      return this.$store.getters.yMax;
+      return this.$store.getters.maxDepth;
     },
   },
 };

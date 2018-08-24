@@ -44,7 +44,7 @@ export default {
   computed: {
     formations() {
       return this.$store.state.currentWell.includedFormations.filter(
-        formation => formation.startDepth <= this.$store.getters.yMax);
+        formation => formation.startDepth <= this.$store.getters.maxDepth);
     },
   },
   methods: {

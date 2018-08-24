@@ -99,7 +99,7 @@ export default {
       return d3.max(this.currentWell.benchmarkInputByPortionInfo, well => well.drilledHours);
     },
     yMax() {
-      return this.$store.getters.yMax;
+      return this.$store.getters.maxDepth;
     },
   },
   methods: {

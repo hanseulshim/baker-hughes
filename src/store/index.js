@@ -36,14 +36,14 @@ export default new Vuex.Store({
   },
   getters: {
     benchmarks: (state, getters) => dataPhantom.benchmarkDetailsByFeet.filter(
-      benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.yMax,
+      benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
     ),
     wellNames: () =>
       dataPhantom.includedWells.map(well => ({
         id: well.id,
         name: well.wellName,
       })),
-    yMax: state =>
+    maxDepth: state =>
       Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.startDepth)),
   },
 });
