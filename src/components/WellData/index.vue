@@ -14,25 +14,35 @@
       @updateWellOptions="updateWellOptions"
     />
     <v-card>
-      <line-chart-container />
+      <v-card-text>
+        <well-info-container
+          :operating-cost="operatingCost"
+          :fixed-cost="fixedCost"
+          :trip-rate="tripRate"
+          :trip-rate-unit="tripRateUnit"
+        />
+        <line-chart-container />
+      </v-card-text>
     </v-card>
   </div>
 </div>
 </template>
 
 <script>
-import WellOptions from './WellOptions';
-import LineChartContainer from './LineChartContainer';
-import WellTitle from './WellTitle';
 import BenchmarkTitle from './BenchmarkTitle';
+import LineChartContainer from './LineChartContainer';
+import WellInfoContainer from './WellInfoContainer';
+import WellOptions from './WellOptions';
+import WellTitle from './WellTitle';
 
 export default {
   name: 'well-data',
   components: {
-    WellOptions,
-    LineChartContainer,
-    WellTitle,
     BenchmarkTitle,
+    LineChartContainer,
+    WellInfoContainer,
+    WellOptions,
+    WellTitle,
   },
   data() {
     return {
