@@ -4,17 +4,17 @@
       <span class="well-info-title">Time</span>
       <div class="well-info-total-container">
         <i class="material-icons">access_time</i>
-        <span class="well-info-total">150 hr</span>
+        <span class="well-info-total">{{totalTime}} hrs</span>
       </div>
     </div>
     <div>
       <div class="well-info-unit-container">
         <span class="well-info-title">Operating</span>
-        <span class="well-info-unit">138</span>
+        <span class="well-info-unit">{{operating}}</span>
       </div>
       <div class="well-info-unit-container">
         <span class="well-info-title">Bit Change</span>
-        <span class="well-info-unit">12</span>
+        <span class="well-info-unit">{{bitChange}}</span>
       </div>
     </div>
   </div>
@@ -23,6 +23,17 @@
 <script>
 export default {
   name: 'time-info',
+  computed: {
+    bitChange() {
+      return Math.round(this.$store.getters.bitDepthSum);
+    },
+    operating() {
+      return Math.round(this.$store.getters.maxTime);
+    },
+    totalTime() {
+      return this.operating + this.bitChange;
+    },
+  },
 };
 </script>
 
