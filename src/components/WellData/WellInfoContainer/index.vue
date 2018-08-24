@@ -15,24 +15,6 @@ export default {
     CostInfo,
     TimeInfo,
   },
-  props: {
-    operatingCost: {
-      type: Number,
-      required: true,
-    },
-    fixedCost: {
-      type: Number,
-      required: true,
-    },
-    tripRate: {
-      type: Number,
-      required: true,
-    },
-    tripRateUnit: {
-      type: String,
-      required: true,
-    },
-  },
 };
 </script>
 

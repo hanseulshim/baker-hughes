@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <v-btn class="button-primary" @click="updateWellOptions()">update</v-btn>
+      <v-btn class="button-primary" @click="updateWellOptions">update</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -51,30 +51,12 @@
 <script>
 export default {
   name: 'well-options',
-  props: {
-    operatingCost: {
-      type: Number,
-      required: true,
-    },
-    fixedCost: {
-      type: Number,
-      required: true,
-    },
-    tripRate: {
-      type: Number,
-      required: true,
-    },
-    tripRateUnit: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
-      operatingCostLocal: this.operatingCost,
-      fixedCostLocal: this.fixedCost,
-      tripRateLocal: this.tripRate,
-      tripRateUnitLocal: this.tripRateUnit,
+      operatingCostLocal: this.$store.state.operatingCost,
+      fixedCostLocal: this.$store.state.fixedCost,
+      tripRateLocal: this.$store.state.tripRate,
+      tripRateUnitLocal: this.$store.state.tripRateUnit,
       items: ['ft', 'm'],
     };
   },
@@ -86,7 +68,7 @@ export default {
         tripRate: this.tripRateLocal,
         tripRateUnit: this.tripRateUnitLocal,
       };
-      this.$emit('updateWellOptions', options);
+      this.$store.dispatch('updateWellOptions', options);
     },
   },
 };
