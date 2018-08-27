@@ -1,13 +1,41 @@
 <template>
   <g>
-    <g ref="hoverWell" :style="style">
-      <circle :r="5"></circle>
+    <g :style="style" :opacity="opacity">
+      <circle :cx="xWell" :cy="yWell" :r="5"/>
     </g>
-    <g ref="hoverBenchmark" :style="style">
-      <circle :r="5"></circle>
+    <g :style="style" :opacity="opacity">
+      <circle :cx="xBenchmark" :cy="yBenchmark" :r="5"/>
     </g>
-    <path ref="hoverLine" :style="style"/>
-    <rect ref="rect"/>
+    <path :style="lineStyle" :opacity="opacity" :d="d" />
+    <g
+      :opacity="opacity"
+    >
+      <rect
+        fill="#5B5959"
+        :height="bbox.height + 5"
+        :width="bbox.width + 10"
+        :x="layout.width - (bbox.width + 10)"
+        :y="yWell - 10"
+      />
+      <text
+        class="hour-label"
+        ref="text"
+        :x="layout.width - bbox.width - 5"
+        :y="yWell"
+      >
+        <tspan>Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
+        <tspan>Time: {{Math.round(dataWell.drilledHours)}} hrs</tspan>
+      </text>
+    </g>
+    <rect
+      ref="rect"
+      @mouseover="showVisible"
+      @mouseout="hideVisible"
+      :width="layout.width"
+      :height="layout.height"
+      fill="none"
+      pointer-events="all"
+    />
   </g>
 </template>
 
@@ -17,10 +45,6 @@ import * as d3 from 'd3';
 export default {
   name: 'line-chart-tooltip',
   props: {
-    benchmarkData: {
-      type: Array,
-      required: true,
-    },
     layout: {
       type: Object,
       required: true,
@@ -29,50 +53,35 @@ export default {
       type: Object,
       required: true,
     },
-    singleWellData: {
-      type: Array,
-      required: true,
-    },
-    xPropName: {
-      type: String,
-      required: true,
-    },
-    yPropName: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
-      style: {
-        opacity: 0,
-        fill: 'none',
-        stroke: '#006FFF',
-        strokeWidth: 1,
+      bbox: { width: 0, height: 0 },
+      d: '',
+      dataWell: {},
+      dataBenchmark: {},
+      lineStyle: {
+        stroke: '#828488',
+        strokeDasharray: '7, 3',
       },
+      opacity: 0,
+      style: {
+        fill: 'none',
+        stroke: '#828488',
+        strokeWidth: 3,
+      },
+      xBenchmark: 0,
+      xWell: 0,
+      yBenchmark: 0,
+      yWell: 0,
     };
   },
   computed: {
-    hoverWell() {
-      return d3.select(this.$refs.hoverWell);
+    benchmarks() {
+      return this.$store.getters.benchmarks;
     },
-    hoverBenchmark() {
-      return d3.select(this.$refs.hoverBenchmark);
-    },
-    hoverLine() {
-      return d3.select(this.$refs.hoverLine);
-    },
-    legend() {
-      return d3.select('#line-chart-legend');
-    },
-    legendDepth() {
-      return d3.select('#line-chart-legend-depth');
-    },
-    legendWellTime() {
-      return d3.select('#line-chart-legend-well-time');
-    },
-    legendBenchmarkTime() {
-      return d3.select('#line-chart-legend-benchmark-time');
+    lineData() {
+      return this.$store.state.currentWell.benchmarkInputByPortionInfo;
     },
   },
   mounted() {
@@ -81,43 +90,36 @@ export default {
   methods: {
     createTooltips() {
       d3.select(this.$refs.rect)
-        .attr('width', this.layout.width)
-        .attr('height', this.layout.height)
-        .attr('fill', 'none')
-        .attr('pointer-events', 'all')
-        .on('mouseover', () => {
-          this.hoverWell.style('opacity', 1);
-          this.hoverBenchmark.style('opacity', 1);
-          this.hoverLine.style('opacity', 1);
-          this.legend.style('opacity', 1);
-        })
-        .on('mouseout', () => {
-          this.hoverWell.style('opacity', 0);
-          this.hoverBenchmark.style('opacity', 0);
-          this.hoverLine.style('opacity', 0);
-          this.legend.style('opacity', 0);
-        })
         .on('mousemove', this.mousemove);
     },
+    hideVisible() {
+      this.opacity = 0;
+    },
     mousemove() {
-      const xValue = this.scale.x.invert(d3.mouse(this.$refs.rect)[0]);
-      const bisector = d3.bisector(d => d[this.xPropName]).left;
-      const indexWell = bisector(this.singleWellData, xValue) === this.singleWellData.length ?
-        bisector(this.singleWellData, xValue) - 1 : bisector(this.singleWellData, xValue);
-      const indexBenchmark = bisector(this.benchmarkData, xValue) === this.benchmarkData.length ?
-        bisector(this.benchmarkData, xValue) - 1 : bisector(this.benchmarkData, xValue);
-      const dataWell = this.singleWellData[indexWell];
-      const dataBenchmark = this.benchmarkData[indexBenchmark];
-      const xCoordWell = this.scale.x(dataWell[this.xPropName]);
-      const yCoordWell = this.scale.y(dataWell[this.yPropName]);
-      const yCoordBenchmark = this.scale.y(dataBenchmark[this.yPropName]);
-      this.hoverWell.attr('transform', `translate(${xCoordWell}, ${yCoordWell})`);
-      this.hoverBenchmark.attr('transform', `translate(${xCoordWell}, ${yCoordBenchmark})`);
-      this.hoverLine.attr('d', () => `M${xCoordWell},${this.layout.height} ${xCoordWell},${yCoordWell}`);
-      this.legendDepth.html(Math.round(xCoordWell * 100) / 100);
-      this.legendWellTime.html(Math.round(yCoordWell * 100) / 100);
-      this.legendBenchmarkTime.html(Math.round(yCoordBenchmark * 100) / 100);
+      const yValue = this.scale.y.invert(d3.mouse(this.$refs.rect)[1]);
+      const bisector = d3.bisector(d => d.startDepth).left;
+      const indexWell = bisector(this.lineData, yValue) === this.lineData.length ?
+        bisector(this.lineData, yValue) - 1 : bisector(this.lineData, yValue);
+      const indexBenchmark = bisector(this.benchmarks, yValue) === this.benchmarks.length ?
+        bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
+      this.dataWell = this.lineData[indexWell];
+      this.dataBenchmark = this.benchmarks[indexBenchmark];
+      this.xWell = this.scale.x(this.dataWell.drilledHours);
+      this.yWell = this.scale.y(this.dataWell.startDepth);
+      this.xBenchmark = this.scale.x(this.dataBenchmark.value);
+      this.yBenchmark = this.scale.y(this.dataBenchmark.startDepth);
+      this.d = `M${0},${this.yWell} ${this.layout.width},${this.yWell}`;
+      this.bbox = this.$refs.text.getBBox();
+    },
+    showVisible() {
+      this.opacity = 1;
     },
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.hour-label
+  font-size: .5em
+  fill: #FFF
+</style>

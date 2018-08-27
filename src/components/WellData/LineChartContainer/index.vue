@@ -24,18 +24,13 @@
           :layout="layout"
           :scale="scale"
         />
-        <!--
+
         <line-chart-tooltip
-          :benchmark-data="benchmarkData"
           :layout="layout"
           :scale="scale"
-          :single-well-data="singleWellData"
-          :x-prop-name="xPropName"
-          :y-prop-name="yPropName"
-        /> -->
+        />
       </g>
     </svg>
-    <line-chart-legend />
   </div>
 </template>
 
@@ -45,7 +40,6 @@ import BenchmarkLine from './BenchmarkLine';
 import LineChartAxis from './LineChartAxis';
 import LineChartFormation from './LineChartFormation';
 import LineChartLabel from './LineChartLabel';
-import LineChartLegend from './LineChartLegend';
 import LineChartLine from './LineChartLine';
 import LineChartTooltip from './LineChartTooltip';
 
@@ -56,7 +50,6 @@ export default {
     LineChartAxis,
     LineChartFormation,
     LineChartLabel,
-    LineChartLegend,
     LineChartLine,
     LineChartTooltip,
   },
