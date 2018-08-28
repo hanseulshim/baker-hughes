@@ -80,9 +80,10 @@ export default {
     },
     findBisect(depthIn) {
       const bisector = d3.bisector(d => d.startDepth).left;
-      const indexWell = bisector(this.lineData, depthIn) === this.lineData.length ?
-        bisector(this.lineData, depthIn) - 1 : bisector(this.lineData, depthIn);
-      return this.lineData[indexWell].drilledHours;
+      const lineArray = [].concat(...this.lineData);
+      const indexWell = bisector(lineArray, depthIn) === lineArray.length ?
+        bisector(lineArray, depthIn) - 1 : bisector(lineArray, depthIn);
+      return lineArray[indexWell].drilledHours + (depthIn / this.tripRate);
     },
     getCoords(bit) {
       const x = this.findBisect(bit.depthIn);
@@ -93,22 +94,17 @@ export default {
     },
   },
   computed: {
+    tripRate() {
+      return this.$store.state.tripRate;
+    },
     drillBits() {
       return this.$store.state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn);
     },
     lineData() {
-      return this.$store.state.currentWell.benchmarkInputByPortionInfo;
+      return this.$store.getters.wellData;
     },
     splitLines() {
-      const lineData = this.lineData.slice();
-      const splitLines = [];
-      this.drillBits.forEach((bit) => {
-        const index = lineData.findIndex(line => line.startDepth > bit.depthIn);
-        const slicedArray = lineData.splice(0, index);
-        if (slicedArray.length) { splitLines.push(slicedArray); }
-      });
-      if (lineData.length) { splitLines.push(lineData); }
-      return splitLines;
+      return this.$store.getters.splitData;
     },
   },
   watch: {

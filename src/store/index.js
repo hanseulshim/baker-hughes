@@ -42,14 +42,6 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    wellData: state => (
-      state.currentCompare === 'time' ?
-        state.currentWell.benchmarkInputByPortionInfo.slice() :
-        state.currentWell.benchmarkInputByPortionInfo.map(well => ({
-          ...well,
-          drilledHours: well.drilledHours * state.operatingCost,
-        }))
-    ),
     benchmarks: (state, getters) => (
       state.currentCompare === 'time' ?
         dataPhantom.benchmarkDetailsByFeet.filter(
@@ -62,18 +54,52 @@ export default new Vuex.Store({
           value: benchmark.value * state.operatingCost,
         }))
     ),
+    bitDepths: (state, getters) => getters.drillBits.map(bit => bit.depthIn / state.tripRate),
+    bitDepthSum: (state, getters) => getters.bitDepths.reduce((a, b) => a + b),
+    drillBits: state => state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn),
+    maxDepth: (state, getters) =>
+      Math.max(...getters.wellData.map(well => well.startDepth)),
+    maxTime: state =>
+      Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.drilledHours)),
+    splitData: (state, getters) => {
+      const splitArray = [[]];
+      let index = 0;
+      let drillBit = getters.drillBits[index];
+      let drillSum = getters.bitDepths[index];
+      getters.wellData.forEach((well) => {
+        if (index) {
+          well.drilledHours += drillSum; // eslint-disable-line no-param-reassign
+        }
+        if (well.startDepth < drillBit.depthIn) {
+          splitArray[splitArray.length - 1].push(well);
+        } else {
+          if (splitArray[splitArray.length - 1].length) {
+            splitArray.push([]);
+          }
+          splitArray[splitArray.length - 1].push(well);
+          index += 1;
+          if (index < getters.drillBits.length - 1) {
+            drillBit = getters.drillBits[index];
+            drillSum = getters.bitDepths[index];
+          }
+        }
+      });
+      return splitArray;
+    },
+    wellData: state => (
+      state.currentCompare === 'time' ?
+        state.currentWell.benchmarkInputByPortionInfo.map(well => ({ ...well })) :
+        state.currentWell.benchmarkInputByPortionInfo.map(well => ({
+          ...well,
+          drilledHours: well.drilledHours * state.operatingCost,
+        }))
+    ),
     wellNames: () =>
       dataPhantom.includedWells.map(well => ({
         id: well.id,
         name: well.wellName,
       })),
-    maxDepth: (state, getters) =>
-      Math.max(...getters.wellData.map(well => well.startDepth)),
     xMax: (state, getters) =>
       Math.max(...getters.wellData.map(well => well.drilledHours)),
-    maxTime: state =>
-      Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.drilledHours)),
-    bitDepths: state => state.currentWell.drillBits.map(bit => bit.depthIn / state.tripRate),
-    bitDepthSum: (state, getters) => getters.bitDepths.reduce((a, b) => a + b),
   },
 });
