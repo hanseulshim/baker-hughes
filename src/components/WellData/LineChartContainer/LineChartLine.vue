@@ -20,8 +20,8 @@
         :dy="index ? 0 : 10"
         :dx="15"
         :style="textStyle"
-        :stroke="scale.color(index)"
-        :fill="scale.color(index)"
+        :stroke="bitColor(index)"
+        :fill="bitColor(index)"
       >
         {{bit.bitType}}
       </text>
@@ -68,12 +68,15 @@ export default {
     };
   },
   methods: {
-    getCoords(bit) {
-      const x = this.findBisect(bit.depthIn);
-      return {
-        x: this.scale.x(x),
-        y: this.scale.y(bit.depthIn),
-      };
+    bitColor(index) {
+      return this.splitLines.length === this.drillBits.length ?
+        this.scale.color(index) : this.scale.color(index + 1);
+    },
+    drawLine(line) {
+      const path = d3.line()
+        .x(d => this.scale.x(d.drilledHours))
+        .y(d => this.scale.y(d.startDepth));
+      return path(line);
     },
     findBisect(depthIn) {
       const bisector = d3.bisector(d => d.startDepth).left;
@@ -81,11 +84,12 @@ export default {
         bisector(this.lineData, depthIn) - 1 : bisector(this.lineData, depthIn);
       return this.lineData[indexWell].drilledHours;
     },
-    drawLine(line) {
-      const path = d3.line()
-        .x(d => this.scale.x(d.drilledHours))
-        .y(d => this.scale.y(d.startDepth));
-      return path(line);
+    getCoords(bit) {
+      const x = this.findBisect(bit.depthIn);
+      return {
+        x: this.scale.x(x),
+        y: this.scale.y(bit.depthIn),
+      };
     },
   },
   computed: {
