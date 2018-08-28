@@ -10,10 +10,7 @@
     <v-card>
       <v-card-text>
         <well-info-container />
-        <toggle-compare
-          :current-compare="currentCompare"
-          @toggleCompare="toggleCompare"
-        />
+        <toggle-compare />
         <chart-title />
         <line-chart-container />
       </v-card-text>
@@ -45,15 +42,11 @@ export default {
   data() {
     return {
       currentView: 'Overview',
-      currentCompare: 'time',
     };
   },
   methods: {
     changeView(view) {
       this.currentView = view;
-    },
-    toggleCompare(compare) {
-      this.currentCompare = compare;
     },
   },
 };

@@ -1,12 +1,22 @@
 <template>
   <g class='labels'>
     <text
+      v-if="currentCompare === 'time'"
       class="chart-label"
       text-anchor="middle"
       :x="layout.width / 2"
       :y="-(layout.marginTop / 2)"
     >
       Cumulative Time (hrs.)
+    </text>
+    <text
+      v-else
+      class="chart-label"
+      text-anchor="middle"
+      :x="layout.width / 2"
+      :y="-(layout.marginTop / 2)"
+    >
+      Cost (USD)
     </text>
     <text
       class="chart-label"
@@ -56,12 +66,15 @@ export default {
     },
   },
   computed: {
-    leftPosition() {
-      return this.scale.x(this.xMax) + 3;
+    currentCompare() {
+      return this.$store.state.currentCompare;
     },
     benchmarkMax() {
       return d3.max(this.$store.getters.benchmarks,
         benchmark => benchmark.value);
+    },
+    leftPosition() {
+      return this.scale.x(this.xMax) + 3;
     },
     xMax() {
       return this.$store.getters.maxTime;

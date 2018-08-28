@@ -14,8 +14,12 @@ export default new Vuex.Store({
     fixedCost: 15000,
     tripRate: 1000,
     tripRateUnit: 'ft',
+    currentCompare: 'time',
   },
   mutations: {
+    toggleCompare(state, payload) {
+      state.currentCompare = payload;
+    },
     updateCurrentWell(state, payload) {
       state.currentWell = state.wells.find(well => well.id === payload.id);
     },
@@ -27,6 +31,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    toggleCompare(context, compare) {
+      context.commit('toggleCompare', compare);
+    },
     updateCurrentWell(context, well) {
       context.commit('updateCurrentWell', well);
     },

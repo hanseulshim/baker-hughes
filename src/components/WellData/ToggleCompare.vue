@@ -22,15 +22,14 @@
 <script>
 export default {
   name: 'ToggleCompare',
-  props: {
-    currentCompare: {
-      type: String,
-      required: true,
+  computed: {
+    currentCompare() {
+      return this.$store.state.currentCompare;
     },
   },
   methods: {
     toggleCompare(compare) {
-      this.$emit('toggleCompare', compare);
+      this.$store.dispatch('toggleCompare', compare);
     },
   },
 };
