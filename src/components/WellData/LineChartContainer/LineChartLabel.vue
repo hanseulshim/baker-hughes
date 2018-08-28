@@ -1,7 +1,7 @@
 <template>
   <g class='labels'>
     <text
-      v-if="currentCompare === 'time'"
+      v-if="currentCompare"
       class="chart-label"
       text-anchor="middle"
       :x="layout.width / 2"
@@ -34,8 +34,10 @@
       text-anchor="middle"
     >
       <tspan :x="leftPosition">|</tspan>
-      <tspan :x="leftPosition" dy="1em">Observed Time</tspan>
-      <tspan :x="leftPosition" dy="1em">{{Math.round(xMax)}} hrs</tspan>
+      <tspan v-if="currentCompare" :x="leftPosition" dy="1em">Observed Time</tspan>
+      <tspan v-else :x="leftPosition" dy="1em">Observed Cost</tspan>
+      <tspan v-if="currentCompare" :x="leftPosition" dy="1em">{{Math.round(xMax)}} hrs</tspan>
+      <tspan v-else :x="leftPosition" dy="1em">${{Math.round(xMax / 1000)}}k</tspan>
     </text>
     <text
       class="chart-line-label"
@@ -44,8 +46,22 @@
       text-anchor="middle"
     >
       <tspan :x="scale.x(benchmarkMax)">|</tspan>
-      <tspan :x="scale.x(benchmarkMax)" dy="1em">Benchmark Time</tspan>
-      <tspan :x="scale.x(benchmarkMax)" dy="1em">{{Math.round(benchmarkMax)}} hrs</tspan>
+      <tspan v-if="currentCompare" :x="scale.x(benchmarkMax)" dy="1em">Benchmark Time</tspan>
+      <tspan v-else :x="scale.x(benchmarkMax)" dy="1em">Benchmark Cost</tspan>
+      <tspan
+        v-if="currentCompare"
+        :x="scale.x(benchmarkMax)"
+        dy="1em"
+      >
+        {{Math.round(benchmarkMax)}} hrs
+      </tspan>
+      <tspan
+        v-else
+        :x="scale.x(benchmarkMax)"
+        dy="1em"
+      >
+        ${{Math.round(benchmarkMax / 1000)}}k
+      </tspan>
     </text>
   </g>
 </template>
@@ -67,7 +83,7 @@ export default {
   },
   computed: {
     currentCompare() {
-      return this.$store.state.currentCompare;
+      return this.$store.state.currentCompare === 'time';
     },
     benchmarkMax() {
       return d3.max(this.$store.getters.benchmarks,
@@ -77,7 +93,7 @@ export default {
       return this.scale.x(this.xMax) + 3;
     },
     xMax() {
-      return this.$store.getters.maxTime;
+      return this.$store.getters.xMax;
     },
     yMax() {
       return this.$store.getters.maxDepth;

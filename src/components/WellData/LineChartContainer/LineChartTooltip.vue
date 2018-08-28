@@ -23,8 +23,10 @@
         :x="layout.width - bbox.width - 5"
         :y="yWell"
       >
-        <tspan>Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
-        <tspan>Time: {{Math.round(dataWell.drilledHours)}} hrs</tspan>
+        <tspan v-if="currentCompare">Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
+        <tspan v-else>Benchmark: ${{Math.round(dataBenchmark.value / 1000)}}k</tspan>
+        <tspan v-if="currentCompare">Time: {{Math.round(dataWell.drilledHours)}} hrs</tspan>
+        <tspan v-else>Cost: ${{Math.round(dataWell.drilledHours / 1000)}}k</tspan>
       </text>
     </g>
     <rect
@@ -80,8 +82,11 @@ export default {
     benchmarks() {
       return this.$store.getters.benchmarks;
     },
+    currentCompare() {
+      return this.$store.state.currentCompare === 'time';
+    },
     lineData() {
-      return this.$store.state.currentWell.benchmarkInputByPortionInfo;
+      return this.$store.getters.wellData;
     },
   },
   mounted() {

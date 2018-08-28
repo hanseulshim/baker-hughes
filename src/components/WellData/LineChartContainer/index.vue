@@ -67,9 +67,6 @@ export default {
     };
   },
   computed: {
-    currentWell() {
-      return this.$store.state.currentWell;
-    },
     scale() {
       return {
         x: this.getScaleX(),
@@ -88,7 +85,7 @@ export default {
       return `0 0 ${outerWidth} ${outerHeight}`;
     },
     xMax() {
-      return this.$store.getters.maxTime;
+      return this.$store.getters.xMax;
     },
     yMax() {
       return this.$store.getters.maxDepth;
