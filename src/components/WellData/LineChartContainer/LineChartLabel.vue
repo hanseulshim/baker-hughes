@@ -102,10 +102,10 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .chart-label
-  font-size: 60%
+  font-size: 100%
   font-weight: bold
 .chart-line-label
-  font-size: 50%
+  font-size: 80%
 </style>
