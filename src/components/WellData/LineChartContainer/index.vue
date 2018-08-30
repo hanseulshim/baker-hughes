@@ -56,10 +56,10 @@ export default {
   data() {
     return {
       layout: {
-        width: 600,
-        height: 500,
+        width: 800,
+        height: 800,
         marginTop: 45,
-        marginRight: 35,
+        marginRight: 10,
         marginBottom: 50,
         marginLeft: 75,
       },
@@ -120,4 +120,5 @@ export default {
 <style lang="sass" scoped>
 #line-chart-container
   position: relative
+  flex-grow: 1
 </style>
