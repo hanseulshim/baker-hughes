@@ -42,14 +42,6 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    wellData: state => (
-      state.currentCompare === 'time' ?
-        state.currentWell.benchmarkInputByPortionInfo.slice() :
-        state.currentWell.benchmarkInputByPortionInfo.map(well => ({
-          ...well,
-          drilledHours: well.drilledHours * state.operatingCost,
-        }))
-    ),
     benchmarks: (state, getters) => (
       state.currentCompare === 'time' ?
         dataPhantom.benchmarkDetailsByFeet.filter(
@@ -62,18 +54,59 @@ export default new Vuex.Store({
           value: benchmark.value * state.operatingCost,
         }))
     ),
+    bitDepths: (state, getters) => getters.drillBits.map(bit => bit.depthIn / state.tripRate),
+    bitDepthSum: (state, getters) => getters.bitDepths.reduce((a, b) => a + b),
+    drillBits: state => state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn),
+    maxDepth: (state, getters) =>
+      Math.max(...getters.wellData.map(well => well.startDepth)),
+    maxTime: (state, getters) =>
+      Math.max(...getters.wellData.map(well => well.drilledHours)),
+    splitData: (state, getters) => {
+      const splitArray = [];
+      const indexArray = [];
+      getters.drillBits.forEach((bit) => {
+        const index = getters.wellData.findIndex(well => well.startDepth > bit.depthIn);
+        if (index) { indexArray.push(index); }
+      });
+      indexArray.forEach((wellIndex, arrIndex) => {
+        if (arrIndex === 0) {
+          splitArray.push(getters.wellData.slice(0, wellIndex));
+        } else {
+          splitArray.push(getters.wellData.slice(indexArray[arrIndex - 1], wellIndex));
+        }
+        if (arrIndex === indexArray.length - 1) {
+          splitArray.push(getters.wellData.slice(wellIndex));
+        }
+      });
+      if (splitArray.length > getters.bitDepths.length) {
+        for (let i = 1; i < splitArray.length; i += 1) {
+          splitArray[i].forEach((well) => {
+            well.drilledHours += getters.bitDepths[i - 1]; // eslint-disable-line no-param-reassign
+          });
+        }
+      } else {
+        for (let i = 0; i < splitArray.length; i += 1) {
+          splitArray[i].forEach((well) => {
+            well.drilledHours += getters.bitDepths[i]; // eslint-disable-line no-param-reassign
+          });
+        }
+      }
+      return splitArray;
+    },
+    wellData: state => (
+      state.currentCompare === 'time' ?
+        state.currentWell.benchmarkInputByPortionInfo.map(well => ({ ...well })) :
+        state.currentWell.benchmarkInputByPortionInfo.map(well => ({
+          ...well,
+          drilledHours: well.drilledHours * state.operatingCost,
+        }))
+    ),
     wellNames: () =>
       dataPhantom.includedWells.map(well => ({
         id: well.id,
         name: well.wellName,
       })),
-    maxDepth: (state, getters) =>
-      Math.max(...getters.wellData.map(well => well.startDepth)),
     xMax: (state, getters) =>
       Math.max(...getters.wellData.map(well => well.drilledHours)),
-    maxTime: state =>
-      Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.drilledHours)),
-    bitDepths: state => state.currentWell.drillBits.map(bit => bit.depthIn / state.tripRate),
-    bitDepthSum: (state, getters) => getters.bitDepths.reduce((a, b) => a + b),
   },
 });
