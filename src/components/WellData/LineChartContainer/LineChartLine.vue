@@ -4,26 +4,30 @@
       v-for="(line, index) in splitLines"
       :key="`${index}-line-section`"
     >
-      <text
-        :x="getTextCoordinates(line).x"
-        :y="getTextCoordinates(line).y"
-        :dy="index ? 0 : 10"
-        :dx="15"
-        :style="textStyle"
-        :stroke="scale.color(index)"
-        :fill="scale.color(index)"
-      >
-        {{drillBits[index].bitType}}
-      </text>
       <path
         :style="lineStyle"
         :d="drawLine(line)"
         :stroke="scale.color(index)"
       />
+    </g>
+    <g
+      v-for="(bit, index) in drillBits"
+      :key="`${index}-${bit.bitType}`"
+    >
+      <text
+        :x="getCoords(bit).x"
+        :y="getCoords(bit).y"
+        :dy="index ? 0 : 10"
+        :dx="15"
+        :style="textStyle"
+        :stroke="bitColor(index)"
+        :fill="bitColor(index)"
+      >
+        {{bit.bitType}}
+      </text>
       <circle
-        v-if="index"
-        :cx="getCircleCoordinates(line, drillBits[index]).x"
-        :cy="getCircleCoordinates(line, drillBits[index]).y"
+        :cx="getCoords(bit).x"
+        :cy="getCoords(bit).y"
         :r="5"
         :style="circleStyle"
       />
@@ -59,22 +63,13 @@ export default {
       circleStyle: {
         fill: '#000',
         stroke: '#000',
-        strokeWidth: 2,
       },
     };
   },
   methods: {
-    getTextCoordinates(line) {
-      return {
-        x: this.scale.x(line[0].drilledHours),
-        y: this.scale.y(line[0].startDepth),
-      };
-    },
-    getCircleCoordinates(line, drillBit) {
-      return {
-        x: this.scale.x(line[0].drilledHours),
-        y: this.scale.y(drillBit.depthIn),
-      };
+    bitColor(index) {
+      return this.splitLines.length === this.drillBits.length ?
+        this.scale.color(index) : this.scale.color(index + 1);
     },
     drawLine(line) {
       const path = d3.line()
@@ -82,27 +77,30 @@ export default {
         .y(d => this.scale.y(d.startDepth));
       return path(line);
     },
+    findBisect(depthIn) {
+      const bisector = d3.bisector(d => d.startDepth).left;
+      const lineArray = [].concat(...this.lineData);
+      const indexWell = bisector(lineArray, depthIn) === lineArray.length ?
+        bisector(lineArray, depthIn) - 1 : bisector(lineArray, depthIn);
+      return lineArray[indexWell].drilledHours;
+    },
+    getCoords(bit) {
+      const x = this.findBisect(bit.depthIn);
+      return {
+        x: this.scale.x(x),
+        y: this.scale.y(bit.depthIn),
+      };
+    },
   },
   computed: {
     drillBits() {
       return this.$store.state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn);
     },
     lineData() {
-      return this.$store.state.currentWell.benchmarkInputByPortionInfo;
+      return this.$store.getters.wellData;
     },
     splitLines() {
-      const lineData = this.lineData.slice();
-      const splitLines = [];
-      this.drillBits.forEach((bit) => {
-        const index = lineData.findIndex(line => line.startDepth > bit.depthIn);
-        if (index) {
-          splitLines.push(lineData.splice(0, index));
-        }
-      });
-      if (lineData.length > 0) {
-        splitLines.push(lineData);
-      }
-      return splitLines;
+      return this.$store.getters.splitData;
     },
   },
   watch: {

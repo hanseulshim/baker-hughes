@@ -35,20 +35,16 @@ export default {
       type: Object,
       required: true,
     },
-    yMax: {
-      type: Number,
-      required: true,
-    },
   },
   data() {
     return {
-      formationColor: d3.scaleOrdinal(d3.schemePastel1),
+      formationColor: d3.scaleOrdinal(d3.schemePastel2),
     };
   },
   computed: {
     formations() {
       return this.$store.state.currentWell.includedFormations.filter(
-        formation => formation.startDepth <= this.yMax);
+        formation => formation.startDepth <= this.$store.getters.maxDepth);
     },
   },
   methods: {
