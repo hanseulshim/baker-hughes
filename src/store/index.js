@@ -59,31 +59,38 @@ export default new Vuex.Store({
     drillBits: state => state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn),
     maxDepth: (state, getters) =>
       Math.max(...getters.wellData.map(well => well.startDepth)),
-    maxTime: state =>
-      Math.max(...state.currentWell.benchmarkInputByPortionInfo.map(well => well.drilledHours)),
+    maxTime: (state, getters) =>
+      Math.max(...getters.wellData.map(well => well.drilledHours)),
     splitData: (state, getters) => {
-      const splitArray = [[]];
-      let index = 0;
-      let drillBit = getters.drillBits[index];
-      let drillSum = getters.bitDepths[index];
-      getters.wellData.forEach((well) => {
-        if (index) {
-          well.drilledHours += drillSum; // eslint-disable-line no-param-reassign
-        }
-        if (well.startDepth < drillBit.depthIn) {
-          splitArray[splitArray.length - 1].push(well);
+      const splitArray = [];
+      const indexArray = [];
+      getters.drillBits.forEach((bit) => {
+        const index = getters.wellData.findIndex(well => well.startDepth > bit.depthIn);
+        if (index) { indexArray.push(index); }
+      });
+      indexArray.forEach((wellIndex, arrIndex) => {
+        if (arrIndex === 0) {
+          splitArray.push(getters.wellData.slice(0, wellIndex));
         } else {
-          if (splitArray[splitArray.length - 1].length) {
-            splitArray.push([]);
-          }
-          splitArray[splitArray.length - 1].push(well);
-          index += 1;
-          if (index < getters.drillBits.length - 1) {
-            drillBit = getters.drillBits[index];
-            drillSum = getters.bitDepths[index];
-          }
+          splitArray.push(getters.wellData.slice(indexArray[arrIndex - 1], wellIndex));
+        }
+        if (arrIndex === indexArray.length - 1) {
+          splitArray.push(getters.wellData.slice(wellIndex));
         }
       });
+      if (splitArray.length > getters.bitDepths.length) {
+        for (let i = 1; i < splitArray.length; i += 1) {
+          splitArray[i].forEach((well) => {
+            well.drilledHours += getters.bitDepths[i - 1]; // eslint-disable-line no-param-reassign
+          });
+        }
+      } else {
+        for (let i = 0; i < splitArray.length; i += 1) {
+          splitArray[i].forEach((well) => {
+            well.drilledHours += getters.bitDepths[i]; // eslint-disable-line no-param-reassign
+          });
+        }
+      }
       return splitArray;
     },
     wellData: state => (

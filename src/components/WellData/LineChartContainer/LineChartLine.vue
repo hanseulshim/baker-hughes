@@ -63,7 +63,6 @@ export default {
       circleStyle: {
         fill: '#000',
         stroke: '#000',
-        strokeWidth: 2,
       },
     };
   },
@@ -83,7 +82,7 @@ export default {
       const lineArray = [].concat(...this.lineData);
       const indexWell = bisector(lineArray, depthIn) === lineArray.length ?
         bisector(lineArray, depthIn) - 1 : bisector(lineArray, depthIn);
-      return lineArray[indexWell].drilledHours + (depthIn / this.tripRate);
+      return lineArray[indexWell].drilledHours;
     },
     getCoords(bit) {
       const x = this.findBisect(bit.depthIn);
@@ -94,9 +93,6 @@ export default {
     },
   },
   computed: {
-    tripRate() {
-      return this.$store.state.tripRate;
-    },
     drillBits() {
       return this.$store.state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn);
     },
