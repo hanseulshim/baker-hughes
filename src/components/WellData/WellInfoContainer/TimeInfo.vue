@@ -21,17 +21,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'time-info',
   computed: {
+    ...mapGetters(['xMax', 'bitDepthSum']),
     bitChange() {
-      return Math.round(this.$store.getters.bitDepthSum);
+      return Math.round(this.bitDepthSum);
     },
     operating() {
-      return Math.round(this.$store.getters.maxTime);
+      return this.totalTime - this.bitChange;
     },
     totalTime() {
-      return this.operating + this.bitChange;
+      return Math.round(this.xMax);
     },
   },
 };
