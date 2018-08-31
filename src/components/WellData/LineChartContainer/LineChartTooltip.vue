@@ -1,21 +1,21 @@
 <template>
   <g>
-    <g :style="style" :opacity="opacity">
+    <g :style="style" :opacity="lineOpacity">
       <circle :cx="wellCoords.x" :cy="wellCoords.y" :r="5"/>
     </g>
-    <g :style="style" :opacity="opacity">
+    <g :style="style" :opacity="lineOpacity">
       <circle :cx="benchmarkCoords.x" :cy="benchmarkCoords.y" :r="5"/>
     </g>
-    <path :style="lineStyle" :opacity="opacity" :d="d" />
+    <path :style="lineStyle" :opacity="lineOpacity" :d="d" />
     <g
-      :opacity="opacity"
+      :opacity="lineOpacity"
     >
       <rect
         fill="#5B5959"
         :height="bbox.height + 5"
         :width="bbox.width + 10"
         :x="layout.width - (bbox.width + 10)"
-        :y="wellCoords.y - 10"
+        :y="wellCoords.y - 13"
       />
       <text
         class="hour-label"
@@ -43,6 +43,7 @@
 
 <script>
 import * as d3 from 'd3';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'line-chart-tooltip',
@@ -58,14 +59,10 @@ export default {
   },
   data() {
     return {
-      bbox: { width: 0, height: 0 },
-      dataWell: { drilledHours: 0, startDepth: 0 },
-      dataBenchmark: { value: 0, startDepth: 0 },
       lineStyle: {
         stroke: '#828488',
         strokeDasharray: '7, 3',
       },
-      opacity: 0,
       style: {
         fill: 'none',
         stroke: '#828488',
@@ -74,9 +71,11 @@ export default {
     };
   },
   computed: {
-    benchmarks() {
-      return this.$store.getters.benchmarks;
-    },
+    ...mapState('hover', ['dataWell', 'dataBenchmark', 'bbox', 'lineOpacity']),
+    ...mapGetters({
+      benchmarks: 'benchmarks',
+      lineData: 'wellData',
+    }),
     benchmarkCoords() {
       return {
         x: this.scale.x(this.dataBenchmark.value),
@@ -88,9 +87,6 @@ export default {
     },
     d() {
       return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
-    },
-    lineData() {
-      return this.$store.getters.wellData;
     },
     wellCoords() {
       return {
@@ -108,7 +104,7 @@ export default {
         .on('mousemove', this.mousemove);
     },
     hideVisible() {
-      this.opacity = 0;
+      this.$store.dispatch('hover/hideVisible');
     },
     mousemove() {
       const yValue = this.scale.y.invert(d3.mouse(this.$refs.rect)[1]);
@@ -117,12 +113,12 @@ export default {
         bisector(this.lineData, yValue) - 1 : bisector(this.lineData, yValue);
       const indexBenchmark = bisector(this.benchmarks, yValue) === this.benchmarks.length ?
         bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
-      this.dataWell = this.lineData[indexWell];
-      this.dataBenchmark = this.benchmarks[indexBenchmark];
-      this.bbox = this.$refs.text.getBBox();
+      this.$store.dispatch('hover/updateDataWell', this.lineData[indexWell]);
+      this.$store.dispatch('hover/updateDataBenchmark', this.benchmarks[indexBenchmark]);
+      this.$store.dispatch('hover/updateBbox', this.$refs.text.getBBox());
     },
     showVisible() {
-      this.opacity = 1;
+      this.$store.dispatch('hover/showVisible');
     },
   },
 };
@@ -130,6 +126,6 @@ export default {
 
 <style lang="sass" scoped>
 .hour-label
-  font-size: .5em
+  font-size: 75%
   fill: #FFF
 </style>
