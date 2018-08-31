@@ -9,6 +9,10 @@
           :layout="layout"
           :scale="scale"
         />
+        <area-chart-line
+          :layout="layout"
+          :scale="scale"
+        />
         <area-chart-label
           :layout="layout"
           :scale="scale"
@@ -22,7 +26,7 @@
 import * as d3 from 'd3';
 import AreaChartAxis from './AreaChartAxis';
 import AreaChartLabel from './AreaChartLabel';
-// import LineChartLine from './LineChartLine';
+import AreaChartLine from './AreaChartLine';
 // import LineChartTooltip from './LineChartTooltip';
 
 export default {
@@ -30,7 +34,7 @@ export default {
   components: {
     AreaChartAxis,
     AreaChartLabel,
-    // LineChartLine,
+    AreaChartLine,
     // LineChartTooltip,
   },
   data() {
@@ -65,7 +69,7 @@ export default {
       return `0 0 ${outerWidth} ${outerHeight}`;
     },
     xMax() {
-      return this.$store.getters.xMax;
+      return this.$store.getters.maxSlope;
     },
     yMax() {
       return this.$store.getters.maxDepth;
@@ -74,7 +78,8 @@ export default {
   methods: {
     getScaleX() {
       return d3.scaleLinear()
-        .domain([0, 1])
+        // .domain([0, this.xMax])
+        .domain([0, 0.05])
         .range([0, this.layout.width])
         .nice();
     },
