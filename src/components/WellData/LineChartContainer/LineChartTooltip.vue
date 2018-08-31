@@ -1,10 +1,10 @@
 <template>
   <g>
     <g :style="style" :opacity="opacity">
-      <circle :cx="xWell" :cy="yWell" :r="5"/>
+      <circle :cx="wellCoords.x" :cy="wellCoords.y" :r="5"/>
     </g>
     <g :style="style" :opacity="opacity">
-      <circle :cx="xBenchmark" :cy="yBenchmark" :r="5"/>
+      <circle :cx="benchmarkCoords.x" :cy="benchmarkCoords.y" :r="5"/>
     </g>
     <path :style="lineStyle" :opacity="opacity" :d="d" />
     <g
@@ -15,13 +15,13 @@
         :height="bbox.height + 5"
         :width="bbox.width + 10"
         :x="layout.width - (bbox.width + 10)"
-        :y="yWell - 10"
+        :y="wellCoords.y - 10"
       />
       <text
         class="hour-label"
         ref="text"
         :x="layout.width - bbox.width - 5"
-        :y="yWell"
+        :y="wellCoords.y"
       >
         <tspan v-if="currentCompare">Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
         <tspan v-else>Benchmark: ${{Math.round(dataBenchmark.value / 1000)}}k</tspan>
@@ -59,9 +59,8 @@ export default {
   data() {
     return {
       bbox: { width: 0, height: 0 },
-      d: '',
-      dataWell: {},
-      dataBenchmark: {},
+      dataWell: { drilledHours: 0, startDepth: 0 },
+      dataBenchmark: { value: 0, startDepth: 0 },
       lineStyle: {
         stroke: '#828488',
         strokeDasharray: '7, 3',
@@ -72,21 +71,32 @@ export default {
         stroke: '#828488',
         strokeWidth: 3,
       },
-      xBenchmark: 0,
-      xWell: 0,
-      yBenchmark: 0,
-      yWell: 0,
     };
   },
   computed: {
     benchmarks() {
       return this.$store.getters.benchmarks;
     },
+    benchmarkCoords() {
+      return {
+        x: this.scale.x(this.dataBenchmark.value),
+        y: this.scale.y(this.dataBenchmark.startDepth),
+      };
+    },
     currentCompare() {
       return this.$store.state.currentCompare === 'time';
     },
+    d() {
+      return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
+    },
     lineData() {
       return this.$store.getters.wellData;
+    },
+    wellCoords() {
+      return {
+        x: this.scale.x(this.dataWell.drilledHours),
+        y: this.scale.y(this.dataWell.startDepth),
+      };
     },
   },
   mounted() {
@@ -109,11 +119,6 @@ export default {
         bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
       this.dataWell = this.lineData[indexWell];
       this.dataBenchmark = this.benchmarks[indexBenchmark];
-      this.xWell = this.scale.x(this.dataWell.drilledHours);
-      this.yWell = this.scale.y(this.dataWell.startDepth);
-      this.xBenchmark = this.scale.x(this.dataBenchmark.value);
-      this.yBenchmark = this.scale.y(this.dataBenchmark.startDepth);
-      this.d = `M${0},${this.yWell} ${this.layout.width},${this.yWell}`;
       this.bbox = this.$refs.text.getBBox();
     },
     showVisible() {
