@@ -15,7 +15,7 @@
         class="chart-formation-label"
         text-anchor="end"
         :x="layout.width - 8"
-        :y="getY(formation) + 8"
+        :y="getY(formation) + 10"
       >{{formation.formationName}}</text>
     </g>
   </g>
@@ -61,5 +61,5 @@ export default {
 <style lang="sass" scoped>
 .chart-formation-label
   fill: #9A9993
-  font-size: 40%
+  font-size: 60%
 </style>
