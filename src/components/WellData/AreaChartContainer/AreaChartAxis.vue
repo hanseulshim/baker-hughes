@@ -77,3 +77,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.tick
+  font-size: 125%
+</style>
