@@ -58,7 +58,7 @@ export default {
         width: 800,
         height: 800,
         marginTop: 45,
-        marginRight: 10,
+        marginRight: 20,
         marginBottom: 50,
         marginLeft: 75,
       },
@@ -119,5 +119,5 @@ export default {
 <style lang="sass" scoped>
 #line-chart-container
   position: relative
-  flex-grow: 1
+  width: 800px
 </style>
