@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import dataPhantom from '../data/dataPhantom.json';
+import dataSlope from '../data/dataSlope.json';
 import benchmarkNames from '../data/benchmarkNames';
 
 Vue.use(Vuex);
@@ -8,13 +9,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     benchmarkNames,
+    currentCompare: 'time',
     currentWell: dataPhantom.includedWells[0],
-    wells: dataPhantom.includedWells,
-    operatingCost: 2500,
+    dataSlope,
     fixedCost: 15000,
+    operatingCost: 2500,
     tripRate: 1000,
     tripRateUnit: 'ft',
-    currentCompare: 'time',
+    wells: dataPhantom.includedWells,
   },
   mutations: {
     toggleCompare(state, payload) {
@@ -61,6 +63,9 @@ export default new Vuex.Store({
       Math.max(...getters.wellData.map(well => well.startDepth)),
     maxTime: (state, getters) =>
       Math.max(...getters.wellData.map(well => well.drilledHours)),
+    maxSlope: (state, getters) =>
+      Math.max(...getters.slopeData.map(well => well.running_average_gradient_diff)),
+    slopeData: state => state.dataSlope.filter(slope => slope.well === state.currentWell.wellName),
     splitData: (state, getters) => {
       const splitArray = [];
       const indexArray = [];
@@ -91,6 +96,25 @@ export default new Vuex.Store({
           });
         }
       }
+      return splitArray;
+    },
+    splitSlopeData: (state, getters) => {
+      const splitArray = [];
+      const indexArray = [];
+      getters.drillBits.forEach((bit) => {
+        const index = getters.slopeData.findIndex(well => well.cumulativeDepth > bit.depthIn);
+        if (index) { indexArray.push(index); }
+      });
+      indexArray.forEach((wellIndex, arrIndex) => {
+        if (arrIndex === 0) {
+          splitArray.push(getters.slopeData.slice(0, wellIndex));
+        } else {
+          splitArray.push(getters.slopeData.slice(indexArray[arrIndex - 1], wellIndex));
+        }
+        if (arrIndex === indexArray.length - 1) {
+          splitArray.push(getters.slopeData.slice(wellIndex));
+        }
+      });
       return splitArray;
     },
     wellData: state => (
