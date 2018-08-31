@@ -18,6 +18,10 @@
           :layout="layout"
           :scale="scale"
         />
+        <area-chart-tooltip
+          :layout="layout"
+          :scale="scale"
+        />
       </g>
     </svg>
   </div>
@@ -28,7 +32,7 @@ import * as d3 from 'd3';
 import AreaChartAxis from './AreaChartAxis';
 import AreaChartLabel from './AreaChartLabel';
 import AreaChartLine from './AreaChartLine';
-// import LineChartTooltip from './LineChartTooltip';
+import AreaChartTooltip from './AreaChartTooltip';
 
 export default {
   name: 'area-chart-container',
@@ -36,13 +40,13 @@ export default {
     AreaChartAxis,
     AreaChartLabel,
     AreaChartLine,
-    // LineChartTooltip,
+    AreaChartTooltip,
   },
   data() {
     return {
       axes: ['left', 'top'],
       layout: {
-        width: 280,
+        width: 265,
         height: 800,
         marginTop: 45,
         marginRight: 50,

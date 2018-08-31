@@ -17,7 +17,7 @@
         :d="`M${0},${scale.y(bit.depthIn)} ${layout.width},${scale.y(bit.depthIn)}`"/>
       <text
         class="chart-line-label"
-        :x="layout.width + 10"
+        :x="layout.width + 5"
         :y="scale.y(bit.depthIn) + 2"
       >
         {{Math.round(bit.depthIn)}} ft
