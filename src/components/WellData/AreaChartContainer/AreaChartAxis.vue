@@ -50,7 +50,7 @@ export default {
       const $axis = d3.select(this.$refs.axis);
       const scale = this.scale;
       const axisGenerator = {
-        top: d3.axisTop(scale.x).ticks(4),
+        top: d3.axisTop(scale.x).ticks(3),
         right: d3.axisRight(scale.y),
         bottom: d3.axisBottom(scale.x),
         left: d3.axisLeft(scale.y).ticks(0),
