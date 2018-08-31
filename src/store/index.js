@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import dataPhantom from '../data/dataPhantom.json';
 import dataSlope from '../data/dataSlope.json';
 import benchmarkNames from '../data/benchmarkNames';
+import colors from '../data/colors.json';
 
 import hover from './modules/hover';
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
   },
   state: {
     benchmarkNames,
+    colors,
     currentCompare: 'time',
     currentWell: dataPhantom.includedWells[0],
     dataSlope,
@@ -73,7 +75,11 @@ export default new Vuex.Store({
       Math.max(...getters.wellData.map(well => well.drilledHours)),
     maxSlope: (state, getters) =>
       Math.max(...getters.slopeData.map(well => well.running_average_gradient_diff)),
-    slopeData: state => state.dataSlope.filter(slope => slope.well === state.currentWell.wellName),
+    slopeData: state => state.dataSlope.filter(slope => slope.well === state.currentWell.wellName)
+      .map(well => ({
+        ...well,
+        cumulativeDepth: well.cumulativeDepth + 1520,
+      })),
     splitData: (state, getters) => {
       const splitArray = [];
       const indexArray = [];
@@ -91,20 +97,30 @@ export default new Vuex.Store({
           splitArray.push(getters.wellData.slice(wellIndex));
         }
       });
-      if (splitArray.length > getters.bitDepths.length) {
-        for (let i = 1; i < splitArray.length; i += 1) {
-          splitArray[i].forEach((well) => {
-            well.drilledHours += getters.bitDepths[i - 1]; // eslint-disable-line no-param-reassign
-          });
-        }
-      } else {
-        for (let i = 0; i < splitArray.length; i += 1) {
-          // Vue.set(getters.wellData, 0, {drilledHours: 1000});
-          splitArray[i].forEach((well) => {
-            well.drilledHours += getters.bitDepths[i]; // eslint-disable-line no-param-reassign
-          });
-        }
-      }
+      // TODO: CHECK TO SEE IF BIT DEPTH IS ADDING CORRECTLY
+
+
+      // if (splitArray.length > getters.bitDepths.length) {
+      //   for (let i = 1; i < splitArray.length; i += 1) {
+      //     splitArray[i].forEach((well) => {
+      //       well.drilledHours += getters.bitDepths[i - 1]; // eslint-disable-line no-param-reassign
+      //     });
+      //   }
+      // } else {
+      //   for (let i = 0; i < splitArray.length; i += 1) {
+      //     splitArray[i].forEach((well, ii) => {
+      //       console.log('wut', {
+      //         ...well,
+      //         [state.currentCompare]: [`${state.currentCompare}Original`] + getters.bitDepths[i],
+      //       });
+      //       Vue.set(getters.wellData, well.index, {
+      //         ...well,
+      //         [state.currentCompare]: well[`${state.currentCompare}Original`] + getters.bitDepths[i],
+      //       });
+      //       // well.drilledHours += getters.bitDepths[i]; // eslint-disable-line no-param-reassign
+      //     });
+      //   }
+      // }
       return splitArray;
     },
     splitSlopeData: (state, getters) => {
@@ -126,21 +142,37 @@ export default new Vuex.Store({
       });
       return splitArray;
     },
-    wellData: state => (
-      state.currentCompare === 'time' ?
-        state.currentWell.benchmarkInputByPortionInfo.map((well, index) => ({
+    wellData: (state, getters) => {
+      let index = 0;
+      let checkDepth = getters.drillBits[index].depthIn;
+      let addDepth = 0;
+      return state.currentWell.benchmarkInputByPortionInfo.map((well) => {
+        const value = state.currentCompare === 'time' ?
+          well.drilledHours : well.drilledHours * state.operatingCost;
+        if (well.startDepth >= checkDepth) {
+          addDepth = getters.bitDepths[index];
+          index = index === getters.drillBits.length - 1 ? getters.drillBits.length - 1 : index + 1;
+          checkDepth = getters.drillBits[index].depthIn;
+        }
+        return {
           ...well,
-          time: well.drilledHours,
-          // cost: 0,
-          index,
-        })) :
-        state.currentWell.benchmarkInputByPortionInfo.map((well, index) => ({
-          ...well,
-          // time: 0,
-          cost: well.drilledHours * state.operatingCost,
-          index,
-        }))
-    ),
+          [state.currentCompare]: value + addDepth,
+        };
+      });
+      // return state.currentCompare === 'time' ?
+      //   state.currentWell.benchmarkInputByPortionInfo.map(well => ({
+      //     ...well,
+      //     time: well.drilledHours,
+      //     timeOriginal: well.drilledHours,
+      //     index,
+      //   })) :
+      //   state.currentWell.benchmarkInputByPortionInfo.map(well => ({
+      //     ...well,
+      //     cost: well.drilledHours * state.operatingCost,
+      //     costOriginal: well.drilledHours * state.operatingCost,
+      //     index,
+      //   }))
+    },
     wellNames: () =>
       dataPhantom.includedWells.map(well => ({
         id: well.id,

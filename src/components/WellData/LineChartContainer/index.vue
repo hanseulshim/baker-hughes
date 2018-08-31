@@ -70,7 +70,6 @@ export default {
       return {
         x: this.getScaleX(),
         y: this.getScaleY(),
-        color: d3.scaleOrdinal(d3.schemeCategory10),
       };
     },
     stageStyle() {

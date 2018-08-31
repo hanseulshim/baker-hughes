@@ -5,7 +5,7 @@
       :key="`${index}-${formation.formationName}`"
     >
       <rect
-        :fill="formationColor(index)"
+        :fill="colors.formation[index]"
         :height="getHeight(formation)"
         :width="layout.width"
         :y="getY(formation)"
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import * as d3 from 'd3';
-
 export default {
   name: 'line-chart-formation',
   props: {
@@ -36,12 +34,10 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      formationColor: d3.scaleOrdinal(d3.schemePastel2),
-    };
-  },
   computed: {
+    colors() {
+      return this.$store.state.colors;
+    },
     formations() {
       return this.$store.state.currentWell.includedFormations.filter(
         formation => formation.startDepth <= this.$store.getters.maxDepth);

@@ -12,8 +12,8 @@
       <path
         :style="lineStyle"
         :d="drawLine(line)"
-        :stroke="scale.color(index)"
-        :fill="scale.color(index)"
+        :stroke="colors.line[index]"
+        :fill="colors.area[index]"
       />
     </g>
   </g>
@@ -57,6 +57,9 @@ export default {
     },
   },
   computed: {
+    colors() {
+      return this.$store.state.colors;
+    },
     splitLines() {
       return this.$store.getters.splitSlopeData;
     },

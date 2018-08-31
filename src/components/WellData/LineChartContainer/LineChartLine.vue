@@ -7,7 +7,7 @@
       <path
         :style="lineStyle"
         :d="drawLine(line)"
-        :stroke="scale.color(index)"
+        :stroke="colors.line[index]"
       />
     </g>
     <g
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
 import * as d3 from 'd3';
 
 export default {
@@ -69,7 +70,7 @@ export default {
   methods: {
     bitColor(index) {
       return this.splitLines.length === this.drillBits.length ?
-        this.scale.color(index) : this.scale.color(index + 1);
+        this.colors.line[index] : this.colors.line[index];
     },
     drawLine(line) {
       const path = d3.line()
@@ -93,18 +94,15 @@ export default {
     },
   },
   computed: {
-    drillBits() {
-      return this.$store.state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn);
-    },
-    lineData() {
-      return this.$store.getters.wellData;
-    },
-    splitLines() {
-      return this.$store.getters.splitData;
-    },
-    xLabel() {
-      return this.$store.state.currentCompare;
-    },
+    ...mapGetters({
+      drillBits: 'drillBits',
+      lineData: 'wellData',
+      splitLines: 'splitData',
+    }),
+    ...mapState({
+      xLabel: 'currentCompare',
+      colors: 'colors',
+    }),
   },
   watch: {
     scale: {
