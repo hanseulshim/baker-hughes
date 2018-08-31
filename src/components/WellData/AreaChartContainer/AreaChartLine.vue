@@ -1,5 +1,10 @@
 <template>
   <g class='lines'>
+    <rect
+      :width="this.layout.width"
+      :height="this.layout.height"
+      fill="#F9F9F9"
+    />
     <g
       v-for="(line, index) in splitLines"
       :key="`${index}-area-section`"
@@ -28,6 +33,10 @@ export default {
       type: Object,
       required: true,
     },
+    xDomain: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
@@ -39,9 +48,10 @@ export default {
   methods: {
     drawLine(line) {
       const path = d3.area()
+        .defined(d => d.running_average_gradient_diff > this.xDomain.min)
         .y1(d => this.scale.y(d.cumulativeDepth))
         .x0(d => this.scale.x(d.running_average_gradient_diff))
-        .x1(0)
+        .x1(this.xDomain.min)
         .y0(d => this.scale.y(d.cumulativeDepth));
       return path(line);
     },

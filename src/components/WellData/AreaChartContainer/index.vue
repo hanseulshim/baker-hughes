@@ -2,23 +2,19 @@
   <div id="area-chart-container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <rect
-          :width="this.layout.width"
-          :height="this.layout.height"
-          fill="#F9F9F9"
+        <area-chart-line
+          :layout="layout"
+          :scale="scale"
+          :xDomain="xDomain"
+        />
+        <area-chart-label
+          :layout="layout"
+          :scale="scale"
         />
         <area-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
-          :layout="layout"
-          :scale="scale"
-        />
-        <area-chart-line
-          :layout="layout"
-          :scale="scale"
-        />
-        <area-chart-label
           :layout="layout"
           :scale="scale"
         />
@@ -44,15 +40,19 @@ export default {
   },
   data() {
     return {
+      axes: ['left', 'top'],
       layout: {
-        width: 300,
+        width: 280,
         height: 800,
         marginTop: 45,
         marginRight: 50,
         marginBottom: 50,
-        marginLeft: 0,
+        marginLeft: 20,
       },
-      axes: ['left', 'top'],
+      xDomain: {
+        min: -0.01,
+        max: 0.025,
+      },
     };
   },
   computed: {
@@ -83,10 +83,8 @@ export default {
   methods: {
     getScaleX() {
       return d3.scaleLinear()
-        // .domain([0, this.xMax])
-        .domain([0, 0.05])
-        .range([0, this.layout.width])
-        .nice();
+        .domain([this.xDomain.min, this.xDomain.max])
+        .range([0, this.layout.width]);
     },
     getScaleY() {
       return d3.scaleLinear()
