@@ -4,9 +4,14 @@ import dataPhantom from '../data/dataPhantom.json';
 import dataSlope from '../data/dataSlope.json';
 import benchmarkNames from '../data/benchmarkNames';
 
+import hover from './modules/hover';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    hover,
+  },
   state: {
     benchmarkNames,
     currentCompare: 'time',
