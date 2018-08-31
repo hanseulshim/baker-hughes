@@ -6,7 +6,7 @@ export default {
     dataBenchmark: { cost: 0, time: 0, startDepth: 0 },
     dataSlope: { running_average_gradient_diff: 0, cumulativeDepth: 0 },
     dataWell: { cost: 0, time: 0, startDepth: 0 },
-    lineOpacity: 1,
+    lineOpacity: 0,
   },
   mutations: {
     hideVisible(state, payload) {
@@ -33,7 +33,7 @@ export default {
   },
   actions: {
     hideVisible(context) {
-      context.commit('hideVisible', 1);
+      context.commit('hideVisible', 0);
     },
     showVisible(context) {
       context.commit('showVisible', 1);
