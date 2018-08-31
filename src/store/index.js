@@ -84,7 +84,7 @@ export default new Vuex.Store({
       const splitArray = [];
       const indexArray = [];
       getters.drillBits.forEach((bit) => {
-        const index = getters.wellData.findIndex(well => well.startDepth > bit.depthIn);
+        const index = getters.wellData.findIndex(well => well.startDepth >= bit.depthIn);
         if (index) { indexArray.push(index); }
       });
       indexArray.forEach((wellIndex, arrIndex) => {
@@ -97,37 +97,13 @@ export default new Vuex.Store({
           splitArray.push(getters.wellData.slice(wellIndex));
         }
       });
-      // TODO: CHECK TO SEE IF BIT DEPTH IS ADDING CORRECTLY
-
-
-      // if (splitArray.length > getters.bitDepths.length) {
-      //   for (let i = 1; i < splitArray.length; i += 1) {
-      //     splitArray[i].forEach((well) => {
-      //       well.drilledHours += getters.bitDepths[i - 1]; // eslint-disable-line no-param-reassign
-      //     });
-      //   }
-      // } else {
-      //   for (let i = 0; i < splitArray.length; i += 1) {
-      //     splitArray[i].forEach((well, ii) => {
-      //       console.log('wut', {
-      //         ...well,
-      //         [state.currentCompare]: [`${state.currentCompare}Original`] + getters.bitDepths[i],
-      //       });
-      //       Vue.set(getters.wellData, well.index, {
-      //         ...well,
-      //         [state.currentCompare]: well[`${state.currentCompare}Original`] + getters.bitDepths[i],
-      //       });
-      //       // well.drilledHours += getters.bitDepths[i]; // eslint-disable-line no-param-reassign
-      //     });
-      //   }
-      // }
       return splitArray;
     },
     splitSlopeData: (state, getters) => {
       const splitArray = [];
       const indexArray = [];
       getters.drillBits.forEach((bit) => {
-        const index = getters.slopeData.findIndex(well => well.cumulativeDepth > bit.depthIn);
+        const index = getters.slopeData.findIndex(well => well.cumulativeDepth >= bit.depthIn);
         if (index) { indexArray.push(index); }
       });
       indexArray.forEach((wellIndex, arrIndex) => {
@@ -149,29 +125,16 @@ export default new Vuex.Store({
       return state.currentWell.benchmarkInputByPortionInfo.map((well) => {
         const value = state.currentCompare === 'time' ?
           well.drilledHours : well.drilledHours * state.operatingCost;
-        if (well.startDepth >= checkDepth) {
-          addDepth = getters.bitDepths[index];
-          index = index === getters.drillBits.length - 1 ? getters.drillBits.length - 1 : index + 1;
-          checkDepth = getters.drillBits[index].depthIn;
+        if (checkDepth && well.startDepth >= checkDepth) {
+          addDepth += getters.bitDepths[index];
+          index += 1;
+          checkDepth = index === getters.drillBits.length ? null : getters.drillBits[index].depthIn;
         }
         return {
           ...well,
           [state.currentCompare]: value + addDepth,
         };
       });
-      // return state.currentCompare === 'time' ?
-      //   state.currentWell.benchmarkInputByPortionInfo.map(well => ({
-      //     ...well,
-      //     time: well.drilledHours,
-      //     timeOriginal: well.drilledHours,
-      //     index,
-      //   })) :
-      //   state.currentWell.benchmarkInputByPortionInfo.map(well => ({
-      //     ...well,
-      //     cost: well.drilledHours * state.operatingCost,
-      //     costOriginal: well.drilledHours * state.operatingCost,
-      //     index,
-      //   }))
     },
     wellNames: () =>
       dataPhantom.includedWells.map(well => ({
