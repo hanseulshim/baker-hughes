@@ -5,7 +5,7 @@
       class="chart-label"
       text-anchor="middle"
       :x="layout.width / 2"
-      :y="-(layout.marginTop / 2)"
+      :y="-((layout.marginTop / 2) + 10)"
     >
       Cumulative Time (hrs.)
     </text>
@@ -14,7 +14,7 @@
       class="chart-label"
       text-anchor="middle"
       :x="layout.width / 2"
-      :y="-(layout.marginTop / 2)"
+      :y="-((layout.marginTop / 2) + 10)"
     >
       Cost (USD)
     </text>
@@ -23,7 +23,7 @@
       text-anchor="middle"
       transform="rotate(-90)"
       :x="-(layout.height / 2)"
-      :y="-layout.marginTop"
+      :y="-(layout.marginTop + 10)"
     >
       Depth (ft.)
     </text>

@@ -4,7 +4,7 @@
       class="chart-label"
       text-anchor="middle"
       :x="layout.width / 2"
-      :y="-(layout.marginTop / 2)"
+      :y="- ((layout.marginTop / 2) + 10)"
     >
       Slope Difference
     </text>
