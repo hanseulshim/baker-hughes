@@ -1,10 +1,14 @@
 <template>
   <g class='lines'>
-    <rect
-      :width="this.layout.width"
-      :height="this.layout.height"
-      fill="#F9F9F9"
-    />
+    <clipPath
+      id="clip-area"
+    >
+      <rect
+        :width="this.layout.width"
+        :height="this.layout.height"
+        fill="#F9F9F9"
+      />
+    </clipPath>
     <g
       v-for="(line, index) in splitLines"
       :key="`${index}-area-section`"
@@ -14,6 +18,7 @@
         :d="drawLine(line)"
         :stroke="colors.line[index]"
         :fill="colors.area[index]"
+        clip-path="url(#clip-area)"
       />
     </g>
   </g>
@@ -41,7 +46,7 @@ export default {
   data() {
     return {
       lineStyle: {
-        strokeWidth: 3,
+        strokeWidth: 1.5,
       },
     };
   },
