@@ -24,7 +24,6 @@
           :layout="layout"
           :scale="scale"
         />
-
         <line-chart-tooltip
           :layout="layout"
           :scale="scale"
