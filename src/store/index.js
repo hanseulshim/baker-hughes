@@ -53,12 +53,15 @@ export default new Vuex.Store({
       state.currentCompare === 'time' ?
         dataPhantom.benchmarkDetailsByFeet.filter(
           benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
-        ) :
+        ).map(benchmark => ({
+          ...benchmark,
+          time: benchmark.value,
+        })) :
         dataPhantom.benchmarkDetailsByFeet.filter(
           benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
         ).map(benchmark => ({
           ...benchmark,
-          value: benchmark.value * state.operatingCost,
+          cost: benchmark.value * state.operatingCost,
         }))
     ),
     bitDepths: (state, getters) => getters.drillBits.map(bit => bit.depthIn / state.tripRate),
@@ -96,6 +99,7 @@ export default new Vuex.Store({
         }
       } else {
         for (let i = 0; i < splitArray.length; i += 1) {
+          // Vue.set(getters.wellData, 0, {drilledHours: 1000});
           splitArray[i].forEach((well) => {
             well.drilledHours += getters.bitDepths[i]; // eslint-disable-line no-param-reassign
           });
@@ -124,10 +128,17 @@ export default new Vuex.Store({
     },
     wellData: state => (
       state.currentCompare === 'time' ?
-        state.currentWell.benchmarkInputByPortionInfo.map(well => ({ ...well })) :
-        state.currentWell.benchmarkInputByPortionInfo.map(well => ({
+        state.currentWell.benchmarkInputByPortionInfo.map((well, index) => ({
           ...well,
-          drilledHours: well.drilledHours * state.operatingCost,
+          time: well.drilledHours,
+          // cost: 0,
+          index,
+        })) :
+        state.currentWell.benchmarkInputByPortionInfo.map((well, index) => ({
+          ...well,
+          // time: 0,
+          cost: well.drilledHours * state.operatingCost,
+          index,
         }))
     ),
     wellNames: () =>
@@ -136,6 +147,6 @@ export default new Vuex.Store({
         name: well.wellName,
       })),
     xMax: (state, getters) =>
-      Math.max(...getters.wellData.map(well => well.drilledHours)),
+      Math.max(...getters.wellData.map(well => well[state.currentCompare])),
   },
 });

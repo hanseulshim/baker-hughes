@@ -73,7 +73,7 @@ export default {
     },
     drawLine(line) {
       const path = d3.line()
-        .x(d => this.scale.x(d.drilledHours))
+        .x(d => this.scale.x(d[this.xLabel]))
         .y(d => this.scale.y(d.startDepth));
       return path(line);
     },
@@ -82,7 +82,7 @@ export default {
       const lineArray = [].concat(...this.lineData);
       const indexWell = bisector(lineArray, depthIn) === lineArray.length ?
         bisector(lineArray, depthIn) - 1 : bisector(lineArray, depthIn);
-      return lineArray[indexWell].drilledHours;
+      return lineArray[indexWell][this.xLabel];
     },
     getCoords(bit) {
       const x = this.findBisect(bit.depthIn);
@@ -101,6 +101,9 @@ export default {
     },
     splitLines() {
       return this.$store.getters.splitData;
+    },
+    xLabel() {
+      return this.$store.state.currentCompare;
     },
   },
   watch: {
