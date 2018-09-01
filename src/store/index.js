@@ -57,22 +57,26 @@ export default new Vuex.Store({
           benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
         ).map(benchmark => ({
           ...benchmark,
-          time: benchmark.value,
+          value: benchmark.value,
         })) :
         dataPhantom.benchmarkDetailsByFeet.filter(
           benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
         ).map(benchmark => ({
           ...benchmark,
-          cost: benchmark.value * state.operatingCost,
+          value: benchmark.value * state.operatingCost,
         }))
     ),
     bitDepths: (state, getters) => getters.drillBits.map(bit => bit.depthIn / state.tripRate),
     bitDepthSum: (state, getters) => getters.bitDepths.reduce((a, b) => a + b),
     drillBits: state => state.currentWell.drillBits.slice().sort((a, b) => a.depthIn - b.depthIn),
+    maxCost: (state, getters) =>
+      Math.max(...getters.wellData.map(well => well.cost)),
     maxDepth: (state, getters) =>
       Math.max(...getters.wellData.map(well => well.startDepth)),
-    maxTime: (state, getters) =>
+    maxDrilledHours: (state, getters) =>
       Math.max(...getters.wellData.map(well => well.drilledHours)),
+    maxTime: (state, getters) =>
+      Math.max(...getters.wellData.map(well => well.time)),
     maxSlope: (state, getters) =>
       Math.max(...getters.slopeData.map(well => well.running_average_gradient_diff)),
     slopeData: (state, getters) =>
@@ -122,18 +126,19 @@ export default new Vuex.Store({
     wellData: (state, getters) => {
       let index = 0;
       let checkDepth = getters.drillBits[index].depthIn;
-      let addDepth = 0;
+      let addTime = 0;
+      let addCost = 0;
       return state.currentWell.benchmarkInputByPortionInfo.map((well) => {
-        const value = state.currentCompare === 'time' ?
-          well.drilledHours : well.drilledHours * state.operatingCost;
         if (checkDepth && well.startDepth >= checkDepth) {
-          addDepth += getters.bitDepths[index];
+          addTime += getters.bitDepths[index];
+          addCost += getters.bitDepths[index] + state.fixedCost;
           index += 1;
           checkDepth = index === getters.drillBits.length ? null : getters.drillBits[index].depthIn;
         }
         return {
           ...well,
-          [state.currentCompare]: value + addDepth,
+          time: well.drilledHours + addTime,
+          cost: (well.drilledHours * state.operatingCost) + addCost,
         };
       });
     },

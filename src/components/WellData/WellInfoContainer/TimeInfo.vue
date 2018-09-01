@@ -26,7 +26,7 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'time-info',
   computed: {
-    ...mapGetters(['xMax', 'bitDepthSum']),
+    ...mapGetters(['maxTime', 'bitDepthSum']),
     bitChange() {
       return Math.round(this.bitDepthSum);
     },
@@ -34,7 +34,7 @@ export default {
       return this.totalTime - this.bitChange;
     },
     totalTime() {
-      return Math.round(this.xMax);
+      return Math.round(this.maxTime);
     },
   },
 };
