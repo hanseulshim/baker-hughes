@@ -70,7 +70,7 @@ export default {
   methods: {
     bitColor(index) {
       return this.splitLines.length === this.drillBits.length ?
-        this.colors.line[index] : this.colors.line[index];
+        this.colors.line[index] : this.colors.line[index + 1];
     },
     drawLine(line) {
       const path = d3.line()
