@@ -75,11 +75,12 @@ export default new Vuex.Store({
       Math.max(...getters.wellData.map(well => well.drilledHours)),
     maxSlope: (state, getters) =>
       Math.max(...getters.slopeData.map(well => well.running_average_gradient_diff)),
-    slopeData: state => state.dataSlope.filter(slope => slope.well === state.currentWell.wellName)
-      .map(well => ({
-        ...well,
-        cumulativeDepth: well.cumulativeDepth + 1520,
-      })),
+    slopeData: (state, getters) =>
+      state.dataSlope.filter(slope => slope.well === state.currentWell.wellName)
+        .map(well => ({
+          ...well,
+          cumulativeDepth: well.cumulativeDepth + getters.wellData[0].startDepth,
+        })),
     splitData: (state, getters) => {
       const splitArray = [];
       const indexArray = [];
