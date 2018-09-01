@@ -23,8 +23,8 @@
         :x="layout.width - bbox.width - 5"
         :y="wellCoords.y"
       >
-        <tspan v-if="currentCompare">Benchmark: {{Math.round(dataBenchmark[xLabel])}} hrs</tspan>
-        <tspan v-else>Benchmark: ${{Math.round(dataBenchmark[xLabel] / 1000)}}k</tspan>
+        <tspan v-if="currentCompare">Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
+        <tspan v-else>Benchmark: ${{Math.round(dataBenchmark.value / 1000)}}k</tspan>
         <tspan v-if="currentCompare">Time: {{Math.round(dataWell[xLabel])}} hrs</tspan>
         <tspan v-else>Cost: ${{Math.round(dataWell[xLabel] / 1000)}}k</tspan>
       </text>
@@ -79,7 +79,7 @@ export default {
     }),
     benchmarkCoords() {
       return {
-        x: this.scale.x(this.dataBenchmark[this.xLabel]),
+        x: this.scale.x(this.dataBenchmark.value),
         y: this.scale.y(this.dataBenchmark.startDepth),
       };
     },
