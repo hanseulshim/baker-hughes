@@ -38,6 +38,8 @@ export default {
     ...mapGetters([
       'bitDepthSum',
       'maxTime',
+      'maxCost',
+      'maxDrilledHours',
     ]),
     bit() {
       return Math.round((this.currentWell.drillBits.length * this.fixedCost) / 1000);
@@ -46,10 +48,10 @@ export default {
       return Math.round((this.bitDepthSum * this.maxTime) / 1000);
     },
     rig() {
-      return Math.round((this.maxTime * this.operatingCost) / 1000);
+      return Math.round((this.maxDrilledHours * this.operatingCost) / 1000);
     },
     totalCost() {
-      return this.bit + this.loss + this.rig;
+      return Math.round(this.maxCost / 1000);
     },
   },
 };

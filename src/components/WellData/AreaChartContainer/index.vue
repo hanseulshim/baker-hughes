@@ -1,30 +1,24 @@
 <template>
-  <div id="line-chart-container">
+  <div id="area-chart-container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <line-chart-formation
+        <area-chart-line
+          :layout="layout"
+          :scale="scale"
+          :xDomain="xDomain"
+        />
+        <area-chart-label
           :layout="layout"
           :scale="scale"
         />
-        <line-chart-label
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-axis
+        <area-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
           :layout="layout"
           :scale="scale"
         />
-        <benchmark-line
-          :scale="scale"
-        />
-        <line-chart-line
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-tooltip
+        <area-chart-tooltip
           :layout="layout"
           :scale="scale"
         />
@@ -35,34 +29,34 @@
 
 <script>
 import * as d3 from 'd3';
-import BenchmarkLine from './BenchmarkLine';
-import LineChartAxis from './LineChartAxis';
-import LineChartFormation from './LineChartFormation';
-import LineChartLabel from './LineChartLabel';
-import LineChartLine from './LineChartLine';
-import LineChartTooltip from './LineChartTooltip';
+import AreaChartAxis from './AreaChartAxis';
+import AreaChartLabel from './AreaChartLabel';
+import AreaChartLine from './AreaChartLine';
+import AreaChartTooltip from './AreaChartTooltip';
 
 export default {
-  name: 'line-chart-container',
+  name: 'area-chart-container',
   components: {
-    BenchmarkLine,
-    LineChartAxis,
-    LineChartFormation,
-    LineChartLabel,
-    LineChartLine,
-    LineChartTooltip,
+    AreaChartAxis,
+    AreaChartLabel,
+    AreaChartLine,
+    AreaChartTooltip,
   },
   data() {
     return {
+      axes: ['left', 'top'],
       layout: {
-        width: 800,
+        width: 265,
         height: 800,
         marginTop: 45,
-        marginRight: 20,
+        marginRight: 50,
         marginBottom: 50,
-        marginLeft: 75,
+        marginLeft: 20,
       },
-      axes: ['left', 'top'],
+      xDomain: {
+        min: -0.01,
+        max: 0.025,
+      },
     };
   },
   computed: {
@@ -70,6 +64,7 @@ export default {
       return {
         x: this.getScaleX(),
         y: this.getScaleY(),
+        color: d3.scaleOrdinal(d3.schemeCategory10),
       };
     },
     stageStyle() {
@@ -83,7 +78,7 @@ export default {
       return `0 0 ${outerWidth} ${outerHeight}`;
     },
     xMax() {
-      return this.$store.getters.xMax;
+      return this.$store.getters.maxSlope;
     },
     yMax() {
       return this.$store.getters.maxDepth;
@@ -92,9 +87,8 @@ export default {
   methods: {
     getScaleX() {
       return d3.scaleLinear()
-        .domain([0, this.xMax * 1.25])
-        .range([0, this.layout.width])
-        .nice();
+        .domain([this.xDomain.min, this.xDomain.max])
+        .range([0, this.layout.width]);
     },
     getScaleY() {
       return d3.scaleLinear()
@@ -116,7 +110,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-#line-chart-container
-  position: relative
-  width: 800px
+#area-chart-container
+  width: 300px
 </style>
+

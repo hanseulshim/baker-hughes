@@ -5,7 +5,7 @@
       :key="`${index}-${formation.formationName}`"
     >
       <rect
-        :fill="formationColor(index)"
+        :fill="colors.formation[index]"
         :height="getHeight(formation)"
         :width="layout.width"
         :y="getY(formation)"
@@ -15,15 +15,13 @@
         class="chart-formation-label"
         text-anchor="end"
         :x="layout.width - 8"
-        :y="getY(formation) + 8"
+        :y="getY(formation) + 10"
       >{{formation.formationName}}</text>
     </g>
   </g>
 </template>
 
 <script>
-import * as d3 from 'd3';
-
 export default {
   name: 'line-chart-formation',
   props: {
@@ -36,12 +34,10 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      formationColor: d3.scaleOrdinal(d3.schemePastel2),
-    };
-  },
   computed: {
+    colors() {
+      return this.$store.state.colors;
+    },
     formations() {
       return this.$store.state.currentWell.includedFormations.filter(
         formation => formation.startDepth <= this.$store.getters.maxDepth);
@@ -61,5 +57,5 @@ export default {
 <style lang="sass" scoped>
 .chart-formation-label
   fill: #9A9993
-  font-size: 40%
+  font-size: 60%
 </style>

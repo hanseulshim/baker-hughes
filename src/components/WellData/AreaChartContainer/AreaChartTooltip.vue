@@ -1,32 +1,38 @@
 <template>
   <g>
-    <g :style="style" :opacity="lineOpacity">
-      <circle :cx="wellCoords.x" :cy="wellCoords.y" :r="5"/>
-    </g>
-    <g :style="style" :opacity="lineOpacity">
-      <circle :cx="benchmarkCoords.x" :cy="benchmarkCoords.y" :r="5"/>
-    </g>
     <path :style="lineStyle" :opacity="lineOpacity" :d="d" />
     <g
       :opacity="lineOpacity"
     >
       <rect
         fill="#5B5959"
-        :height="bbox.height + 5"
-        :width="bbox.width + 10"
-        :x="layout.width - (bbox.width + 10)"
+        :height="bboxSlope.height + 5"
+        :width="bboxSlope.width + 10"
+        :x="((layout.width - bboxSlope.width) / 2) - 5"
         :y="wellCoords.y - 13"
       />
       <text
         class="hour-label"
-        id="hour-label-text"
-        :x="layout.width - bbox.width - 5"
+        id="hour-label-slope"
+        :x="(layout.width - bboxSlope.width) / 2"
         :y="wellCoords.y"
       >
-        <tspan v-if="currentCompare">Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
-        <tspan v-else>Benchmark: ${{Math.round(dataBenchmark.value / 1000)}}k</tspan>
-        <tspan v-if="currentCompare">Time: {{Math.round(dataWell[xLabel])}} hrs</tspan>
-        <tspan v-else>Cost: ${{Math.round(dataWell[xLabel] / 1000)}}k</tspan>
+        Slope Diff: {{Math.round(dataSlope.running_average_gradient_diff * 1000) / 1000}}
+      </text>
+      <rect
+        fill="#FFF"
+        :height="20"
+        :width="60"
+        :x="layout.width"
+        :y="wellCoords.y - 15"
+      />
+      <text
+        class="depth-label"
+        id="depth-label-slope"
+        :x="layout.width + 5"
+        :y="wellCoords.y"
+      >
+        {{Math.round(depth)}} ft
       </text>
     </g>
     <rect
@@ -46,7 +52,7 @@ import * as d3 from 'd3';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
-  name: 'line-chart-tooltip',
+  name: 'area-chart-tooltip',
   props: {
     layout: {
       type: Object,
@@ -71,32 +77,24 @@ export default {
     };
   },
   computed: {
-    ...mapState('hover', ['dataBenchmark', 'dataSlope', 'dataWell', 'bbox', 'lineOpacity']),
+    ...mapState('hover', ['dataBenchmark', 'dataSlope', 'dataWell', 'bboxSlope', 'lineOpacity']),
     ...mapGetters({
       benchmarks: 'benchmarks',
       lineData: 'wellData',
       slopeData: 'slopeData',
     }),
-    benchmarkCoords() {
-      return {
-        x: this.scale.x(this.dataBenchmark.value),
-        y: this.scale.y(this.dataBenchmark.startDepth),
-      };
-    },
-    currentCompare() {
-      return this.$store.state.currentCompare === 'time';
-    },
     d() {
       return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
     },
+    depth() {
+      return this.dataSlope.cumulativeDepth < this.lineData[0].startDepth ?
+        this.dataSlope.cumulativeDepth : this.dataWell.startDepth;
+    },
     wellCoords() {
       return {
-        x: this.scale.x(this.dataWell[this.xLabel]),
-        y: this.scale.y(this.dataWell.startDepth),
+        x: this.scale.x(this.dataSlope.running_average_gradient_diff),
+        y: this.scale.y(this.depth),
       };
-    },
-    xLabel() {
-      return this.$store.state.currentCompare;
     },
   },
   mounted() {
@@ -137,4 +135,7 @@ export default {
 .hour-label
   font-size: 75%
   fill: #FFF
+.depth-label
+  font-size: 80%
+  fill: #828488
 </style>
