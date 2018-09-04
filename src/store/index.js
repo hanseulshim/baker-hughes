@@ -63,7 +63,7 @@ export default new Vuex.Store({
           benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
         ).map(benchmark => ({
           ...benchmark,
-          value: benchmark.value * state.operatingCost,
+          value: (benchmark.value * state.operatingCost) + state.fixedCost,
         }))
     ),
     bitDepths: (state, getters) => getters.drillBits.map(bit => bit.depthIn / state.tripRate),
