@@ -131,7 +131,7 @@ export default new Vuex.Store({
       return state.currentWell.benchmarkInputByPortionInfo.map((well) => {
         if (checkDepth && well.startDepth >= checkDepth) {
           addTime += getters.bitDepths[index];
-          addCost += getters.bitDepths[index] + state.fixedCost;
+          addCost += (getters.bitDepths[index] * state.operatingCost) + state.fixedCost;
           index += 1;
           checkDepth = index === getters.drillBits.length ? null : getters.drillBits[index].depthIn;
         }
