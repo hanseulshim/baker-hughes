@@ -30,8 +30,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'cost-info',
   computed: {
-    ...mapState([
-      'currentWell',
+    ...mapState('options', [
       'fixedCost',
       'operatingCost',
     ]),
@@ -41,7 +40,7 @@ export default {
       'maxDrilledHours',
     ]),
     bit() {
-      return Math.round((this.currentWell.drillBits.length * this.fixedCost) / 1000);
+      return Math.round((this.$store.state.well.currentWell.drillBits.length * this.fixedCost) / 1000);
     },
     loss() {
       return Math.round((this.bitDepthSum * this.operatingCost) / 1000);

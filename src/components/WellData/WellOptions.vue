@@ -53,10 +53,10 @@ export default {
   name: 'well-options',
   data() {
     return {
-      operatingCostLocal: this.$store.state.operatingCost,
-      fixedCostLocal: this.$store.state.fixedCost,
-      tripRateLocal: this.$store.state.tripRate,
-      tripRateUnitLocal: this.$store.state.tripRateUnit,
+      operatingCostLocal: this.$store.state.options.operatingCost,
+      fixedCostLocal: this.$store.state.options.fixedCost,
+      tripRateLocal: this.$store.state.options.tripRate,
+      tripRateUnitLocal: this.$store.state.options.tripRateUnit,
       items: ['ft', 'm'],
     };
   },

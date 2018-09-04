@@ -61,10 +61,13 @@ export default {
   },
   computed: {
     wellNames() {
-      return this.$store.getters.wellNames;
+      return this.$store.state.well.wellList.map(well => ({
+        id: well.id,
+        name: well.wellName,
+      }));
     },
     currentWell() {
-      return this.$store.state.currentWell;
+      return this.$store.state.well.currentWell;
     },
   },
   methods: {

@@ -24,7 +24,7 @@ export default {
   name: 'ToggleCompare',
   computed: {
     currentCompare() {
-      return this.$store.state.currentCompare;
+      return this.$store.state.options.currentCompare;
     },
   },
   methods: {

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import * as d3 from 'd3';
 
 export default {
@@ -99,10 +99,12 @@ export default {
       lineData: 'wellData',
       splitLines: 'splitData',
     }),
-    ...mapState({
-      xLabel: 'currentCompare',
-      colors: 'colors',
-    }),
+    colors() {
+      return this.$store.state.options.colors;
+    },
+    xLabel() {
+      return this.$store.state.options.currentCompare;
+    },
   },
   watch: {
     scale: {
