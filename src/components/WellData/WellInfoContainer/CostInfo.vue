@@ -40,7 +40,8 @@ export default {
       'maxDrilledHours',
     ]),
     bit() {
-      return Math.round((this.$store.state.well.currentWell.drillBits.length * this.fixedCost) / 1000);
+      return Math.round(
+        (this.$store.state.well.currentWell.drillBits.length * this.fixedCost) / 1000);
     },
     loss() {
       return Math.round((this.bitDepthSum * this.operatingCost) / 1000);

@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     currentCompare() {
-      return this.$store.state.currentCompare === 'time';
+      return this.$store.state.options.currentCompare === 'time';
     },
     benchmarkMax() {
       return d3.max(this.$store.getters.benchmarks,

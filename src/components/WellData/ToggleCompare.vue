@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     toggleCompare(compare) {
-      this.$store.dispatch('toggleCompare', compare);
+      this.$store.dispatch('options/toggleCompare', compare);
     },
   },
 };

@@ -18,7 +18,7 @@ export default {
           benchmark => benchmark.name === 'minDrilledHours' && benchmark.startDepth <= getters.maxDepth,
         ).map(benchmark => ({
           ...benchmark,
-          value: (benchmark.value * state.options.operatingCost) + state.options.fixedCost,
+          value: (benchmark.value * rootState.options.operatingCost) + rootState.options.fixedCost,
         }))
     ),
   },

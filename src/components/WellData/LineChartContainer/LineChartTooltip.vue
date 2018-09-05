@@ -84,7 +84,7 @@ export default {
       };
     },
     currentCompare() {
-      return this.$store.state.currentCompare === 'time';
+      return this.$store.state.options.currentCompare === 'time';
     },
     d() {
       return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
@@ -96,7 +96,7 @@ export default {
       };
     },
     xLabel() {
-      return this.$store.state.currentCompare;
+      return this.$store.state.options.currentCompare;
     },
   },
   mounted() {

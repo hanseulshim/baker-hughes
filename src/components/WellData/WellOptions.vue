@@ -68,7 +68,7 @@ export default {
         tripRate: this.tripRateLocal,
         tripRateUnit: this.tripRateUnitLocal,
       };
-      this.$store.dispatch('updateWellOptions', options);
+      this.$store.dispatch('options/updateWellOptions', options);
     },
   },
 };

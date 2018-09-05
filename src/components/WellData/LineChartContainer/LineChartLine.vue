@@ -100,7 +100,7 @@ export default {
       splitLines: 'splitData',
     }),
     colors() {
-      return this.$store.state.options.colors;
+      return this.$store.state.chartInfo.colors;
     },
     xLabel() {
       return this.$store.state.options.currentCompare;

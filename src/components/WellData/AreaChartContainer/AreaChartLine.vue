@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     colors() {
-      return this.$store.state.colors;
+      return this.$store.state.chartInfo.colors;
     },
     splitLines() {
       return this.$store.getters.splitSlopeData;
