@@ -118,11 +118,14 @@ export default {
         bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
       const indexSlope = bisectorSlope(this.slopeData, yValue) === this.slopeData.length ?
         bisectorSlope(this.slopeData, yValue) - 1 : bisectorSlope(this.slopeData, yValue);
-      this.$store.dispatch('hover/updateDataWell', this.lineData[indexWell]);
-      this.$store.dispatch('hover/updateDataBenchmark', this.benchmarks[indexBenchmark]);
-      this.$store.dispatch('hover/updateDataSlope', this.slopeData[indexSlope]);
-      this.$store.dispatch('hover/updateBboxSlope', d3.select('#hour-label-slope').node().getBBox());
-      this.$store.dispatch('hover/updateBbox', d3.select('#hour-label-text').node().getBBox());
+      const payload = {
+        dataWell: this.lineData[indexWell],
+        dataBenchmark: this.benchmarks[indexBenchmark],
+        dataSlope: this.slopeData[indexSlope],
+        bboxSlope: d3.select('#hour-label-slope').node().getBBox(),
+        bbox: d3.select('#hour-label-text').node().getBBox(),
+      };
+      this.$store.dispatch('hover/updateHover', payload);
     },
     showVisible() {
       this.$store.dispatch('hover/showVisible');
