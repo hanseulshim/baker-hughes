@@ -55,6 +55,9 @@ export default {
         bottom: d3.axisBottom(scale.x),
         left: d3.axisLeft(scale.y),
       };
+      if (this.$store.state.options.currentCompare === 'cost') {
+        axisGenerator.top = d3.axisTop(scale.x).ticks(3, '$s');
+      }
       $axis.call(axisGenerator[this.axis]);
     },
     getAxisTransform() {
