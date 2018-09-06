@@ -7,7 +7,7 @@
       :x="layout.width / 2"
       :y="-((layout.marginTop / 2) + 10)"
     >
-      Cumulative Time (hrs.)
+      Time (hrs.)
     </text>
     <text
       v-else
