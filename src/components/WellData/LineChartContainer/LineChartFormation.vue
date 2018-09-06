@@ -36,10 +36,10 @@ export default {
   },
   computed: {
     colors() {
-      return this.$store.state.colors;
+      return this.$store.state.chartInfo.colors;
     },
     formations() {
-      return this.$store.state.currentWell.includedFormations.filter(
+      return this.$store.state.well.currentWell.includedFormations.filter(
         formation => formation.startDepth <= this.$store.getters.maxDepth);
     },
   },

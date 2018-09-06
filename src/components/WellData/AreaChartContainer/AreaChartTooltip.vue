@@ -17,7 +17,7 @@
         :x="(layout.width - bboxSlope.width) / 2"
         :y="wellCoords.y"
       >
-        Slope Diff: {{Math.round(dataSlope.running_average_gradient_diff * 1000) / 1000}}
+        Slope Diff: {{slopeDiff}}
       </text>
       <rect
         fill="#FFF"
@@ -32,7 +32,7 @@
         :x="layout.width + 5"
         :y="wellCoords.y"
       >
-        {{Math.round(depth)}} ft
+        {{getDepth(depth)}} ft
       </text>
     </g>
     <rect
@@ -49,6 +49,7 @@
 
 <script>
 import * as d3 from 'd3';
+import numeral from 'numeral';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -90,6 +91,9 @@ export default {
       return this.dataSlope.cumulativeDepth < this.lineData[0].startDepth ?
         this.dataSlope.cumulativeDepth : this.dataWell.startDepth;
     },
+    slopeDiff() {
+      return numeral(this.dataSlope.running_average_gradient_diff * 1000).format('0.000');
+    },
     wellCoords() {
       return {
         x: this.scale.x(this.dataSlope.running_average_gradient_diff),
@@ -105,6 +109,9 @@ export default {
       d3.select(this.$refs.rect)
         .on('mousemove', this.mousemove);
     },
+    getDepth(depth) {
+      return numeral(depth).format('0,0');
+    },
     hideVisible() {
       this.$store.dispatch('hover/hideVisible');
     },
@@ -118,11 +125,14 @@ export default {
         bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
       const indexSlope = bisectorSlope(this.slopeData, yValue) === this.slopeData.length ?
         bisectorSlope(this.slopeData, yValue) - 1 : bisectorSlope(this.slopeData, yValue);
-      this.$store.dispatch('hover/updateDataWell', this.lineData[indexWell]);
-      this.$store.dispatch('hover/updateDataBenchmark', this.benchmarks[indexBenchmark]);
-      this.$store.dispatch('hover/updateDataSlope', this.slopeData[indexSlope]);
-      this.$store.dispatch('hover/updateBboxSlope', d3.select('#hour-label-slope').node().getBBox());
-      this.$store.dispatch('hover/updateBbox', d3.select('#hour-label-text').node().getBBox());
+      const payload = {
+        dataWell: this.lineData[indexWell],
+        dataBenchmark: this.benchmarks[indexBenchmark],
+        dataSlope: this.slopeData[indexSlope],
+        bboxSlope: d3.select('#hour-label-slope').node().getBBox(),
+        bbox: d3.select('#hour-label-text').node().getBBox(),
+      };
+      this.$store.dispatch('hover/updateHover', payload);
     },
     showVisible() {
       this.$store.dispatch('hover/showVisible');

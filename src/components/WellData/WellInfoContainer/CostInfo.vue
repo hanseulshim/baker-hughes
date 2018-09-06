@@ -4,21 +4,21 @@
       <span class="well-info-title">Total Cost</span>
       <div class="well-info-total-container">
         <i class="material-icons">attach_money</i>
-        <span class="well-info-total">{{totalCost}}k</span>
+        <span class="well-info-total">{{totalCost}}</span>
       </div>
     </div>
     <div>
       <div class="well-info-unit-container">
         <span class="well-info-title">Rig</span>
-        <span class="well-info-unit">{{rig}}k</span>
+        <span class="well-info-unit">{{rig}}</span>
       </div>
       <div class="well-info-unit-container">
         <span class="well-info-title">Bit</span>
-        <span class="well-info-unit">{{bit}}k</span>
+        <span class="well-info-unit">{{bit}}</span>
       </div>
       <div class="well-info-unit-container">
         <span class="well-info-title">Loss</span>
-        <span class="well-info-unit">{{loss}}k</span>
+        <span class="well-info-unit">{{loss}}</span>
       </div>
     </div>
   </div>
@@ -26,12 +26,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import numeral from 'numeral';
 
 export default {
   name: 'cost-info',
   computed: {
-    ...mapState([
-      'currentWell',
+    ...mapState('options', [
       'fixedCost',
       'operatingCost',
     ]),
@@ -41,16 +41,20 @@ export default {
       'maxDrilledHours',
     ]),
     bit() {
-      return Math.round((this.currentWell.drillBits.length * this.fixedCost) / 1000);
+      return numeral(this.$store.state.well.currentWell.drillBits.length * this.fixedCost)
+        .format('0.0a');
     },
     loss() {
-      return Math.round((this.bitDepthSum * this.operatingCost) / 1000);
+      return numeral((this.bitDepthSum * this.operatingCost))
+        .format('0.0a');
     },
     rig() {
-      return Math.round((this.maxDrilledHours * this.operatingCost) / 1000);
+      return numeral((this.maxDrilledHours * this.operatingCost))
+        .format('0.0a');
     },
     totalCost() {
-      return Math.round(this.maxCost / 1000);
+      return numeral(this.maxCost)
+        .format('0.0a');
     },
   },
 };

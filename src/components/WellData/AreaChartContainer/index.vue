@@ -24,6 +24,7 @@
         />
       </g>
     </svg>
+    <info />
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import AreaChartAxis from './AreaChartAxis';
 import AreaChartLabel from './AreaChartLabel';
 import AreaChartLine from './AreaChartLine';
 import AreaChartTooltip from './AreaChartTooltip';
+import Info from './Info';
 
 export default {
   name: 'area-chart-container',
@@ -41,6 +43,7 @@ export default {
     AreaChartLabel,
     AreaChartLine,
     AreaChartTooltip,
+    Info,
   },
   data() {
     return {
@@ -111,6 +114,7 @@ export default {
 
 <style lang="sass" scoped>
 #area-chart-container
+  position: relative
   width: 300px
 </style>
 

@@ -35,19 +35,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
   name: 'benchmark-title',
   computed: {
-    ...mapState([
-      'benchmarkNames',
-      'currentWell',
-    ]),
+    benchmarkNames() {
+      return this.$store.state.benchmark.benchmarkNames;
+    },
+    currentWell() {
+      return this.$store.state.well.currentWell;
+    },
   },
   data() {
     return {
-      currentBenchmark: this.$store.state.benchmarkNames[0],
+      currentBenchmark: this.$store.state.benchmark.benchmarkNames[0],
     };
   },
   methods: {

@@ -30,12 +30,14 @@
         />
       </g>
     </svg>
+    <info />
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3';
 import BenchmarkLine from './BenchmarkLine';
+import Info from './Info';
 import LineChartAxis from './LineChartAxis';
 import LineChartFormation from './LineChartFormation';
 import LineChartLabel from './LineChartLabel';
@@ -46,6 +48,7 @@ export default {
   name: 'line-chart-container',
   components: {
     BenchmarkLine,
+    Info,
     LineChartAxis,
     LineChartFormation,
     LineChartLabel,

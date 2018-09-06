@@ -9,6 +9,13 @@
         :d="drawLine(line)"
         :stroke="colors.line[index]"
       />
+      <circle
+        :cx="scale.x(splitLines[index].slice(-1)[0][xLabel])"
+        :cy="scale.y(splitLines[index].slice(-1)[0].startDepth)"
+        :r="3"
+        :stroke="colors.line[index]"
+        :fill="colors.line[index]"
+      />
     </g>
     <g
       v-for="(bit, index) in drillBits"
@@ -28,7 +35,7 @@
       <circle
         :cx="getCoords(bit).x"
         :cy="getCoords(bit).y"
-        :r="5"
+        :r="3"
         :style="circleStyle"
       />
     </g>
@@ -36,7 +43,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import * as d3 from 'd3';
 
 export default {
@@ -99,10 +106,12 @@ export default {
       lineData: 'wellData',
       splitLines: 'splitData',
     }),
-    ...mapState({
-      xLabel: 'currentCompare',
-      colors: 'colors',
-    }),
+    colors() {
+      return this.$store.state.chartInfo.colors;
+    },
+    xLabel() {
+      return this.$store.state.options.currentCompare;
+    },
   },
   watch: {
     scale: {

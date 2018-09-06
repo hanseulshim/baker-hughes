@@ -15,20 +15,10 @@ export default {
     showVisible(state, payload) {
       state.lineOpacity = payload;
     },
-    updateBbox(state, payload) {
-      state.bbox = payload;
-    },
-    updateBboxSlope(state, payload) {
-      state.bboxSlope = payload;
-    },
-    updateDataBenchmark(state, payload) {
-      state.dataBenchmark = payload;
-    },
-    updateDataSlope(state, payload) {
-      state.dataSlope = payload;
-    },
-    updateDataWell(state, payload) {
-      state.dataWell = payload;
+    updateHover(state, payload) {
+      Object.keys(payload).forEach((key) => {
+        state[key] = payload[key];
+      });
     },
   },
   actions: {
@@ -38,20 +28,8 @@ export default {
     showVisible(context) {
       context.commit('showVisible', 1);
     },
-    updateBbox(context, bbox) {
-      context.commit('updateBbox', bbox);
-    },
-    updateBboxSlope(context, bbox) {
-      context.commit('updateBboxSlope', bbox);
-    },
-    updateDataBenchmark(context, dataBenchmark) {
-      context.commit('updateDataBenchmark', dataBenchmark);
-    },
-    updateDataSlope(context, dataSlope) {
-      context.commit('updateDataSlope', dataSlope);
-    },
-    updateDataWell(context, dataWell) {
-      context.commit('updateDataWell', dataWell);
+    updateHover(context, payload) {
+      context.commit('updateHover', payload);
     },
   },
 };
