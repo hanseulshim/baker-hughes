@@ -42,7 +42,7 @@ export default {
       return {
         fill: 'none',
         stroke: '#858585',
-        strokeWidth: 3,
+        strokeWidth: 2,
         strokeDasharray: '7, 3',
       };
     },
