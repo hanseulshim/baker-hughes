@@ -24,9 +24,9 @@
         :y="wellCoords.y"
       >
         <tspan v-if="currentCompare">Benchmark: {{Math.round(dataBenchmark.value)}} hrs</tspan>
-        <tspan v-else>Benchmark: ${{Math.round(dataBenchmark.value / 1000)}}k</tspan>
+        <tspan v-else>Benchmark: ${{benchmarkValue}}</tspan>
         <tspan v-if="currentCompare">Time: {{Math.round(dataWell[xLabel])}} hrs</tspan>
-        <tspan v-else>Cost: ${{Math.round(dataWell[xLabel] / 1000)}}k</tspan>
+        <tspan v-else>Cost: ${{costValue}}</tspan>
       </text>
     </g>
     <rect
@@ -43,6 +43,7 @@
 
 <script>
 import * as d3 from 'd3';
+import numeral from 'numeral';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -82,6 +83,12 @@ export default {
         x: this.scale.x(this.dataBenchmark.value),
         y: this.scale.y(this.dataBenchmark.startDepth),
       };
+    },
+    benchmarkValue() {
+      return numeral(this.dataBenchmark.value).format('0a');
+    },
+    costValue() {
+      return numeral(this.dataWell[this.xLabel]).format('0a');
     },
     currentCompare() {
       return this.$store.state.options.currentCompare === 'time';

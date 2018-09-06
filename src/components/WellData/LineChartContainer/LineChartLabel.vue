@@ -37,7 +37,7 @@
       <tspan v-if="currentCompare" :x="leftPosition" dy="1em">Observed Time</tspan>
       <tspan v-else :x="leftPosition" dy="1em">Observed Cost</tspan>
       <tspan v-if="currentCompare" :x="leftPosition" dy="1em">{{Math.round(xMax)}} hrs</tspan>
-      <tspan v-else :x="leftPosition" dy="1em">${{Math.round(xMax / 1000)}}k</tspan>
+      <tspan v-else :x="leftPosition" dy="1em">${{observedCost}}</tspan>
     </text>
     <text
       class="chart-line-label"
@@ -60,13 +60,14 @@
         :x="scale.x(benchmarkMax)"
         dy="1em"
       >
-        ${{Math.round(benchmarkMax / 1000)}}k
+        ${{benchmarkCost}}
       </tspan>
     </text>
   </g>
 </template>
 
 <script>
+import numeral from 'numeral';
 import * as d3 from 'd3';
 
 export default {
@@ -89,8 +90,14 @@ export default {
       return d3.max(this.$store.getters.benchmarks,
         benchmark => benchmark.value);
     },
+    benchmarkCost() {
+      return numeral(this.benchmarkMax).format('0a');
+    },
     leftPosition() {
       return this.scale.x(this.xMax) + 3;
+    },
+    observedCost() {
+      return numeral(this.xMax).format('0a');
     },
     xMax() {
       return this.$store.getters.xMax;

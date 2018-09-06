@@ -17,7 +17,7 @@
         :x="(layout.width - bboxSlope.width) / 2"
         :y="wellCoords.y"
       >
-        Slope Diff: {{Math.round(dataSlope.running_average_gradient_diff * 1000) / 1000}}
+        Slope Diff: {{slopeDiff}}
       </text>
       <rect
         fill="#FFF"
@@ -49,6 +49,7 @@
 
 <script>
 import * as d3 from 'd3';
+import numeral from 'numeral';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -89,6 +90,9 @@ export default {
     depth() {
       return this.dataSlope.cumulativeDepth < this.lineData[0].startDepth ?
         this.dataSlope.cumulativeDepth : this.dataWell.startDepth;
+    },
+    slopeDiff() {
+      return numeral(this.dataSlope.running_average_gradient_diff * 1000).format('0.000');
     },
     wellCoords() {
       return {
