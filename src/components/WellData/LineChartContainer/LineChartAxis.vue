@@ -80,3 +80,12 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.axis line
+  stroke: #202020
+.axis path
+  stroke: #202020
+.axis text
+  fill: #202020
+</style>
