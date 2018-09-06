@@ -1,5 +1,5 @@
 {
-  "formation": ["#eff9ee", "#fffbee", "#ffece1", "#fcfadd", "#ffefd9", "#f8fce9", "#e2f4f4", "#f1fbf2", "#fcecf4", "#fffff4", "#ffefe7", "#f9e0ea", "#f6f3e0", "#f7e7e1", "#f1f6e2", "#fdefd8", "#f4fff4", "#e1f2fa", "#e3fdf7", "#f3effa", "#f3fdf8", "#f1eceb", "#ffedf2"],
+  "formation": ["#f3f9ee", "#fdfbf1", "#fbeee5", "#faf9e4", "#fcf1e1", "#f8fce9", "#e2f4f4", "#f1fbf2", "#fcecf4", "#fffff4", "#ffefe7", "#f9e0ea", "#f6f3e0", "#f7e7e1", "#f1f6e2", "#fdefd8", "#f4fff4", "#e1f2fa", "#e3fdf7", "#f3effa", "#f3fdf8", "#f1eceb", "#ffedf2"],
   "line": ["#EB1253", "#C29032", "#12C5CF", "#5EE57B", "#FA7636", "#BB3BB9"],
   "area": ["#EB9EBD", "#C2B08C",  "#8DCFCE", "#BDE5C3", "#FACDB3", "#BB8FBB"]
 }
