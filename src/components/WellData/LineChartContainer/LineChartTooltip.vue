@@ -85,10 +85,10 @@ export default {
       };
     },
     benchmarkValue() {
-      return numeral(this.dataBenchmark.value).format('0a');
+      return numeral(this.dataBenchmark.value).format('0.0a');
     },
     costValue() {
-      return numeral(this.dataWell[this.xLabel]).format('0a');
+      return numeral(this.dataWell[this.xLabel]).format('0.0a');
     },
     currentCompare() {
       return this.$store.state.options.currentCompare === 'time';

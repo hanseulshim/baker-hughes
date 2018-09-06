@@ -91,13 +91,13 @@ export default {
         benchmark => benchmark.value);
     },
     benchmarkCost() {
-      return numeral(this.benchmarkMax).format('0a');
+      return numeral(this.benchmarkMax).format('0.0a');
     },
     leftPosition() {
       return this.scale.x(this.xMax) + 3;
     },
     observedCost() {
-      return numeral(this.xMax).format('0a');
+      return numeral(this.xMax).format('0.0a');
     },
     xMax() {
       return this.$store.getters.xMax;

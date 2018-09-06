@@ -42,19 +42,19 @@ export default {
     ]),
     bit() {
       return numeral(this.$store.state.well.currentWell.drillBits.length * this.fixedCost)
-        .format('0a');
+        .format('0.0a');
     },
     loss() {
       return numeral((this.bitDepthSum * this.operatingCost))
-        .format('0a');
+        .format('0.0a');
     },
     rig() {
       return numeral((this.maxDrilledHours * this.operatingCost))
-        .format('0a');
+        .format('0.0a');
     },
     totalCost() {
       return numeral(this.maxCost)
-        .format('0a');
+        .format('0.0a');
     },
   },
 };
