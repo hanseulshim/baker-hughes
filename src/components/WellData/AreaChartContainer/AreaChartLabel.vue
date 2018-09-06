@@ -20,13 +20,15 @@
         :x="layout.width + 5"
         :y="scale.y(bit.depthIn) + 2"
       >
-        {{Math.round(bit.depthIn)}} ft
+        {{getDepth(bit.depthIn)}} ft
       </text>
     </g>
   </g>
 </template>
 
 <script>
+import numeral from 'numeral';
+
 export default {
   name: 'area-chart-label',
   props: {
@@ -52,6 +54,11 @@ export default {
     },
     yMax() {
       return this.$store.getters.maxDepth;
+    },
+  },
+  methods: {
+    getDepth(depth) {
+      return numeral(depth).format('0,0');
     },
   },
 };

@@ -32,7 +32,7 @@
         :x="layout.width + 5"
         :y="wellCoords.y"
       >
-        {{Math.round(depth)}} ft
+        {{getDepth(depth)}} ft
       </text>
     </g>
     <rect
@@ -108,6 +108,9 @@ export default {
     createTooltips() {
       d3.select(this.$refs.rect)
         .on('mousemove', this.mousemove);
+    },
+    getDepth(depth) {
+      return numeral(depth).format('0,0');
     },
     hideVisible() {
       this.$store.dispatch('hover/hideVisible');
