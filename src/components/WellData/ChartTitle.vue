@@ -1,6 +1,6 @@
 <template>
   <div class="chart-title-container">
-    <span class="chart-title">Well Performance vs. Benchmark</span>
+    <span class="chart-title">Well Performance of {{wellName}}</span>
     <div class="chart-legend-container">
       <div class="chart-legend">
         <img src="/static/bitChange.png" />
@@ -21,6 +21,11 @@
 <script>
 export default {
   name: 'chart-title',
+  computed: {
+    wellName() {
+      return this.$store.state.well.currentWell.wellName;
+    },
+  },
 };
 </script>
 
