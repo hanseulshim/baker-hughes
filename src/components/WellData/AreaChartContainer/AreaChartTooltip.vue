@@ -8,13 +8,13 @@
         fill="#5B5959"
         :height="bboxSlope.height + 5"
         :width="bboxSlope.width + 10"
-        :x="((layout.width - bboxSlope.width) / 2) - 5"
+        :x="0"
         :y="wellCoords.y - 13"
       />
       <text
         class="hour-label"
         id="hour-label-slope"
-        :x="(layout.width - bboxSlope.width) / 2"
+        :x="5"
         :y="wellCoords.y"
       >
         Slope Diff: {{slopeDiff}}
