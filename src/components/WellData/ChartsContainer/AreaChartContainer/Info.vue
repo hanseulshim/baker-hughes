@@ -26,11 +26,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass">
-.info-menu-container
-  display: flex
-.info-menu-title
-  margin-right: .3em
-  font-weight: bold
-</style>

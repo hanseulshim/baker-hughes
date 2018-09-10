@@ -1,5 +1,5 @@
 <template>
-  <div id="area-chart-container" ref="container">
+  <div class="chart-container" ref="container">
     <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
@@ -120,10 +120,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass" scoped>
-#area-chart-container
-  display: flex
-  flex-direction: column
-  align-items: center
-</style>

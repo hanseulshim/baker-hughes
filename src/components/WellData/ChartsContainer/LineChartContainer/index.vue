@@ -1,5 +1,6 @@
 <template>
-  <div id="line-chart-container" ref="container">
+  <div class="chart-container" ref="container">
+    <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <line-chart-formation
@@ -30,7 +31,6 @@
         />
       </g>
     </svg>
-    <info />
   </div>
 </template>
 
@@ -132,7 +132,9 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
-#line-chart-container
-  position: relative
+<style lang="sass">
+.chart-container
+  display: flex
+  flex-direction: column
+  align-items: center
 </style>
