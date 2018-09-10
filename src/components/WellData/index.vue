@@ -62,4 +62,5 @@ export default {
   margin: 5% auto
 .charts-container
   display: flex
+  padding: 1em
 </style>
