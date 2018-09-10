@@ -1,5 +1,6 @@
 <template>
   <div id="area-chart-container" ref="container">
+    <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <rect
@@ -29,7 +30,6 @@
         />
       </g>
     </svg>
-    <info />
   </div>
 </template>
 
@@ -123,5 +123,7 @@ export default {
 
 <style lang="sass" scoped>
 #area-chart-container
-  position: relative
+  display: flex
+  flex-direction: column
+  align-items: center
 </style>

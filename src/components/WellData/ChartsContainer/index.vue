@@ -32,7 +32,7 @@ export default {
     return {
       verticalLayout: {
         height: 600,
-        marginTop: 45,
+        marginTop: 30,
         marginBottom: 50,
       },
     };
