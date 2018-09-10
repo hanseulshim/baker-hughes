@@ -29,6 +29,6 @@ export default {
 <style lang="sass">
 #area-info-menu
   position: absolute
-  top: -0.75%
-  left: 65%
+  top: -0.5%
+  left: 75%
 </style>

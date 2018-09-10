@@ -41,8 +41,8 @@ export default {
 <style lang="sass">
 #line-info-menu
   position: absolute
-  top: -0.75%
-  left: 58%
+  top: -0.5%
+  left: 60%
 .info-card
   max-width: 500px
 .info-title
