@@ -64,7 +64,7 @@ export default {
       return this.$store.state.well.wellList.map(well => ({
         id: well.id,
         name: well.wellName,
-      }));
+      })).sort((a, b) => a.name > b.name);
     },
     currentWell() {
       return this.$store.state.well.currentWell;
