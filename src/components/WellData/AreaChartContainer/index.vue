@@ -1,5 +1,5 @@
 <template>
-  <div id="area-chart-container">
+  <div id="area-chart-container" ref="container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <rect
@@ -54,11 +54,11 @@ export default {
     return {
       axes: ['left', 'top'],
       layout: {
-        width: 265,
-        height: 800,
-        marginTop: 45,
+        width: 150,
+        height: this.$store.state.chartInfo.layout.height,
+        marginTop: this.$store.state.chartInfo.layout.marginTop,
         marginRight: 50,
-        marginBottom: 50,
+        marginBottom: this.$store.state.chartInfo.layout.marginBottom,
         marginLeft: 20,
       },
       xDomain: {
@@ -66,6 +66,9 @@ export default {
         max: 0.025,
       },
     };
+  },
+  mounted() {
+    this.$refs.container.style.width = this.width;
   },
   computed: {
     scale() {
@@ -84,6 +87,9 @@ export default {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;
       return `0 0 ${outerWidth} ${outerHeight}`;
+    },
+    width() {
+      return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
       return this.$store.getters.maxSlope;
@@ -120,6 +126,4 @@ export default {
 <style lang="sass" scoped>
 #area-chart-container
   position: relative
-  width: 300px
 </style>
-
