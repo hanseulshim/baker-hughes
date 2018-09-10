@@ -55,15 +55,23 @@ export default {
     LineChartLine,
     LineChartTooltip,
   },
+  props: {
+    verticalLayout: {
+      type: Object,
+      required: true,
+    },
+    yScale: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       layout: {
         width: 650,
-        height: this.$store.state.chartInfo.layout.height,
-        marginTop: this.$store.state.chartInfo.layout.marginTop,
         marginRight: 20,
-        marginBottom: this.$store.state.chartInfo.layout.marginBottom,
         marginLeft: 75,
+        ...this.verticalLayout,
       },
       axes: ['left', 'top'],
     };
@@ -75,7 +83,7 @@ export default {
     scale() {
       return {
         x: this.getScaleX(),
-        y: this.getScaleY(),
+        y: this.yScale(),
       };
     },
     stageStyle() {
@@ -117,7 +125,7 @@ export default {
       deep: true,
       handler() {
         this.scale.x = this.getScaleX();
-        this.scale.y = this.getScaleY();
+        this.scale.y = this.yScale();
       },
     },
   },

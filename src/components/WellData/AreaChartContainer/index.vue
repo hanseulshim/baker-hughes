@@ -50,16 +50,24 @@ export default {
     AreaChartTooltip,
     Info,
   },
+  props: {
+    verticalLayout: {
+      type: Object,
+      required: true,
+    },
+    yScale: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       axes: ['left', 'top'],
       layout: {
         width: 150,
-        height: this.$store.state.chartInfo.layout.height,
-        marginTop: this.$store.state.chartInfo.layout.marginTop,
         marginRight: 50,
-        marginBottom: this.$store.state.chartInfo.layout.marginBottom,
         marginLeft: 20,
+        ...this.verticalLayout,
       },
       xDomain: {
         min: -0.01,
@@ -74,8 +82,7 @@ export default {
     scale() {
       return {
         x: this.getScaleX(),
-        y: this.getScaleY(),
-        color: d3.scaleOrdinal(d3.schemeCategory10),
+        y: this.yScale(),
       };
     },
     stageStyle() {
@@ -94,9 +101,6 @@ export default {
     xMax() {
       return this.$store.getters.maxSlope;
     },
-    yMax() {
-      return this.$store.getters.maxDepth;
-    },
   },
   methods: {
     getScaleX() {
@@ -104,19 +108,13 @@ export default {
         .domain([this.xDomain.min, this.xDomain.max])
         .range([0, this.layout.width]);
     },
-    getScaleY() {
-      return d3.scaleLinear()
-        .domain([0, this.yMax])
-        .range([0, this.layout.height])
-        .nice();
-    },
   },
   watch: {
     layout: {
       deep: true,
       handler() {
         this.scale.x = this.getScaleX();
-        this.scale.y = this.getScaleY();
+        this.scale.y = this.yScale();
       },
     },
   },
