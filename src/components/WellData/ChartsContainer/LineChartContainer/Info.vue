@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <v-menu id="line-info-menu" offset-y middle>
+  <div class="info-menu-container">
+    <span class="info-menu-title">{{label}}</span>
+    <v-menu offset-y middle>
       <i class="material-icons" slot="activator">info_outline</i>
       <v-card class="info-card">
         <v-card-text>
@@ -34,15 +35,19 @@ export default {
     info() {
       return this.currentCompare === 'time' ? this.time : this.cost;
     },
+    label() {
+      return this.currentCompare === 'time' ? 'Time (hrs.)' : 'Cost (USD)';
+    },
   },
 };
 </script>
 
 <style lang="sass">
-#line-info-menu
-  position: absolute
-  top: -0.5%
-  left: 60%
+.info-menu-container
+  display: flex
+.info-menu-title
+  margin-right: .3em
+  font-weight: bold
 .info-card
   max-width: 500px
 .info-title
