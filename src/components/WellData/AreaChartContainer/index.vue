@@ -2,6 +2,13 @@
   <div id="area-chart-container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
+        <rect
+          :x="0"
+          :y="0"
+          :width="layout.width"
+          :height="layout.height"
+          fill="#F9F9F9"
+        />
         <area-chart-line
           :layout="layout"
           :scale="scale"
