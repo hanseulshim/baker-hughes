@@ -1,5 +1,5 @@
 <template>
-  <div id="line-chart-container">
+  <div id="line-chart-container" ref="container">
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <line-chart-formation
@@ -58,15 +58,18 @@ export default {
   data() {
     return {
       layout: {
-        width: 800,
-        height: 800,
-        marginTop: 45,
+        width: 650,
+        height: this.$store.state.chartInfo.layout.height,
+        marginTop: this.$store.state.chartInfo.layout.marginTop,
         marginRight: 20,
-        marginBottom: 50,
+        marginBottom: this.$store.state.chartInfo.layout.marginBottom,
         marginLeft: 75,
       },
       axes: ['left', 'top'],
     };
+  },
+  mounted() {
+    this.$refs.container.style.width = this.width;
   },
   computed: {
     scale() {
@@ -84,6 +87,9 @@ export default {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;
       return `0 0 ${outerWidth} ${outerHeight}`;
+    },
+    width() {
+      return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
       return this.$store.getters.xMax;
@@ -121,5 +127,4 @@ export default {
 <style lang="sass" scoped>
 #line-chart-container
   position: relative
-  width: 800px
 </style>
