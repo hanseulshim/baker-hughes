@@ -3,11 +3,6 @@ import colors from '../../data/colors.json';
 export default {
   state: {
     colors,
-    layout: {
-      height: 600,
-      marginTop: 45,
-      marginBottom: 50,
-    },
   },
   getters: {
     maxCost: (state, getters) =>
