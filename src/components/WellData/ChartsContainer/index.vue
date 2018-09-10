@@ -13,8 +13,8 @@
 
 <script>
 import * as d3 from 'd3';
-import AreaChartContainer from '../AreaChartContainer';
-import LineChartContainer from '../LineChartContainer';
+import AreaChartContainer from './AreaChartContainer';
+import LineChartContainer from './LineChartContainer';
 
 export default {
   name: 'charts-container',
