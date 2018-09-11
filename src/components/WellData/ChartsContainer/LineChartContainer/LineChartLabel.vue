@@ -4,8 +4,8 @@
       class="chart-label"
       text-anchor="middle"
       transform="rotate(-90)"
-      :x="-(layout.height / 2)"
-      :y="-(layout.marginTop + 10)"
+      :x="-(layout.height - layout.marginLeft)"
+      :y="layout.marginTop"
     >
       Depth (ft.)
     </text>
