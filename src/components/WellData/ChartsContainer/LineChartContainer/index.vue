@@ -70,7 +70,7 @@ export default {
       layout: {
         width: 650,
         marginRight: 20,
-        marginLeft: 75,
+        marginLeft: 50,
         ...this.verticalLayout,
       },
       axes: ['left', 'top'],
