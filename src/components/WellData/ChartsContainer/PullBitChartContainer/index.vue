@@ -1,28 +1,20 @@
 <template>
   <div class="chart-container" ref="container">
-    <div>reset</div>
+    <div class="reset-container">
+      <i class="material-icons">refresh</i>
+      <span>Reset</span>
+    </div>
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
-      <g :style="stageStyle"></g>
-        <circle
-          :cx="0"
-          :cy="0"
-          r=5
+      <g :style="stageStyle">
+        <rect
+          :width="layout.width"
+          :height="layout.height"
+          fill="#ECECEC"
         />
-        <!-- <area-chart-line
-          :layout="layout"
-          :scale="scale"
-          :xDomain="xDomain"
-        />
-        <area-chart-label
+        <pull-bit-chart-drag
           :layout="layout"
           :scale="scale"
         />
-        -->
-        <!--
-        <area-chart-tooltip
-          :layout="layout"
-          :scale="scale"
-        /> -->
       </g>
     </svg>
   </div>
@@ -30,16 +22,12 @@
 
 <script>
 import * as d3 from 'd3';
-// import AreaChartLabel from './AreaChartLabel';
-// import AreaChartLine from './AreaChartLine';
-// import AreaChartTooltip from './AreaChartTooltip';
+import PullBitChartDrag from './PullBitChartDrag';
 
 export default {
   name: 'pull-bit-chart-container',
   components: {
-    // AreaChartLabel,
-    // AreaChartLine,
-    // AreaChartTooltip,
+    PullBitChartDrag,
   },
   props: {
     verticalLayout: {
@@ -55,6 +43,7 @@ export default {
     return {
       axes: ['left', 'top'],
       layout: {
+        chartWidth: 50,
         width: 10,
         marginRight: 10,
         marginLeft: 10,
@@ -74,16 +63,16 @@ export default {
     },
     stageStyle() {
       return {
-        transform: `translate(${this.layout.marginLeft}px, ${this.layout.marginTop}px)`,
+        transform: `translate(${this.layout.chartWidth}px, ${this.layout.marginTop}px)`,
       };
     },
     viewBox() {
-      const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
+      const outerWidth = this.layout.chartWidth + this.layout.marginLeft + this.layout.marginRight;
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;
       return `0 0 ${outerWidth} ${outerHeight}`;
     },
     width() {
-      return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
+      return `${this.layout.chartWidth + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
       return this.$store.getters.maxSlope;
@@ -107,3 +96,15 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.reset-container
+  display: flex
+  align-items: center
+  font-weight: bold
+  font-size: .8em
+  cursor: pointer
+  .material-icons
+    margin-right: .1em
+    font-size: 1.3em
+</style>
