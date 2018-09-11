@@ -1,11 +1,11 @@
 <template>
-  <div id="pull-bit-chart-container" ref="container">
+  <div class="chart-container" ref="container">
     <div>reset</div>
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
-      <g :style="stageStyle">
+      <g :style="stageStyle"></g>
         <circle
           :cx="0"
-          :cy="scale.y(0)"
+          :cy="0"
           r=5
         />
         <!-- <area-chart-line
@@ -107,9 +107,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass" scoped>
-#pull-bit-chart-container
-  position: relative
-  background: yellow
-</style>
