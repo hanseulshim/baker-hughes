@@ -1,8 +1,7 @@
 <template>
   <g class='pull-bits'
-    @mousemove="drag"
   >
-    <g
+    <!-- <g
       v-for="(bit, index) in drillBits"
       :key="`${index}-${bit.bitType}`"
     >
@@ -22,7 +21,7 @@
         rx="2"
         @mousedown="startDrag"
       />
-    </g>
+    </g> -->
   </g>
 </template>
 
@@ -47,22 +46,34 @@ export default {
         fontSize: '.65em',
         strokeWidth: 0.3,
       },
-      currentMove: null,
     };
+  },
+  mounted() {
+    const rect = d3.select('.pull-bits')
+      .selectAll('rect')
+      .data(this.drillBits)
+      .enter()
+      .append('rect')
+      .attr('x', -2.5)
+      .attr('y', d => this.scale.y(d.depthIn))
+      .attr('width', this.layout.width + 5)
+      .attr('height', 5)
+      .attr('rx', 2);
+    const drag = d3.drag()
+      .on('drag', (d, i, a) => this.dragBit(d, i, a));
+    drag(rect);
+  },
+  methods: {
+    dragBit(d, i, a) {
+      if (d3.event.y >= 0 && d3.event.y <= this.layout.height) {
+        d3.select(a[i])
+          .attr('y', d3.event.y);
+      }
+    },
   },
   computed: {
     drillBits() {
       return this.$store.getters.drillBits;
-    },
-  },
-  methods: {
-    startDrag(e) {
-      this.currentMove = e.target;
-    },
-    drag(e) {
-      if (this.currentMove) {
-        this.currentMove.y = e.clientY;
-      }
     },
   },
   watch: {
@@ -74,3 +85,4 @@ export default {
   },
 };
 </script>
+
