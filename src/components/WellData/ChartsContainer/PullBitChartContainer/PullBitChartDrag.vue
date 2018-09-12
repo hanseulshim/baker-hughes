@@ -1,27 +1,15 @@
 <template>
   <g class='pull-bits'
   >
-    <!-- <g
+    <text
       v-for="(bit, index) in drillBits"
       :key="`${index}-${bit.bitType}`"
+      x="-50"
+      :y="textPositions[index] ? textPositions[index] + 7 : 0"
+      :style="textStyle"
     >
-      <text
-        :y="scale.y(bit.depthIn)"
-        :dy="5"
-        :dx="-45"
-        :style="textStyle"
-      >
-        Pull Bit
-      </text>
-      <rect
-        x="-2.5"
-        :y="scale.y(bit.depthIn)"
-        :width="layout.width + 5"
-        :height="5"
-        rx="2"
-        @mousedown="startDrag"
-      />
-    </g> -->
+      Pull Bit {{index + 1}}
+    </text>
   </g>
 </template>
 
@@ -46,29 +34,39 @@ export default {
         fontSize: '.65em',
         strokeWidth: 0.3,
       },
+      textPositions: [],
     };
   },
   mounted() {
-    const rect = d3.select('.pull-bits')
-      .selectAll('rect')
-      .data(this.drillBits)
-      .enter()
-      .append('rect')
-      .attr('x', -2.5)
-      .attr('y', d => this.scale.y(d.depthIn))
-      .attr('width', this.layout.width + 5)
-      .attr('height', 5)
-      .attr('rx', 2);
-    const drag = d3.drag()
-      .on('drag', (d, i, a) => this.dragBit(d, i, a));
-    drag(rect);
+    this.setBitPulls();
+    this.setTextPositions();
   },
   methods: {
     dragBit(d, i, a) {
       if (d3.event.y >= 0 && d3.event.y <= this.layout.height) {
+        this.textPositions.splice(i, 1, d3.event.y);
         d3.select(a[i])
           .attr('y', d3.event.y);
       }
+    },
+    setBitPulls() {
+      const rect = d3.select('.pull-bits')
+        .selectAll('rect')
+        .data(this.drillBits)
+        .enter()
+        .append('rect')
+        .attr('x', -2.5)
+        .attr('y', d => this.scale.y(d.depthIn))
+        .attr('width', this.layout.width + 5)
+        .attr('height', 7)
+        .attr('cursor', 'pointer')
+        .attr('rx', 2);
+      const drag = d3.drag()
+        .on('drag', (d, i, a) => this.dragBit(d, i, a));
+      drag(rect);
+    },
+    setTextPositions() {
+      this.textPositions = this.drillBits.map(bit => this.scale.y(bit.depthIn));
     },
   },
   computed: {
