@@ -42,10 +42,13 @@ export default {
 .chart-legend-container
   display: flex
   justify-content: flex-end
+  width: 50%
 .chart-legend
   margin: 0 .5em
   display: flex
   align-items: center
+  span
+    font-size: 85%
   img
     margin-right: .5em
 </style>
