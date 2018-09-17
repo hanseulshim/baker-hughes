@@ -12,10 +12,7 @@
         <well-info-container />
         <toggle-compare />
         <chart-title />
-        <div class="charts-container">
-          <line-chart-container />
-          <area-chart-container />
-        </div>
+        <charts-container />
       </v-card-text>
     </v-card>
   </div>
@@ -23,10 +20,9 @@
 </template>
 
 <script>
-import AreaChartContainer from './AreaChartContainer';
 import BenchmarkTitle from './BenchmarkTitle';
 import ChartTitle from './ChartTitle';
-import LineChartContainer from './LineChartContainer';
+import ChartsContainer from './ChartsContainer';
 import ToggleCompare from './ToggleCompare';
 import WellInfoContainer from './WellInfoContainer';
 import WellOptions from './WellOptions';
@@ -35,10 +31,9 @@ import WellTitle from './WellTitle';
 export default {
   name: 'well-data',
   components: {
-    AreaChartContainer,
     BenchmarkTitle,
     ChartTitle,
-    LineChartContainer,
+    ChartsContainer,
     ToggleCompare,
     WellInfoContainer,
     WellOptions,
@@ -62,4 +57,5 @@ export default {
   margin: 5% auto
 .charts-container
   display: flex
+  padding: 1em
 </style>

@@ -37,17 +37,15 @@ export default {
   padding: 1em
 .chart-title
   color: #5B5959
-  font-size: 162.5%
+  font-size: 150%
   font-weight: bold
-  margin-right: 2em
 .chart-legend-container
   display: flex
   justify-content: flex-end
-  flex-grow: 1
 .chart-legend
-  margin: 0 1em
+  margin: 0 .5em
   display: flex
   align-items: center
   img
-    margin-right: 1em
+    margin-right: .5em
 </style>

@@ -1,13 +1,5 @@
 <template>
   <g class='labels'>
-    <text
-      class="chart-label"
-      text-anchor="middle"
-      :x="layout.width / 2"
-      :y="- ((layout.marginTop / 2) + 10)"
-    >
-      Slope Difference
-    </text>
     <g
       v-for="(bit, index) in drillBits"
       :key="index + bit.bitType"
@@ -51,9 +43,6 @@ export default {
   computed: {
     drillBits() {
       return this.$store.getters.drillBits;
-    },
-    yMax() {
-      return this.$store.getters.maxDepth;
     },
   },
   methods: {

@@ -1,5 +1,6 @@
 <template>
-  <div id="line-chart-container">
+  <div class="chart-container" ref="container">
+    <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <line-chart-formation
@@ -30,7 +31,6 @@
         />
       </g>
     </svg>
-    <info />
   </div>
 </template>
 
@@ -55,24 +55,35 @@ export default {
     LineChartLine,
     LineChartTooltip,
   },
+  props: {
+    verticalLayout: {
+      type: Object,
+      required: true,
+    },
+    yScale: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       layout: {
-        width: 800,
-        height: 800,
-        marginTop: 45,
+        width: 650,
         marginRight: 20,
-        marginBottom: 50,
-        marginLeft: 75,
+        marginLeft: 50,
+        ...this.verticalLayout,
       },
       axes: ['left', 'top'],
     };
+  },
+  mounted() {
+    this.$refs.container.style.width = this.width;
   },
   computed: {
     scale() {
       return {
         x: this.getScaleX(),
-        y: this.getScaleY(),
+        y: this.yScale(),
       };
     },
     stageStyle() {
@@ -84,6 +95,9 @@ export default {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;
       return `0 0 ${outerWidth} ${outerHeight}`;
+    },
+    width() {
+      return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
       return this.$store.getters.xMax;
@@ -111,15 +125,16 @@ export default {
       deep: true,
       handler() {
         this.scale.x = this.getScaleX();
-        this.scale.y = this.getScaleY();
+        this.scale.y = this.yScale();
       },
     },
   },
 };
 </script>
 
-<style lang="sass" scoped>
-#line-chart-container
-  position: relative
-  width: 800px
+<style lang="sass">
+.chart-container
+  display: flex
+  flex-direction: column
+  align-items: center
 </style>

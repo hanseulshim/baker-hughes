@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <v-menu id="area-info-menu" offset-y middle>
+  <div class="info-menu-container">
+    <span class="info-menu-title">Slope Difference</span>
+    <v-menu offset-y middle>
       <i class="material-icons" slot="activator">info_outline</i>
       <v-card class="info-card">
         <v-card-text>
@@ -25,10 +26,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass">
-#area-info-menu
-  position: absolute
-  top: -0.75%
-  left: 65%
-</style>

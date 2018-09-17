@@ -1,10 +1,11 @@
 <template>
   <v-app>
-    <well-data v-if="validated" />
+    <well-data />
+    <!-- <well-data v-if="validated" />
     <password
       v-else
       @submit="validatePassword"
-    />
+    /> -->
   </v-app>
 </template>
 

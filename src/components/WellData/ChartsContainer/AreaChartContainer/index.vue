@@ -1,5 +1,6 @@
 <template>
-  <div id="area-chart-container">
+  <div class="chart-container" ref="container">
+    <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <rect
@@ -29,7 +30,6 @@
         />
       </g>
     </svg>
-    <info />
   </div>
 </template>
 
@@ -50,16 +50,24 @@ export default {
     AreaChartTooltip,
     Info,
   },
+  props: {
+    verticalLayout: {
+      type: Object,
+      required: true,
+    },
+    yScale: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       axes: ['left', 'top'],
       layout: {
-        width: 265,
-        height: 800,
-        marginTop: 45,
+        width: 150,
         marginRight: 50,
-        marginBottom: 50,
         marginLeft: 20,
+        ...this.verticalLayout,
       },
       xDomain: {
         min: -0.01,
@@ -67,12 +75,14 @@ export default {
       },
     };
   },
+  mounted() {
+    this.$refs.container.style.width = this.width;
+  },
   computed: {
     scale() {
       return {
         x: this.getScaleX(),
-        y: this.getScaleY(),
-        color: d3.scaleOrdinal(d3.schemeCategory10),
+        y: this.yScale(),
       };
     },
     stageStyle() {
@@ -85,11 +95,11 @@ export default {
       const outerHeight = this.layout.height + this.layout.marginTop + this.layout.marginBottom;
       return `0 0 ${outerWidth} ${outerHeight}`;
     },
+    width() {
+      return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
+    },
     xMax() {
       return this.$store.getters.maxSlope;
-    },
-    yMax() {
-      return this.$store.getters.maxDepth;
     },
   },
   methods: {
@@ -98,28 +108,15 @@ export default {
         .domain([this.xDomain.min, this.xDomain.max])
         .range([0, this.layout.width]);
     },
-    getScaleY() {
-      return d3.scaleLinear()
-        .domain([0, this.yMax])
-        .range([0, this.layout.height])
-        .nice();
-    },
   },
   watch: {
     layout: {
       deep: true,
       handler() {
         this.scale.x = this.getScaleX();
-        this.scale.y = this.getScaleY();
+        this.scale.y = this.yScale();
       },
     },
   },
 };
 </script>
-
-<style lang="sass" scoped>
-#area-chart-container
-  position: relative
-  width: 300px
-</style>
-
