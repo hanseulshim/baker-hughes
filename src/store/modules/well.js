@@ -4,6 +4,7 @@ export default {
   state: {
     currentWell: dataPhantom.includedWells[0],
     wellList: dataPhantom.includedWells,
+    benchmarkName: dataPhantom.name,
   },
   actions: {
     updateCurrentWell(context, well) {
