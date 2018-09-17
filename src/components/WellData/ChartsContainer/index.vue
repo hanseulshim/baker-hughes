@@ -1,9 +1,10 @@
 <template>
   <div class="charts-container">
-    <pull-bit-chart-container
+    <!-- TODO: ADD IN VERSION 1.0 -->
+    <!-- <pull-bit-chart-container
       :vertical-layout="verticalLayout"
       :y-scale="yScale"
-    />
+    /> -->
     <line-chart-container
       :vertical-layout="verticalLayout"
       :y-scale="yScale"
