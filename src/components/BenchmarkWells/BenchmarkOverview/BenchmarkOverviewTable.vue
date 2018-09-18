@@ -78,8 +78,6 @@ table.v-table
   thead
     tr:first-child
       border-bottom: 1px solid #5B5959 !important
-    .v-datatable__progress
-      // display: none
     th
       font-weight: bold
 </style>
