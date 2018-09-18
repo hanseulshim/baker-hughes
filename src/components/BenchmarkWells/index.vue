@@ -6,8 +6,7 @@
     <v-card class="charts-container">
       <v-card-text>
         <benchmark-overview />
-        <!-- <chart-title /> -->
-        <!-- <charts-container /> -->
+        <wells-overview />
       </v-card-text>
     </v-card>
   </div>
@@ -15,20 +14,18 @@
 </template>
 
 <script>
-import ChartTitle from './ChartTitle';
-import ChartsContainer from './ChartsContainer';
-import WellOptions from './WellOptions';
 import BenchmarkName from './BenchmarkName';
 import BenchmarkOverview from './BenchmarkOverview';
+import WellOptions from './WellOptions';
+import WellsOverview from './WellsOverview';
 
 export default {
   name: 'benchmark-wells',
   components: {
-    ChartTitle,
-    ChartsContainer,
-    WellOptions,
     BenchmarkName,
     BenchmarkOverview,
+    WellOptions,
+    WellsOverview,
   },
 };
 </script>
@@ -37,5 +34,5 @@ export default {
 #benchmark-name-container
   margin: 5% auto
 .charts-container
-  padding: 1em
+  padding: 0 1em
 </style>

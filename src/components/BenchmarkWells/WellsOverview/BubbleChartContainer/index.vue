@@ -3,29 +3,14 @@
     <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <line-chart-formation
+        <bubble-chart-label
           :layout="layout"
           :scale="scale"
         />
-        <line-chart-label
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-axis
+        <bubble-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
-          :layout="layout"
-          :scale="scale"
-        />
-        <benchmark-line
-          :scale="scale"
-        />
-        <line-chart-line
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-tooltip
           :layout="layout"
           :scale="scale"
         />
@@ -36,42 +21,26 @@
 
 <script>
 import * as d3 from 'd3';
-import BenchmarkLine from './BenchmarkLine';
 import Info from './Info';
-import LineChartAxis from './LineChartAxis';
-import LineChartFormation from './LineChartFormation';
-import LineChartLabel from './LineChartLabel';
-import LineChartLine from './LineChartLine';
-import LineChartTooltip from './LineChartTooltip';
+import BubbleChartAxis from './BubbleChartAxis';
+import BubbleChartLabel from './BubbleChartLabel';
 
 export default {
-  name: 'line-chart-container',
+  name: 'bubble-chart-container',
   components: {
-    BenchmarkLine,
     Info,
-    LineChartAxis,
-    LineChartFormation,
-    LineChartLabel,
-    LineChartLine,
-    LineChartTooltip,
-  },
-  props: {
-    verticalLayout: {
-      type: Object,
-      required: true,
-    },
-    yScale: {
-      type: Function,
-      required: true,
-    },
+    BubbleChartAxis,
+    BubbleChartLabel,
   },
   data() {
     return {
       layout: {
-        width: 650,
+        width: 800,
+        height: 600,
         marginRight: 20,
-        marginLeft: 50,
-        ...this.verticalLayout,
+        marginLeft: 75,
+        marginTop: 30,
+        marginBottom: 50,
       },
       axes: ['left', 'top'],
     };
@@ -83,7 +52,7 @@ export default {
     scale() {
       return {
         x: this.getScaleX(),
-        y: this.yScale(),
+        y: this.getScaleY(),
       };
     },
     stageStyle() {
@@ -112,6 +81,11 @@ export default {
         .domain([0, this.xMax * 1.25])
         .range([0, this.layout.width])
         .nice();
+    },
+    getScaleY() {
+      return d3.scaleLinear()
+        .domain([0, this.yMax])
+        .range([0, this.layout.height]);
     },
   },
   watch: {
