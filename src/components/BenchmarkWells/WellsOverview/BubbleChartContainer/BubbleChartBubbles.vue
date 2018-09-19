@@ -4,7 +4,13 @@
       v-for="(well, index) in wellList"
       :key="index"
     >
-      <circle cx="50" cy="50" r="10" />
+      <circle
+        class="well-bubble"
+        :cx="scale.x(well.maxTime)"
+        :cy="scale.y(well.maxDepth)"
+        :r="scale.r(well.maxCost)"
+        :fill="well.color"
+      />
     </g>
   </g>
 </template>
@@ -29,3 +35,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.well-bubble
+  opacity: .7
+</style>

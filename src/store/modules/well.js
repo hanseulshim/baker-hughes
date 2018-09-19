@@ -74,8 +74,10 @@ export default {
       return {
         wellList,
         maxDepth: Math.max(...depthArray),
+        minDepth: Math.min(...depthArray),
         maxTime: Math.max(...timeArray),
-        costArray: Math.max(...costArray),
+        maxCost: Math.max(...costArray),
+        minCost: Math.min(...costArray),
       };
     },
   },

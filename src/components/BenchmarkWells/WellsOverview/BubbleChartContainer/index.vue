@@ -7,14 +7,14 @@
           :layout="layout"
           :scale="scale"
         />
-        <bubble-chart-bubbles
-          :layout="layout"
-          :scale="scale"
-        />
         <bubble-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
+          :layout="layout"
+          :scale="scale"
+        />
+        <bubble-chart-bubbles
           :layout="layout"
           :scale="scale"
         />
@@ -42,7 +42,7 @@ export default {
     return {
       layout: {
         width: 800,
-        height: 600,
+        height: 400,
         marginRight: 20,
         marginLeft: 75,
         marginTop: 30,
@@ -57,6 +57,7 @@ export default {
   computed: {
     scale() {
       return {
+        r: this.getScaleR(),
         x: this.getScaleX(),
         y: this.getScaleY(),
       };
@@ -65,6 +66,12 @@ export default {
       return {
         transform: `translate(${this.layout.marginLeft}px, ${this.layout.marginTop}px)`,
       };
+    },
+    rMax() {
+      return this.$store.getters.combinedWells.maxCost;
+    },
+    rMin() {
+      return this.$store.getters.combinedWells.minCost;
     },
     viewBox() {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
@@ -80,8 +87,16 @@ export default {
     yMax() {
       return this.$store.getters.combinedWells.maxDepth;
     },
+    yMin() {
+      return this.$store.getters.combinedWells.minDepth;
+    },
   },
   methods: {
+    getScaleR() {
+      return d3.scaleSqrt()
+        .domain([this.rMin, this.rMax])
+        .range([10, 50]);
+    },
     getScaleX() {
       return d3.scaleLinear()
         .domain([0, this.xMax * 1.25])
@@ -90,7 +105,7 @@ export default {
     },
     getScaleY() {
       return d3.scaleLinear()
-        .domain([0, this.yMax])
+        .domain([this.yMin * 0.99, this.yMax * 1.01])
         .range([0, this.layout.height]);
     },
   },
