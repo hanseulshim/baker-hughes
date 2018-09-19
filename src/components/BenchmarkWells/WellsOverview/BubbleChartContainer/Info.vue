@@ -1,16 +1,13 @@
 <template>
   <div class="info-menu-container">
-    <span class="info-menu-title">{{label}}</span>
+    <span class="info-menu-title">Time (hrs.)</span>
     <v-menu offset-y middle>
       <i class="material-icons" slot="activator">info_outline</i>
       <v-card class="info-card">
         <v-card-text>
           <div class="info-title">
             <i class="material-icons info-icon">info_outline</i>
-            <div>
-              <span class="info-compare">{{currentCompare}}</span>
-              vs. Depth
-            </div>
+            Time (hrs.) vs. Depth
           </div>
           <div class="info-text">{{info}}</div>
         </v-card-text>
@@ -21,23 +18,11 @@
 
 <script>
 export default {
-  name: 'line-chart-info',
+  name: 'bubble-chart-info',
   data() {
     return {
-      time: 'This chart is plotted every 20 ft using bit sensor data. It shows the time (x-axis) the selected well took to reach each depth (y-axis.) Bit pull time was added to the bit data in the chart based on user input, “Trip Rate.” The grey “Benchmark Well” line combines the best 20 ft increment among all wells in the benchmark group into one line for comparison.',
-      cost: 'This chart is plotted every 20 ft using bit sensor data. It shows the cost (x-axis) the selected well took to reach each depth (y-axis.) Cost was calculated by multiplying the user input, “Rig Operating Cost” with the cumulative time. For each bit pull, additional cost was added in the chart based on, “Trip Rate” and “Fixed Cost to Trip.” The grey “Benchmark Well” line combines the best 20 ft increment among all wells in the benchmark group into one line for comparison.',
+      info: 'This chart is plotted every 20 ft using bit sensor data. It shows the time (x-axis) the selected well took to reach each depth (y-axis.) Bit pull time was added to the bit data in the chart based on user input, “Trip Rate.” The grey “Benchmark Well” line combines the best 20 ft increment among all wells in the benchmark group into one line for comparison.',
     };
-  },
-  computed: {
-    currentCompare() {
-      return this.$store.state.options.currentCompare;
-    },
-    info() {
-      return this.currentCompare === 'time' ? this.time : this.cost;
-    },
-    label() {
-      return this.currentCompare === 'time' ? 'Time (hrs.)' : 'Cost (USD)';
-    },
   },
 };
 </script>
@@ -57,8 +42,6 @@ export default {
   margin-bottom: .5em
   .info-icon
     margin-right: 2%
-  .info-compare
-    text-transform: capitalize
 .info-text
   color: #5B5959
   font-size: 90%
