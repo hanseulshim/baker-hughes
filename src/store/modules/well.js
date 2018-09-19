@@ -3,7 +3,6 @@ import dataPhantom from '../../data/dataPhantom.json';
 export default {
   state: {
     currentWell: dataPhantom.includedWells[0],
-    wellList: dataPhantom.includedWells,
     benchmarkName: dataPhantom.name,
   },
   actions: {
@@ -50,6 +49,33 @@ export default {
           cost: (well.drilledHours * rootState.options.operatingCost) + addCost,
         };
       });
+    },
+    combinedWells: (state, getters, rootState) => {
+      const depthArray = [];
+      const timeArray = [];
+      const costArray = [];
+      const wellList = dataPhantom.includedWells.map((well) => {
+        const maxDepth =
+          Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.startDepth));
+        const maxTime = Math.round(
+          Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.drilledHours)));
+        const maxCost = maxTime * rootState.options.operatingCost;
+        depthArray.push(maxDepth);
+        timeArray.push(maxTime);
+        costArray.push(maxCost);
+        return {
+          maxDepth,
+          maxTime,
+          maxCost,
+          ...well,
+        };
+      });
+      return {
+        wellList,
+        maxDepth: Math.max(...depthArray),
+        maxTime: Math.max(...timeArray),
+        costArray: Math.max(...costArray),
+      };
     },
   },
   mutations: {

@@ -46,23 +46,15 @@ export default {
   },
   computed: {
     benchmarkNamesTable() {
-      return this.$store.state.well.wellList.map((well, index) => {
-        const depth =
-          numeral(Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.startDepth)))
-            .format('0,0');
-        const time = Math.round(
-          Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.drilledHours)));
-        const cost = numeral(time * this.$store.state.options.operatingCost).format('0a');
-        return {
-          color: this.colors[index],
-          name: well.wellName,
-          depth,
-          time,
-          efficiency: well.efficiencyScore,
-          cost,
-          link: 'https://www.google.com',
-        };
-      });
+      return this.$store.getters.combinedWells.wellList.map((well, index) => ({
+        color: this.colors[index],
+        name: well.wellName,
+        depth: numeral(well.maxDepth).format('0,0'),
+        time: numeral(well.maxTime).format('0,a'),
+        cost: numeral(well.maxCost).format('0a'),
+        efficiency: well.efficiencyScore,
+        link: 'https://www.google.com',
+      }));
     },
     colors() {
       return this.$store.state.chartInfo.colors.benchmarkName;

@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     wellNames() {
-      return this.$store.state.well.wellList.map(well => ({
+      return this.$store.getters.combinedWells.wellList.map(well => ({
         id: well.id,
         name: well.wellName,
       })).sort((a, b) => a.name > b.name);

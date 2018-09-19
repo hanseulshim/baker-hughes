@@ -7,6 +7,10 @@
           :layout="layout"
           :scale="scale"
         />
+        <bubble-chart-bubbles
+          :layout="layout"
+          :scale="scale"
+        />
         <bubble-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
@@ -23,6 +27,7 @@
 import * as d3 from 'd3';
 import Info from './Info';
 import BubbleChartAxis from './BubbleChartAxis';
+import BubbleChartBubbles from './BubbleChartBubbles';
 import BubbleChartLabel from './BubbleChartLabel';
 
 export default {
@@ -30,6 +35,7 @@ export default {
   components: {
     Info,
     BubbleChartAxis,
+    BubbleChartBubbles,
     BubbleChartLabel,
   },
   data() {
@@ -69,10 +75,10 @@ export default {
       return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
-      return this.$store.getters.xMax;
+      return this.$store.getters.combinedWells.maxTime;
     },
     yMax() {
-      return this.$store.getters.maxDepth;
+      return this.$store.getters.combinedWells.maxDepth;
     },
   },
   methods: {
