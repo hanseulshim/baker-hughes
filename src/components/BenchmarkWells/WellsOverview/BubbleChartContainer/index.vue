@@ -18,6 +18,10 @@
           :layout="layout"
           :scale="scale"
         />
+        <bubble-chart-legend
+          :layout="layout"
+          :scale="scale"
+        />
       </g>
     </svg>
   </div>
@@ -29,6 +33,7 @@ import Info from './Info';
 import BubbleChartAxis from './BubbleChartAxis';
 import BubbleChartBubbles from './BubbleChartBubbles';
 import BubbleChartLabel from './BubbleChartLabel';
+import BubbleChartLegend from './BubbleChartLegend';
 
 export default {
   name: 'bubble-chart-container',
@@ -37,6 +42,7 @@ export default {
     BubbleChartAxis,
     BubbleChartBubbles,
     BubbleChartLabel,
+    BubbleChartLegend,
   },
   data() {
     return {
@@ -95,7 +101,7 @@ export default {
     getScaleR() {
       return d3.scaleSqrt()
         .domain([this.rMin, this.rMax])
-        .range([10, 50]);
+        .range([10, 40]);
     },
     getScaleX() {
       return d3.scaleLinear()
@@ -105,7 +111,7 @@ export default {
     },
     getScaleY() {
       return d3.scaleLinear()
-        .domain([this.yMin * 0.99, this.yMax * 1.01])
+        .domain([this.yMin * 0.99, this.yMax * 1.02])
         .range([0, this.layout.height]);
     },
   },
