@@ -46,8 +46,8 @@ export default {
   },
   computed: {
     benchmarkNamesTable() {
-      return this.$store.getters.combinedWells.wellList.map((well, index) => ({
-        color: this.colors[index],
+      return this.$store.getters.combinedWells.wellList.map(well => ({
+        color: well.color,
         name: well.wellName,
         depth: numeral(well.maxDepth).format('0,0'),
         time: numeral(well.maxTime).format('0,a'),

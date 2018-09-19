@@ -54,7 +54,7 @@ export default {
       const depthArray = [];
       const timeArray = [];
       const costArray = [];
-      const wellList = dataPhantom.includedWells.map((well) => {
+      const wellList = dataPhantom.includedWells.map((well, index) => {
         const maxDepth =
           Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.startDepth));
         const maxTime = Math.round(
@@ -67,6 +67,7 @@ export default {
           maxDepth,
           maxTime,
           maxCost,
+          color: rootState.chartInfo.colors.benchmarkName[index],
           ...well,
         };
       });
