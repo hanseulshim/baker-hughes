@@ -1,9 +1,5 @@
 <template>
-  <g>
-    <g :class="[classList]" ref="axis" :style="style" />
-    <g ref="gridX" />
-    <g ref="gridY" />
-  </g>
+  <g :class="[classList]" ref="axis" :style="style" />
 </template>
 
 <script>
@@ -32,7 +28,6 @@ export default {
   },
   mounted() {
     this.drawAxis();
-    this.drawGrid();
   },
   computed: {
     style() {
@@ -44,10 +39,10 @@ export default {
   methods: {
     getAxisClasses() {
       const axis = {
-        top: 'x',
-        bottom: 'x',
-        left: 'y',
-        right: 'y',
+        top: 'x bubble',
+        bottom: 'x bubble',
+        left: 'y bubble',
+        right: 'y bubble',
       };
       return [this.axis, axis[this.axis]];
     },
@@ -55,22 +50,12 @@ export default {
       const $axis = d3.select(this.$refs.axis);
       const scale = this.scale;
       const axisGenerator = {
-        top: d3.axisTop(scale.x).ticks(3),
+        top: d3.axisTop(scale.x).ticks(3).tickSize(-this.layout.height).tickSizeOuter(0),
         right: d3.axisRight(scale.y),
         bottom: d3.axisBottom(scale.x),
-        left: d3.axisLeft(scale.y).ticks(3).tickSizeOuter(0),
+        left: d3.axisLeft(scale.y).ticks(3).tickSize(-this.layout.width).tickSizeOuter(0),
       };
       $axis.call(axisGenerator[this.axis]);
-    },
-    drawGrid() {
-      const $gridX = d3.select(this.$refs.gridX);
-      const $gridY = d3.select(this.$refs.gridY);
-      $gridX.call(
-        d3.axisTop(this.scale.x).ticks(3).tickFormat('')
-          .tickSize(-this.layout.height));
-      $gridY.call(
-        d3.axisLeft(this.scale.y).ticks(2).tickFormat('').tickSize(-this.layout.width)
-          .tickSizeOuter(0));
     },
     getAxisTransform() {
       const axisOffset = {
@@ -95,9 +80,11 @@ export default {
 
 <style lang="sass">
 .axis line
-  stroke: #202020
+  stroke: #C1C1C1
 .axis path
   stroke: #202020
 .axis text
   fill: #202020
+g.axis.bubble > g:nth-child(2) > line
+  display: none
 </style>
