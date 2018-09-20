@@ -4,7 +4,7 @@ import dataPhantom from '../../data/dataPhantom.json';
 export default {
   state: {
     currentBitFilter: {
-      id: 0,
+      id: 'all',
       label: 'Show All Bits',
     },
     currentWell: dataPhantom.includedWells[0],
@@ -68,6 +68,7 @@ export default {
         const maxTime = Math.round(
           Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.drilledHours)));
         const maxCost = maxTime * rootState.options.operatingCost;
+        const sortedDrillBits = well.drillBits.sort((a, b) => a.depthIn - b.depthIn);
         depthArray.push(maxDepth);
         timeArray.push(maxTime);
         costArray.push(maxCost);
@@ -76,6 +77,7 @@ export default {
           maxTime,
           maxCost,
           color: rootState.chartInfo.colors.benchmarkName[index],
+          drillBits: sortedDrillBits,
           ...well,
         };
       });
