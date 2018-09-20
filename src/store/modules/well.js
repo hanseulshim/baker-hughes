@@ -1,13 +1,18 @@
+
 import dataPhantom from '../../data/dataPhantom.json';
 
 export default {
   state: {
+    currentBitFilter: 'Show All Bits',
     currentWell: dataPhantom.includedWells[0],
     benchmarkName: dataPhantom.name,
   },
   actions: {
     updateCurrentWell(context, well) {
       context.commit('updateCurrentWell', well);
+    },
+    updateBitFilter(context, bitFilter) {
+      context.commit('updateBitFilter', bitFilter);
     },
   },
   getters: {
@@ -84,6 +89,9 @@ export default {
   mutations: {
     updateCurrentWell(state, payload) {
       state.currentWell = state.wellList.find(well => well.id === payload.id);
+    },
+    updateBitFilter(state, payload) {
+      state.currentBitFilter = payload;
     },
   },
 };
