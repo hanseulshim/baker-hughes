@@ -7,6 +7,7 @@
       <v-card-text>
         <benchmark-overview />
         <wells-overview />
+        <wells-performance />
       </v-card-text>
     </v-card>
   </div>
@@ -18,6 +19,7 @@ import BenchmarkName from './BenchmarkName';
 import BenchmarkOverview from './BenchmarkOverview';
 import WellOptions from './WellOptions';
 import WellsOverview from './WellsOverview';
+import WellsPerformance from './WellsPerformance';
 
 export default {
   name: 'benchmark-wells',
@@ -26,6 +28,7 @@ export default {
     BenchmarkOverview,
     WellOptions,
     WellsOverview,
+    WellsPerformance,
   },
 };
 </script>

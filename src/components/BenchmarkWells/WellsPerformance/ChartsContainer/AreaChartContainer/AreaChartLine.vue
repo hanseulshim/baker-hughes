@@ -9,18 +9,14 @@
         fill="#F9F9F9"
       />
     </clipPath>
-    <g
-      v-for="(line, index) in splitLines"
+    <path
+      v-for="(well, index) in wellList"
       :key="`${index}-area-section`"
-    >
-      <path
-        :style="lineStyle"
-        :d="drawLine(line)"
-        :stroke="colors.line[index]"
-        :fill="colors.area[index]"
-        clip-path="url(#clip-area)"
-      />
-    </g>
+      :style="lineStyle"
+      :d="drawLine(well)"
+      :fill="well.color"
+      clip-path="url(#clip-area)"
+    />
   </g>
 </template>
 
@@ -47,26 +43,28 @@ export default {
     return {
       lineStyle: {
         strokeWidth: 1.5,
+        opacity: 0.6,
       },
     };
   },
   methods: {
-    drawLine(line) {
+    drawLine(well) {
+      const filteredSlope = this.combinedSlopeData.filter(slope => slope.well === well.wellName);
       const path = d3.area()
         .defined(d => d.running_average_gradient_diff > this.xDomain.min)
         .y1(d => this.scale.y(d.cumulativeDepth))
         .x0(d => this.scale.x(d.running_average_gradient_diff))
         .x1(this.xDomain.min)
         .y0(d => this.scale.y(d.cumulativeDepth));
-      return path(line);
+      return path(filteredSlope);
     },
   },
   computed: {
-    colors() {
-      return this.$store.state.chartInfo.colors;
+    combinedSlopeData() {
+      return this.$store.getters.combinedSlopeData;
     },
-    splitLines() {
-      return this.$store.getters.splitSlopeData;
+    wellList() {
+      return this.$store.getters.combinedWells.wellList;
     },
   },
   watch: {

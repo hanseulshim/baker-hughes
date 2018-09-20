@@ -1,10 +1,5 @@
 <template>
   <div class="charts-container">
-    <!-- TODO: ADD IN VERSION 1.0 -->
-    <!-- <pull-bit-chart-container
-      :vertical-layout="verticalLayout"
-      :y-scale="yScale"
-    /> -->
     <line-chart-container
       :vertical-layout="verticalLayout"
       :y-scale="yScale"
@@ -20,14 +15,12 @@
 import * as d3 from 'd3';
 import AreaChartContainer from './AreaChartContainer';
 import LineChartContainer from './LineChartContainer';
-import PullBitChartContainer from './PullBitChartContainer';
 
 export default {
   name: 'charts-container',
   components: {
     AreaChartContainer,
     LineChartContainer,
-    PullBitChartContainer,
   },
   data() {
     return {
@@ -40,7 +33,7 @@ export default {
   },
   computed: {
     yMax() {
-      return this.$store.getters.maxDepth;
+      return this.$store.getters.combinedWells.maxDepth;
     },
   },
   methods: {

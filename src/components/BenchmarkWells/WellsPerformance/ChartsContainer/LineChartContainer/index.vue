@@ -3,28 +3,22 @@
     <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <rect
-          :width="layout.width"
-          :height="layout.height"
-          fill="#F9F9F9"
-        />
-        <area-chart-line
-          :layout="layout"
-          :scale="scale"
-          :xDomain="xDomain"
-        />
-        <area-chart-label
+        <line-chart-formation
           :layout="layout"
           :scale="scale"
         />
-        <area-chart-axis
+        <line-chart-label
+          :layout="layout"
+          :scale="scale"
+        />
+        <line-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
           :layout="layout"
           :scale="scale"
         />
-        <area-chart-tooltip
+        <line-chart-line
           :layout="layout"
           :scale="scale"
         />
@@ -35,20 +29,20 @@
 
 <script>
 import * as d3 from 'd3';
-import AreaChartAxis from './AreaChartAxis';
-import AreaChartLabel from './AreaChartLabel';
-import AreaChartLine from './AreaChartLine';
-import AreaChartTooltip from './AreaChartTooltip';
 import Info from './Info';
+import LineChartAxis from './LineChartAxis';
+import LineChartFormation from './LineChartFormation';
+import LineChartLabel from './LineChartLabel';
+import LineChartLine from './LineChartLine';
 
 export default {
-  name: 'area-chart-container',
+  name: 'line-chart-container',
   components: {
-    AreaChartAxis,
-    AreaChartLabel,
-    AreaChartLine,
-    AreaChartTooltip,
     Info,
+    LineChartAxis,
+    LineChartFormation,
+    LineChartLabel,
+    LineChartLine,
   },
   props: {
     verticalLayout: {
@@ -62,17 +56,13 @@ export default {
   },
   data() {
     return {
-      axes: ['left', 'top'],
       layout: {
-        width: 150,
-        marginRight: 50,
-        marginLeft: 20,
+        width: 650,
+        marginRight: 20,
+        marginLeft: 75,
         ...this.verticalLayout,
       },
-      xDomain: {
-        min: -0.01,
-        max: 0.025,
-      },
+      axes: ['left', 'top'],
     };
   },
   mounted() {
@@ -99,14 +89,15 @@ export default {
       return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
-      return this.$store.getters.maxSlope;
+      return this.$store.getters.combinedWells.maxTime;
     },
   },
   methods: {
     getScaleX() {
       return d3.scaleLinear()
-        .domain([this.xDomain.min, this.xDomain.max])
-        .range([0, this.layout.width]);
+        .domain([0, this.xMax * 1.25])
+        .range([0, this.layout.width])
+        .nice();
     },
   },
   watch: {
@@ -120,3 +111,10 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.chart-container
+  display: flex
+  flex-direction: column
+  align-items: center
+</style>
