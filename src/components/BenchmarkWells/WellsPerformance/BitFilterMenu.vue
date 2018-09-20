@@ -32,23 +32,23 @@ export default {
     return {
       bitFilters: [
         {
-          id: 0,
+          id: 'all',
           label: 'Show All Bits',
         },
         {
-          id: 0,
+          id: 1,
           label: 'Only Bit 1',
         },
         {
-          id: 0,
+          id: 2,
           label: 'Only Bit 2',
         },
         {
-          id: 0,
+          id: 3,
           label: 'Only Bit 3',
         },
         {
-          id: 0,
+          id: 'last',
           label: 'Only Last Bit',
         },
       ],
