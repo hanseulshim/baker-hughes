@@ -3,7 +3,10 @@ import dataPhantom from '../../data/dataPhantom.json';
 
 export default {
   state: {
-    currentBitFilter: 'Show All Bits',
+    currentBitFilter: {
+      id: 0,
+      label: 'Show All Bits',
+    },
     currentWell: dataPhantom.includedWells[0],
     benchmarkName: dataPhantom.name,
   },

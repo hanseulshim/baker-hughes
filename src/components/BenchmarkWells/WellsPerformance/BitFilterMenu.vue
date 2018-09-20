@@ -2,7 +2,7 @@
   <div>
     <v-menu offset-y min-width=0>
       <div slot="activator" class="bit-selected-container">
-        <span class="bit-selection">{{currentBitFilter}}</span>
+        <span class="bit-selection">{{currentBitFilter.label}}</span>
         <i class="material-icons dropdown">arrow_drop_down</i>
       </div>
       <v-card>
@@ -10,12 +10,12 @@
           <v-list>
             <v-list-tile
               v-for="(bitFilter, index) in bitFilters"
-              :key="index + bitFilter"
+              :key="index + bitFilter.label"
               @click="changeBitFilter(bitFilter)"
-              :class="{ 'bit-selected-active': currentBitFilter === bitFilter }"
+              :class="{ 'bit-selected-active': currentBitFilter.label === bitFilter.label }"
             >
               <v-list-tile-content>
-                {{bitFilter}}
+                {{bitFilter.label}}
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
@@ -31,11 +31,26 @@ export default {
   data() {
     return {
       bitFilters: [
-        'Show All Bits',
-        'Only Bit 1',
-        'Only Bit 2',
-        'Only Bit 3',
-        'Only Last Bit',
+        {
+          id: 0,
+          label: 'Show All Bits',
+        },
+        {
+          id: 0,
+          label: 'Only Bit 1',
+        },
+        {
+          id: 0,
+          label: 'Only Bit 2',
+        },
+        {
+          id: 0,
+          label: 'Only Bit 3',
+        },
+        {
+          id: 0,
+          label: 'Only Last Bit',
+        },
       ],
     };
   },
