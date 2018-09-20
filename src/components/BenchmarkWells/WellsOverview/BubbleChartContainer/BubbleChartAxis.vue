@@ -79,11 +79,11 @@ export default {
 </script>
 
 <style lang="sass">
-.axis line
+.axis.bubble line
   stroke: #C1C1C1
-.axis path
+.axis.bubble path
   stroke: #202020
-.axis text
+.axis.bubble text
   fill: #202020
 g.axis.bubble > g:nth-child(2) > line
   display: none
