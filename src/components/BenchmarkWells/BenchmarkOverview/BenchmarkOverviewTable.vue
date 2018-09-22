@@ -5,23 +5,28 @@
     hide-actions
   >
     <template slot="items" slot-scope="props">
-      <td class="text-xs-right">
-        <svg width="20" height="20">
-          <rect width="20" height="20"
-            :style="`fill: ${props.item.color}`" />
-        </svg>
-      </td>
-      <td>{{ props.item.name }}</td>
-      <td>{{ props.item.depth }} ft</td>
-      <td>{{ props.item.time }} hrs</td>
-      <td>{{ props.item.efficiency }}</td>
-      <td>{{ props.item.cost }}</td>
-      <td>
-        <v-btn
-          class="button-primary button-link"
-          :onclick="`location.href='${props.item.link}'`"
-        >View</v-btn>
-      </td>
+      <tr
+        @click="selectWell(props.item.name)"
+        :class="{'active-well': selectedWell.wellName === props.item.name}"
+      >
+        <td class="text-xs-right">
+          <svg width="20" height="20">
+            <rect width="20" height="20"
+              :style="`fill: ${props.item.color}`" />
+          </svg>
+        </td>
+        <td>{{ props.item.name }}</td>
+        <td>{{ props.item.depth }} ft</td>
+        <td>{{ props.item.time }} hrs</td>
+        <td>{{ props.item.efficiency }}</td>
+        <td>{{ props.item.cost }}</td>
+        <td>
+          <v-btn
+            class="button-primary button-link"
+            :onclick="`location.href='${props.item.link}'`"
+          >View</v-btn>
+        </td>
+      </tr>
     </template>
   </v-data-table>
 </template>
@@ -59,6 +64,14 @@ export default {
     colors() {
       return this.$store.state.chartInfo.colors.benchmarkName;
     },
+    selectedWell() {
+      return this.$store.state.well.selectedWell;
+    },
+  },
+  methods: {
+    selectWell(wellName) {
+      this.$store.dispatch('updateSelectedWell', wellName);
+    },
   },
 };
 </script>
@@ -72,4 +85,6 @@ table.v-table
       border-bottom: 1px solid #5B5959 !important
     th
       font-weight: bold
+.active-well
+  background: #ECECEC
 </style>

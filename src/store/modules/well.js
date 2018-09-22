@@ -8,11 +8,21 @@ export default {
       label: 'Show All Bits',
     },
     currentWell: dataPhantom.includedWells[0],
+    selectedWell: { wellName: '' },
     benchmarkName: dataPhantom.name,
   },
   actions: {
-    updateCurrentWell(context, well) {
-      context.commit('updateCurrentWell', well);
+    updateCurrentWell(context, payload) {
+      const currentWell = context.getters.combinedWells.wellList
+        .find(well => well.id === payload.id);
+      context.commit('updateCurrentWell', currentWell);
+    },
+    updateSelectedWell(context, payload) {
+      const unselect = context.state.selectedWell.wellName === payload;
+      const selectedWell = unselect ? { wellName: '' } :
+        context.getters.combinedWells.wellList
+          .find(well => well.wellName === payload);
+      context.commit('updateSelectedWell', selectedWell);
     },
     updateBitFilter(context, bitFilter) {
       context.commit('updateBitFilter', bitFilter);
@@ -93,7 +103,10 @@ export default {
   },
   mutations: {
     updateCurrentWell(state, payload) {
-      state.currentWell = state.wellList.find(well => well.id === payload.id);
+      state.currentWell = payload;
+    },
+    updateSelectedWell(state, payload) {
+      state.selectedWell = payload;
     },
     updateBitFilter(state, payload) {
       state.currentBitFilter = payload;
