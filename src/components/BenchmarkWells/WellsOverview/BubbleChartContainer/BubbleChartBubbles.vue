@@ -7,14 +7,19 @@
       <circle
         @mouseover="hover(well)"
         @mouseout="removeHover"
-        :class="[{'well-bubble-hover': hoverWell === well.wellName}, 'well-bubble-default']"
+        @click="selectWell(well.wellName)"
+        :class="[
+          {
+            'well-bubble-hover': hoverWell === well.wellName,
+            'well-bubble-active': selectedWell.wellName === well.wellName,
+          }, 'well-bubble-default']"
         :cx="scale.x(well.maxTime)"
         :cy="scale.y(well.maxDepth)"
         :r="scale.r(well.maxCost)"
         :fill="well.color"
       />
       <text
-        v-if="hoverWell === well.wellName"
+        v-if="hoverWell === well.wellName || selectedWell.wellName === well.wellName"
         class="well-bubble-text"
         :x="scale.x(well.maxTime)"
         :y="scale.y(well.maxDepth) + scale.r(well.maxCost) + 15"
@@ -49,6 +54,9 @@ export default {
     wellList() {
       return this.$store.getters.combinedWells.wellList;
     },
+    selectedWell() {
+      return this.$store.state.well.selectedWell;
+    },
   },
   methods: {
     hover(well) {
@@ -57,6 +65,9 @@ export default {
     removeHover() {
       this.hoverWell = '';
     },
+    selectWell(wellName) {
+      this.$store.dispatch('updateSelectedWell', wellName);
+    },
   },
 };
 </script>
@@ -64,7 +75,7 @@ export default {
 <style lang="sass">
 .well-bubble-default
   opacity: .7
-.well-bubble-hover
+.well-bubble-hover, .well-bubble-active
   opacity: 1
 .well-bubble-text
   font-size: 80%
