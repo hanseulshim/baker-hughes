@@ -6,6 +6,7 @@
       :style="lineStyle"
       :d="drawLine(well)"
       :stroke="well.color"
+      :opacity="!selectedWell.wellName || well.wellName === selectedWell.wellName ? 1 : 0.2"
     />
   </g>
 </template>
@@ -70,6 +71,9 @@ export default {
   computed: {
     currentBitFilter() {
       return this.$store.state.well.currentBitFilter;
+    },
+    selectedWell() {
+      return this.$store.state.well.selectedWell;
     },
     wellList() {
       return this.$store.getters.combinedWells.wellList;
