@@ -31,32 +31,31 @@ export default {
   data() {
     return {
       bitFilters: [
-        {
-          id: 'all',
-          label: 'Show All Bits',
-        },
-        {
-          id: 1,
-          label: 'Only Bit 1',
-        },
-        {
-          id: 2,
-          label: 'Only Bit 2',
-        },
-        {
-          id: 3,
-          label: 'Only Bit 3',
-        },
-        {
-          id: 'last',
-          label: 'Only Last Bit',
-        },
       ],
     };
+  },
+  mounted() {
+    this.bitFilters.push({
+      id: 'all',
+      label: 'Show All Bits',
+    });
+    for (let i = 1; i <= this.maxBitLength; i += 1) {
+      this.bitFilters.push({
+        id: i,
+        label: `Only Bit ${i}`,
+      });
+    }
+    this.bitFilters.push({
+      id: 'last',
+      label: 'Only Last Bit',
+    });
   },
   computed: {
     currentBitFilter() {
       return this.$store.state.well.currentBitFilter;
+    },
+    maxBitLength() {
+      return this.$store.getters.combinedWells.maxBitLength;
     },
   },
   methods: {

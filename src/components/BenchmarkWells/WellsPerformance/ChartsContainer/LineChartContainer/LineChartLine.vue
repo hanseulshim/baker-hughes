@@ -53,11 +53,13 @@ export default {
         const filterDepth = well.drillBits[well.drillBits.length - 1].depthIn;
         filterLine.push(...well.benchmarkInputByPortionInfo
           .filter(depth => depth.startDepth >= filterDepth));
+      } else if (this.currentBitFilter.id - 1 >= well.drillBits.length) {
+        return path([]);
       } else {
         const drillBitIndex = this.currentBitFilter.id - 1;
         const drillBitLastIndex = this.currentBitFilter.id;
         const filterDepth = well.drillBits[drillBitIndex].depthIn;
-        const filterDepthLast = well.drillBits.length - 1 === this.currentBitFilter.id - 1 ?
+        const filterDepthLast = well.drillBits.length === this.currentBitFilter.id ?
           Infinity : well.drillBits[drillBitLastIndex].depthIn;
         filterLine.push(...well.benchmarkInputByPortionInfo
           .filter(depth => depth.startDepth >= filterDepth && depth.startDepth <= filterDepthLast));

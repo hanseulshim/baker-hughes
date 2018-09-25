@@ -72,6 +72,7 @@ export default {
       const depthArray = [];
       const timeArray = [];
       const costArray = [];
+      const bitArray = [];
       const wellList = dataPhantom.includedWells.map((well, index) => {
         const maxDepth =
           Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.startDepth));
@@ -82,6 +83,7 @@ export default {
         depthArray.push(maxDepth);
         timeArray.push(maxTime);
         costArray.push(maxCost);
+        bitArray.push(well.drillBits.length);
         return {
           maxDepth,
           maxTime,
@@ -98,6 +100,7 @@ export default {
         maxTime: Math.max(...timeArray),
         maxCost: Math.max(...costArray),
         minCost: Math.min(...costArray),
+        maxBitLength: Math.max(...bitArray),
       };
     },
   },
