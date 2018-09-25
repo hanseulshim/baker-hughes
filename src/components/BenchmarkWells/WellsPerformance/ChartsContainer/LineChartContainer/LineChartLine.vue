@@ -8,6 +8,31 @@
       :stroke="well.color"
       :opacity="!selectedWell.wellName || well.wellName === selectedWell.wellName ? 1 : 0.2"
     />
+    <g
+      v-for="(bit, index) in selectedWell.drillBits"
+      v-if="
+        currentBitFilter.id === 'all' ||
+        (currentBitFilter.id === 'last' && index === selectedWell.drillBits.length - 1) ||
+        index === currentBitFilter.id - 1"
+      :key="index"
+    >
+      <circle
+        :cx="getCoords(bit, selectedWell.benchmarkInputByPortionInfo).x"
+        :cy="getCoords(bit, selectedWell.benchmarkInputByPortionInfo).y"
+        :r="5"
+      />
+      <text
+        :x="getCoords(bit, selectedWell.benchmarkInputByPortionInfo).x"
+        :y="getCoords(bit, selectedWell.benchmarkInputByPortionInfo).y"
+        :dy="index ? 0 : 10"
+        :dx="15"
+        :style="textStyle"
+        :stroke="selectedWell.color"
+        :fill="selectedWell.color"
+      >
+        {{bit.bitType}}
+      </text>
+    </g>
   </g>
 </template>
 
@@ -67,9 +92,26 @@ export default {
       }
       return path(filterLine);
     },
+    findBisect(depthIn, lineData) {
+      const bisector = d3.bisector(d => d.startDepth).left;
+      const lineArray = [].concat(...lineData);
+      const indexWell = bisector(lineArray, depthIn) === lineArray.length ?
+        bisector(lineArray, depthIn) - 1 : bisector(lineArray, depthIn);
+      return lineArray[indexWell].drilledHours;
+    },
+    getCoords(bit, lineData) {
+      const x = this.findBisect(bit.depthIn, lineData);
+      return {
+        x: this.scale.x(x),
+        y: this.scale.y(bit.depthIn),
+      };
+    },
   },
   computed: {
     currentBitFilter() {
+      return this.$store.state.well.currentBitFilter;
+    },
+    drillBits() {
       return this.$store.state.well.currentBitFilter;
     },
     selectedWell() {
