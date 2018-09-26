@@ -22,6 +22,10 @@
           :layout="layout"
           :scale="scale"
         />
+        <line-chart-tooltip
+          :layout="layout"
+          :scale="scale"
+        />
       </g>
     </svg>
   </div>
@@ -34,6 +38,7 @@ import LineChartAxis from './LineChartAxis';
 import LineChartFormation from './LineChartFormation';
 import LineChartLabel from './LineChartLabel';
 import LineChartLine from './LineChartLine';
+import LineChartTooltip from './LineChartTooltip';
 
 export default {
   name: 'line-chart-container',
@@ -43,6 +48,7 @@ export default {
     LineChartFormation,
     LineChartLabel,
     LineChartLine,
+    LineChartTooltip,
   },
   props: {
     verticalLayout: {

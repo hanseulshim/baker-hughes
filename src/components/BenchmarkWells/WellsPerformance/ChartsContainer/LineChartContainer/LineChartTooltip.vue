@@ -1,38 +1,29 @@
 <template>
   <g>
+    <g
+      v-if="selectedWell.wellName"
+      :style="style"
+      :opacity="lineOpacity">
+      <circle :cx="wellCoords.x" :cy="wellCoords.y" :r="5"/>
+    </g>
     <path :style="lineStyle" :opacity="lineOpacity" :d="d" />
     <g
-      :opacity="lineOpacity"
+      :opacity="selectedWell.wellName ? lineOpacity : 0"
     >
       <rect
         fill="#5B5959"
-        :height="bboxSlope.height + 5"
-        :width="bboxSlope.width + 10"
-        :x="0"
+        :height="bbox.height + 5"
+        :width="bbox.width + 10"
+        :x="layout.width - (bbox.width + 10)"
         :y="wellCoords.y - 13"
       />
       <text
         class="hour-label"
-        id="hour-label-slope"
-        :x="5"
+        id="hour-label-text"
+        :x="layout.width - bbox.width - 5"
         :y="wellCoords.y"
       >
-        Slope Diff: {{slopeDiff}}
-      </text>
-      <rect
-        fill="#FFF"
-        :height="20"
-        :width="60"
-        :x="layout.width"
-        :y="wellCoords.y - 15"
-      />
-      <text
-        class="depth-label"
-        id="depth-label-slope"
-        :x="layout.width + 5"
-        :y="wellCoords.y"
-      >
-        {{getDepth(depth)}} ft
+        <tspan>Time: {{Math.round(dataWell.drilledHours)}} hrs</tspan>
       </text>
     </g>
     <rect
@@ -49,11 +40,10 @@
 
 <script>
 import * as d3 from 'd3';
-import numeral from 'numeral';
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
-  name: 'area-chart-tooltip',
+  name: 'line-chart-tooltip',
   props: {
     layout: {
       type: Object,
@@ -78,26 +68,29 @@ export default {
     };
   },
   computed: {
-    ...mapState('hover', ['dataBenchmark', 'dataSlope', 'dataWell', 'bboxSlope', 'lineOpacity']),
-    ...mapGetters({
-      benchmarks: 'benchmarks',
-      lineData: 'wellData',
-      slopeData: 'slopeData',
-    }),
+    ...mapState('hover', ['dataSlope', 'dataWell', 'bbox', 'lineOpacity']),
     d() {
       return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
     },
-    depth() {
-      return this.dataSlope.cumulativeDepth < this.lineData[0].startDepth ?
-        this.dataSlope.cumulativeDepth : this.dataWell.startDepth;
+    lineData() {
+      return this.$store.state.well.selectedWell.wellName ?
+        this.$store.state.well.selectedWell.benchmarkInputByPortionInfo :
+        this.$store.getters.wellData;
     },
-    slopeDiff() {
-      return numeral(this.dataSlope.running_average_gradient_diff).format('0.000');
+    selectedWell() {
+      return this.$store.state.well.selectedWell;
+    },
+    slopeData() {
+      return this.$store.getters.combinedSlopeData
+        .filter(slope => (
+          this.$store.state.well.selectedWell.wellName ?
+            this.$store.state.well.selectedWell.wellName === slope.well :
+            this.$store.state.well.currentWell.wellName === slope.well));
     },
     wellCoords() {
       return {
-        x: this.scale.x(this.dataSlope.running_average_gradient_diff),
-        y: this.scale.y(this.depth),
+        x: this.scale.x(this.dataWell.drilledHours),
+        y: this.scale.y(this.dataWell.startDepth),
       };
     },
   },
@@ -109,9 +102,6 @@ export default {
       d3.select(this.$refs.rect)
         .on('mousemove', this.mousemove);
     },
-    getDepth(depth) {
-      return numeral(depth).format('0,0');
-    },
     hideVisible() {
       this.$store.dispatch('hover/hideVisible');
     },
@@ -121,13 +111,10 @@ export default {
       const bisectorSlope = d3.bisector(d => d.cumulativeDepth).left;
       const indexWell = bisector(this.lineData, yValue) === this.lineData.length ?
         bisector(this.lineData, yValue) - 1 : bisector(this.lineData, yValue);
-      const indexBenchmark = bisector(this.benchmarks, yValue) === this.benchmarks.length ?
-        bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
       const indexSlope = bisectorSlope(this.slopeData, yValue) === this.slopeData.length ?
         bisectorSlope(this.slopeData, yValue) - 1 : bisectorSlope(this.slopeData, yValue);
       const payload = {
         dataWell: this.lineData[indexWell],
-        dataBenchmark: this.benchmarks[indexBenchmark],
         dataSlope: this.slopeData[indexSlope],
         bboxSlope: d3.select('#hour-label-slope').node().getBBox(),
         bbox: d3.select('#hour-label-text').node().getBBox(),
@@ -145,7 +132,4 @@ export default {
 .hour-label
   font-size: 75%
   fill: #FFF
-.depth-label
-  font-size: 80%
-  fill: #828488
 </style>
