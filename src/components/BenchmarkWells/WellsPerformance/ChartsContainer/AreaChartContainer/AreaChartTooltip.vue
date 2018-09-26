@@ -20,7 +20,7 @@
         Slope Diff: {{slopeDiff}}
       </text>
     </g>
-    <g>
+    <g :opacity="lineOpacity">
       <rect
         fill="#FFF"
         :height="20"

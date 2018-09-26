@@ -8,10 +8,10 @@
           :scale="scale"
           :xDomain="xDomain"
         />
-        <!-- <area-chart-label
+        <area-chart-label
           :layout="layout"
           :scale="scale"
-        /> -->
+        />
         <area-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"

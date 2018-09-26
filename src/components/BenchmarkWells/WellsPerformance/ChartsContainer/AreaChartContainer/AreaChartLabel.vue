@@ -1,7 +1,8 @@
 <template>
   <g class='labels'>
     <g
-      v-for="(bit, index) in drillBits"
+      v-if="selectedWell.wellName"
+      v-for="(bit, index) in selectedWell.drillBits"
       :key="index + bit.bitType"
     >
       <path
@@ -41,8 +42,8 @@ export default {
     };
   },
   computed: {
-    drillBits() {
-      return this.$store.getters.drillBits;
+    selectedWell() {
+      return this.$store.state.well.selectedWell;
     },
   },
   methods: {
