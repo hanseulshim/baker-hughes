@@ -15,7 +15,7 @@
       :d="drawLine(well)"
       :fill="well.color"
       clip-path="url(#clip-area)"
-      :opacity="!selectedWell.wellName || well.wellName === selectedWell.wellName ? 1 : 0.2"
+      :opacity="well.wellName === selectedWell.wellName ? 1 : !selectedWell.wellName ? 0.6 : 0.2"
     />
   </g>
 </template>
