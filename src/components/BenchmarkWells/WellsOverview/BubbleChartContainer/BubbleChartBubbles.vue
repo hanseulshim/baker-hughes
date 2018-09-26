@@ -52,7 +52,18 @@ export default {
   },
   computed: {
     wellList() {
-      return this.$store.getters.combinedWells.wellList;
+      const wellList = this.$store.getters.combinedWells.wellList
+        .filter(well => well.wellName !== this.selectedWell.wellName);
+      if (this.selectedWell.wellName) {
+        wellList.push(this.selectedWell);
+      }
+      if (this.hoverWell) {
+        const hoverWellObj = wellList.find(well => well.wellName === this.hoverWell);
+        const hoverWellList = wellList.filter(well => well.wellName !== hoverWellObj.wellName);
+        hoverWellList.push(hoverWellObj);
+        return hoverWellList;
+      }
+      return wellList;
     },
     selectedWell() {
       return this.$store.state.well.selectedWell;
