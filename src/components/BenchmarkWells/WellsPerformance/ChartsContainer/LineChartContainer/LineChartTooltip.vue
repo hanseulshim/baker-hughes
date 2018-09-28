@@ -1,14 +1,13 @@
 <template>
   <g>
     <g
-      v-if="selectedWell.wellName"
       :style="style"
-      :opacity="lineOpacity">
+      :opacity="showWellInfo()">
       <circle :cx="wellCoords.x" :cy="wellCoords.y" :r="5"/>
     </g>
     <path :style="lineStyle" :opacity="lineOpacity" :d="d" />
     <g
-      :opacity="selectedWell.wellName ? lineOpacity : 0"
+      :opacity="showWellInfo()"
     >
       <rect
         fill="#5B5959"
@@ -69,6 +68,9 @@ export default {
   },
   computed: {
     ...mapState('hover', ['dataSlope', 'dataWell', 'bbox', 'lineOpacity']),
+    bitFilterLines() {
+      return this.$store.getters.bitFilterLines;
+    },
     d() {
       return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
     },
@@ -120,6 +122,16 @@ export default {
         bbox: d3.select('#hour-label-text').node().getBBox(),
       };
       this.$store.dispatch('hover/updateHover', payload);
+    },
+    showWellInfo() {
+      const well = this.bitFilterLines
+        .find(bitFilterWell => bitFilterWell.wellName === this.selectedWell.wellName);
+      const maxDepth = well ? well.maxDepth : -Infinity;
+      const minDepth = well ? well.minDepth : Infinity;
+      return (
+        this.selectedWell.wellName &&
+        this.dataWell.startDepth <= maxDepth &&
+        this.dataWell.startDepth >= minDepth ? this.lineOpacity : 0);
     },
     showVisible() {
       this.$store.dispatch('hover/showVisible');

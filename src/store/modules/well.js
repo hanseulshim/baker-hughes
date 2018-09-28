@@ -29,6 +29,35 @@ export default {
     },
   },
   getters: {
+    bitFilterLines: (state, getters) => getters.combinedWells.wellList.map((well) => {
+      const filterLine = [];
+      if (state.currentBitFilter.id === 'all') {
+        filterLine.push(...well.benchmarkInputByPortionInfo);
+      } else if (state.currentBitFilter.id === 'last') {
+        const filterDepth = well.drillBits[well.drillBits.length - 1].depthIn;
+        filterLine.push(...well.benchmarkInputByPortionInfo
+          .filter(depth => depth.startDepth >= filterDepth));
+      } else if (state.currentBitFilter.id - 1 >= well.drillBits.length) {
+        filterLine.push();
+      } else {
+        const drillBitIndex = state.currentBitFilter.id - 1;
+        const drillBitLastIndex = state.currentBitFilter.id;
+        const filterDepth = well.drillBits[drillBitIndex].depthIn;
+        const filterDepthLast = well.drillBits.length === state.currentBitFilter.id ?
+          Infinity : well.drillBits[drillBitLastIndex].depthIn;
+        filterLine.push(...well.benchmarkInputByPortionInfo
+          .filter(depth =>
+            depth.startDepth >= filterDepth && depth.startDepth <= filterDepthLast,
+          ));
+      }
+      return {
+        filterLine,
+        wellName: well.wellName,
+        color: well.color,
+        minDepth: Math.min(...filterLine.map(filterWell => filterWell.startDepth)),
+        maxDepth: Math.max(...filterLine.map(filterWell => filterWell.startDepth)),
+      };
+    }),
     splitData: (state, getters) => {
       const splitArray = [];
       const indexArray = [];

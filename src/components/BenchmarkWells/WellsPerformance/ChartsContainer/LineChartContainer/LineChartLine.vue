@@ -1,10 +1,10 @@
 <template>
   <g class='lines'>
     <path
-      v-for="(well, index) in wellList"
+      v-for="(well, index) in bitFilterLines"
       :key="`${index}-line-section`"
       :style="lineStyle"
-      :d="drawLine(well)"
+      :d="drawLine(well.filterLine)"
       :stroke="well.color"
       :opacity="!selectedWell.wellName || well.wellName === selectedWell.wellName ? 1 : 0.2"
     />
@@ -68,28 +68,10 @@ export default {
     };
   },
   methods: {
-    drawLine(well) {
+    drawLine(filterLine) {
       const path = d3.line()
         .x(d => this.scale.x(d.drilledHours))
         .y(d => this.scale.y(d.startDepth));
-      const filterLine = [];
-      if (this.currentBitFilter.id === 'all') {
-        filterLine.push(...well.benchmarkInputByPortionInfo);
-      } else if (this.currentBitFilter.id === 'last') {
-        const filterDepth = well.drillBits[well.drillBits.length - 1].depthIn;
-        filterLine.push(...well.benchmarkInputByPortionInfo
-          .filter(depth => depth.startDepth >= filterDepth));
-      } else if (this.currentBitFilter.id - 1 >= well.drillBits.length) {
-        return path([]);
-      } else {
-        const drillBitIndex = this.currentBitFilter.id - 1;
-        const drillBitLastIndex = this.currentBitFilter.id;
-        const filterDepth = well.drillBits[drillBitIndex].depthIn;
-        const filterDepthLast = well.drillBits.length === this.currentBitFilter.id ?
-          Infinity : well.drillBits[drillBitLastIndex].depthIn;
-        filterLine.push(...well.benchmarkInputByPortionInfo
-          .filter(depth => depth.startDepth >= filterDepth && depth.startDepth <= filterDepthLast));
-      }
       return path(filterLine);
     },
     findBisect(depthIn, lineData) {
@@ -108,6 +90,9 @@ export default {
     },
   },
   computed: {
+    bitFilterLines() {
+      return this.$store.getters.bitFilterLines;
+    },
     currentBitFilter() {
       return this.$store.state.well.currentBitFilter;
     },
@@ -116,9 +101,6 @@ export default {
     },
     selectedWell() {
       return this.$store.state.well.selectedWell;
-    },
-    wellList() {
-      return this.$store.getters.combinedWells.wellList;
     },
   },
   watch: {
