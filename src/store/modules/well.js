@@ -30,15 +30,22 @@ export default {
   },
   getters: {
     bitFilterLines: (state, getters) => getters.combinedWells.wellList.map((well) => {
+      const filteredSlopeData =
+        getters.combinedSlopeData.filter(slope => slope.well === well.wellName);
       const filterLine = [];
+      const filterSlope = [];
       if (state.currentBitFilter.id === 'all') {
         filterLine.push(...well.benchmarkInputByPortionInfo);
+        filterSlope.push(...filteredSlopeData);
       } else if (state.currentBitFilter.id === 'last') {
         const filterDepth = well.drillBits[well.drillBits.length - 1].depthIn;
         filterLine.push(...well.benchmarkInputByPortionInfo
           .filter(depth => depth.startDepth >= filterDepth));
+        filterSlope.push(...filteredSlopeData
+          .filter(depth => depth.cumulativeDepth >= filterDepth));
       } else if (state.currentBitFilter.id - 1 >= well.drillBits.length) {
         filterLine.push();
+        filterSlope.push();
       } else {
         const drillBitIndex = state.currentBitFilter.id - 1;
         const drillBitLastIndex = state.currentBitFilter.id;
@@ -49,9 +56,14 @@ export default {
           .filter(depth =>
             depth.startDepth >= filterDepth && depth.startDepth <= filterDepthLast,
           ));
+        filterSlope.push(...filteredSlopeData
+          .filter(depth =>
+            depth.cumulativeDepth >= filterDepth && depth.cumulativeDepth <= filterDepthLast,
+          ));
       }
       return {
         filterLine,
+        filterSlope,
         wellName: well.wellName,
         color: well.color,
         minDepth: Math.min(...filterLine.map(filterWell => filterWell.startDepth)),
