@@ -26,6 +26,13 @@ export default {
     });
     return splitArray;
   },
-  combinedSlopeData: () => dataSlope,
+  combinedSlopeData: (state, getters) => dataSlope.map((slope) => {
+    const foundWell = getters.combinedWells.wellList.find(well => well.wellName === slope.well);
+    const depth = foundWell ? foundWell.benchmarkInputByPortionInfo[0].startDepth : 0;
+    return {
+      ...slope,
+      cumulativeDepth: slope.cumulativeDepth + depth,
+    };
+  }),
 };
 
