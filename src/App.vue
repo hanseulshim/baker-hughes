@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     validatePassword(password) {
-      this.validated = password === 'bakerhughes0.1';
+      this.validated = password === 'bakerhughes2018';
     },
   },
 };
