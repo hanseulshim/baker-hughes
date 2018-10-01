@@ -1,6 +1,7 @@
 <template>
   <div class="chart-container" ref="container">
     <info />
+    <well-detail />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
         <bubble-chart-label
@@ -29,20 +30,22 @@
 
 <script>
 import * as d3 from 'd3';
-import Info from './Info';
 import BubbleChartAxis from './BubbleChartAxis';
 import BubbleChartBubbles from './BubbleChartBubbles';
 import BubbleChartLabel from './BubbleChartLabel';
 import BubbleChartLegend from './BubbleChartLegend';
+import Info from './Info';
+import WellDetail from './WellDetail';
 
 export default {
   name: 'bubble-chart-container',
   components: {
-    Info,
     BubbleChartAxis,
     BubbleChartBubbles,
     BubbleChartLabel,
     BubbleChartLegend,
+    Info,
+    WellDetail,
   },
   data() {
     return {
@@ -132,4 +135,5 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
+  position: relative
 </style>
