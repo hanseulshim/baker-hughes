@@ -18,9 +18,6 @@
           :layout="layout"
           :scale="scale"
         />
-        <benchmark-line
-          :scale="scale"
-        />
         <line-chart-line
           :layout="layout"
           :scale="scale"
@@ -36,7 +33,6 @@
 
 <script>
 import * as d3 from 'd3';
-import BenchmarkLine from './BenchmarkLine';
 import Info from './Info';
 import LineChartAxis from './LineChartAxis';
 import LineChartFormation from './LineChartFormation';
@@ -47,7 +43,6 @@ import LineChartTooltip from './LineChartTooltip';
 export default {
   name: 'line-chart-container',
   components: {
-    BenchmarkLine,
     Info,
     LineChartAxis,
     LineChartFormation,
@@ -70,7 +65,7 @@ export default {
       layout: {
         width: 650,
         marginRight: 20,
-        marginLeft: 50,
+        marginLeft: 75,
         ...this.verticalLayout,
       },
       axes: ['left', 'top'],
@@ -100,10 +95,7 @@ export default {
       return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
-      return this.$store.getters.xMax;
-    },
-    yMax() {
-      return this.$store.getters.maxDepth;
+      return this.$store.getters.combinedWells.maxTime;
     },
   },
   methods: {

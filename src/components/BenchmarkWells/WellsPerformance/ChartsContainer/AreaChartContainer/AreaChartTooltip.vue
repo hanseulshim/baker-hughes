@@ -2,7 +2,7 @@
   <g>
     <path :style="lineStyle" :opacity="lineOpacity" :d="d" />
     <g
-      :opacity="lineOpacity"
+      :opacity="showWellInfo()"
     >
       <rect
         fill="#5B5959"
@@ -19,6 +19,8 @@
       >
         Slope Diff: {{slopeDiff}}
       </text>
+    </g>
+    <g :opacity="lineOpacity">
       <rect
         fill="#FFF"
         :height="20"
@@ -50,7 +52,7 @@
 <script>
 import * as d3 from 'd3';
 import numeral from 'numeral';
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'area-chart-tooltip',
@@ -78,18 +80,31 @@ export default {
     };
   },
   computed: {
-    ...mapState('hover', ['dataBenchmark', 'dataSlope', 'dataWell', 'bboxSlope', 'lineOpacity']),
-    ...mapGetters({
-      benchmarks: 'benchmarks',
-      lineData: 'wellData',
-      slopeData: 'slopeData',
-    }),
+    ...mapState('hover', ['dataSlope', 'dataWell', 'bboxSlope', 'lineOpacity']),
+    bitFilterLines() {
+      return this.$store.getters.bitFilterLines;
+    },
     d() {
       return `M${0},${this.wellCoords.y} ${this.layout.width},${this.wellCoords.y}`;
+    },
+    lineData() {
+      return this.$store.state.well.selectedWell.wellName ?
+        this.$store.state.well.selectedWell.benchmarkInputByPortionInfo :
+        this.$store.getters.wellData;
     },
     depth() {
       return this.dataSlope.cumulativeDepth < this.lineData[0].startDepth ?
         this.dataSlope.cumulativeDepth : this.dataWell.startDepth;
+    },
+    selectedWell() {
+      return this.$store.state.well.selectedWell;
+    },
+    slopeData() {
+      return this.$store.getters.combinedSlopeData
+        .filter(slope => (
+          this.$store.state.well.selectedWell.wellName ?
+            this.$store.state.well.selectedWell.wellName === slope.well :
+            this.$store.state.well.currentWell.wellName === slope.well));
     },
     slopeDiff() {
       return numeral(this.dataSlope.running_average_gradient_diff).format('0.000');
@@ -121,18 +136,25 @@ export default {
       const bisectorSlope = d3.bisector(d => d.cumulativeDepth).left;
       const indexWell = bisector(this.lineData, yValue) === this.lineData.length ?
         bisector(this.lineData, yValue) - 1 : bisector(this.lineData, yValue);
-      const indexBenchmark = bisector(this.benchmarks, yValue) === this.benchmarks.length ?
-        bisector(this.benchmarks, yValue) - 1 : bisector(this.benchmarks, yValue);
       const indexSlope = bisectorSlope(this.slopeData, yValue) === this.slopeData.length ?
         bisectorSlope(this.slopeData, yValue) - 1 : bisectorSlope(this.slopeData, yValue);
       const payload = {
         dataWell: this.lineData[indexWell],
-        dataBenchmark: this.benchmarks[indexBenchmark],
         dataSlope: this.slopeData[indexSlope],
         bboxSlope: d3.select('#hour-label-slope').node().getBBox(),
         bbox: d3.select('#hour-label-text').node().getBBox(),
       };
       this.$store.dispatch('hover/updateHover', payload);
+    },
+    showWellInfo() {
+      const well = this.bitFilterLines
+        .find(bitFilterWell => bitFilterWell.wellName === this.selectedWell.wellName);
+      const maxDepth = well ? well.maxDepth : -Infinity;
+      const minDepth = well ? well.minDepth : Infinity;
+      return (
+        this.selectedWell.wellName &&
+        this.dataWell.startDepth <= maxDepth &&
+        this.dataWell.startDepth >= minDepth ? this.lineOpacity : 0);
     },
     showVisible() {
       this.$store.dispatch('hover/showVisible');

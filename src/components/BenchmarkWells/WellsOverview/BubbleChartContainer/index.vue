@@ -1,31 +1,25 @@
 <template>
   <div class="chart-container" ref="container">
     <info />
+    <well-detail />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <line-chart-formation
+        <bubble-chart-label
           :layout="layout"
           :scale="scale"
         />
-        <line-chart-label
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-axis
+        <bubble-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
           :layout="layout"
           :scale="scale"
         />
-        <benchmark-line
-          :scale="scale"
-        />
-        <line-chart-line
+        <bubble-chart-bubbles
           :layout="layout"
           :scale="scale"
         />
-        <line-chart-tooltip
+        <bubble-chart-legend
           :layout="layout"
           :scale="scale"
         />
@@ -36,42 +30,32 @@
 
 <script>
 import * as d3 from 'd3';
-import BenchmarkLine from './BenchmarkLine';
+import BubbleChartAxis from './BubbleChartAxis';
+import BubbleChartBubbles from './BubbleChartBubbles';
+import BubbleChartLabel from './BubbleChartLabel';
+import BubbleChartLegend from './BubbleChartLegend';
 import Info from './Info';
-import LineChartAxis from './LineChartAxis';
-import LineChartFormation from './LineChartFormation';
-import LineChartLabel from './LineChartLabel';
-import LineChartLine from './LineChartLine';
-import LineChartTooltip from './LineChartTooltip';
+import WellDetail from './WellDetail';
 
 export default {
-  name: 'line-chart-container',
+  name: 'bubble-chart-container',
   components: {
-    BenchmarkLine,
+    BubbleChartAxis,
+    BubbleChartBubbles,
+    BubbleChartLabel,
+    BubbleChartLegend,
     Info,
-    LineChartAxis,
-    LineChartFormation,
-    LineChartLabel,
-    LineChartLine,
-    LineChartTooltip,
-  },
-  props: {
-    verticalLayout: {
-      type: Object,
-      required: true,
-    },
-    yScale: {
-      type: Function,
-      required: true,
-    },
+    WellDetail,
   },
   data() {
     return {
       layout: {
-        width: 650,
+        width: 800,
+        height: 400,
         marginRight: 20,
-        marginLeft: 50,
-        ...this.verticalLayout,
+        marginLeft: 75,
+        marginTop: 30,
+        marginBottom: 50,
       },
       axes: ['left', 'top'],
     };
@@ -82,14 +66,21 @@ export default {
   computed: {
     scale() {
       return {
+        r: this.getScaleR(),
         x: this.getScaleX(),
-        y: this.yScale(),
+        y: this.getScaleY(),
       };
     },
     stageStyle() {
       return {
         transform: `translate(${this.layout.marginLeft}px, ${this.layout.marginTop}px)`,
       };
+    },
+    rMax() {
+      return this.$store.getters.combinedWells.maxCost;
+    },
+    rMin() {
+      return this.$store.getters.combinedWells.minCost;
     },
     viewBox() {
       const outerWidth = this.layout.width + this.layout.marginLeft + this.layout.marginRight;
@@ -100,18 +91,31 @@ export default {
       return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
-      return this.$store.getters.xMax;
+      return this.$store.getters.combinedWells.maxTime;
     },
     yMax() {
-      return this.$store.getters.maxDepth;
+      return this.$store.getters.combinedWells.maxDepth;
+    },
+    yMin() {
+      return this.$store.getters.combinedWells.minDepth;
     },
   },
   methods: {
+    getScaleR() {
+      return d3.scaleSqrt()
+        .domain([this.rMin, this.rMax])
+        .range([10, 40]);
+    },
     getScaleX() {
       return d3.scaleLinear()
         .domain([0, this.xMax * 1.25])
         .range([0, this.layout.width])
         .nice();
+    },
+    getScaleY() {
+      return d3.scaleLinear()
+        .domain([this.yMin * 0.99, this.yMax * 1.02])
+        .range([0, this.layout.height]);
     },
   },
   watch: {
@@ -131,4 +135,5 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
+  position: relative
 </style>

@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <well-data />
+    <benchmark-wells />
+    <!-- <well-data /> -->
     <!-- <well-data v-if="validated" />
     <password
       v-else
@@ -11,7 +12,7 @@
 
 <script>
 import Password from './components/Password';
-import WellData from './components/WellData';
+import BenchmarkWells from './components/BenchmarkWells';
 
 export default {
   name: 'app',
@@ -22,7 +23,7 @@ export default {
   },
   components: {
     Password,
-    WellData,
+    BenchmarkWells,
   },
   methods: {
     validatePassword(password) {

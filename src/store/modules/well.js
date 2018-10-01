@@ -1,16 +1,75 @@
+
 import dataPhantom from '../../data/dataPhantom.json';
 
 export default {
   state: {
+    currentBitFilter: {
+      id: 'all',
+      label: 'Show All Bits',
+    },
     currentWell: dataPhantom.includedWells[0],
-    wellList: dataPhantom.includedWells,
+    selectedWell: { wellName: '' },
+    benchmarkName: dataPhantom.name,
   },
   actions: {
-    updateCurrentWell(context, well) {
-      context.commit('updateCurrentWell', well);
+    updateCurrentWell(context, payload) {
+      const currentWell = context.getters.combinedWells.wellList
+        .find(well => well.id === payload.id);
+      context.commit('updateCurrentWell', currentWell);
+    },
+    updateSelectedWell(context, payload) {
+      const unselect = context.state.selectedWell.wellName === payload;
+      const selectedWell = unselect ? { wellName: '' } :
+        context.getters.combinedWells.wellList
+          .find(well => well.wellName === payload);
+      context.commit('updateSelectedWell', selectedWell);
+    },
+    updateBitFilter(context, bitFilter) {
+      context.commit('updateBitFilter', bitFilter);
     },
   },
   getters: {
+    bitFilterLines: (state, getters) => getters.combinedWells.wellList.map((well) => {
+      const filteredSlopeData =
+        getters.combinedSlopeData.filter(slope => slope.well === well.wellName);
+      const filterLine = [];
+      const filterSlope = [];
+      if (state.currentBitFilter.id === 'all') {
+        filterLine.push(...well.benchmarkInputByPortionInfo);
+        filterSlope.push(...filteredSlopeData);
+      } else if (state.currentBitFilter.id === 'last') {
+        const filterDepth = well.drillBits[well.drillBits.length - 1].depthIn;
+        filterLine.push(...well.benchmarkInputByPortionInfo
+          .filter(depth => depth.startDepth >= filterDepth));
+        filterSlope.push(...filteredSlopeData
+          .filter(depth => depth.cumulativeDepth >= filterDepth));
+      } else if (state.currentBitFilter.id - 1 >= well.drillBits.length) {
+        filterLine.push();
+        filterSlope.push();
+      } else {
+        const drillBitIndex = state.currentBitFilter.id - 1;
+        const drillBitLastIndex = state.currentBitFilter.id;
+        const filterDepth = well.drillBits[drillBitIndex].depthIn;
+        const filterDepthLast = well.drillBits.length === state.currentBitFilter.id ?
+          Infinity : well.drillBits[drillBitLastIndex].depthIn;
+        filterLine.push(...well.benchmarkInputByPortionInfo
+          .filter(depth =>
+            depth.startDepth >= filterDepth && depth.startDepth <= filterDepthLast,
+          ));
+        filterSlope.push(...filteredSlopeData
+          .filter(depth =>
+            depth.cumulativeDepth >= filterDepth && depth.cumulativeDepth <= filterDepthLast,
+          ));
+      }
+      return {
+        filterLine,
+        filterSlope,
+        wellName: well.wellName,
+        color: well.color,
+        minDepth: Math.min(...filterLine.map(filterWell => filterWell.startDepth)),
+        maxDepth: Math.max(...filterLine.map(filterWell => filterWell.startDepth)),
+      };
+    }),
     splitData: (state, getters) => {
       const splitArray = [];
       const indexArray = [];
@@ -50,10 +109,51 @@ export default {
         };
       });
     },
+    combinedWells: (state, getters, rootState) => {
+      const depthArray = [];
+      const timeArray = [];
+      const costArray = [];
+      const bitArray = [];
+      const wellList = dataPhantom.includedWells.map((well, index) => {
+        const maxDepth =
+          Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.startDepth));
+        const maxTime = Math.round(
+          Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.drilledHours)));
+        const maxCost = maxTime * rootState.options.operatingCost;
+        const sortedDrillBits = well.drillBits.sort((a, b) => a.depthIn - b.depthIn);
+        depthArray.push(maxDepth);
+        timeArray.push(maxTime);
+        costArray.push(maxCost);
+        bitArray.push(well.drillBits.length);
+        return {
+          maxDepth,
+          maxTime,
+          maxCost,
+          color: rootState.chartInfo.colors.benchmarkName[index],
+          drillBits: sortedDrillBits,
+          ...well,
+        };
+      });
+      return {
+        wellList,
+        maxDepth: Math.max(...depthArray),
+        minDepth: Math.min(...depthArray),
+        maxTime: Math.max(...timeArray),
+        maxCost: Math.max(...costArray),
+        minCost: Math.min(...costArray),
+        maxBitLength: Math.max(...bitArray),
+      };
+    },
   },
   mutations: {
     updateCurrentWell(state, payload) {
-      state.currentWell = state.wellList.find(well => well.id === payload.id);
+      state.currentWell = payload;
+    },
+    updateSelectedWell(state, payload) {
+      state.selectedWell = payload;
+    },
+    updateBitFilter(state, payload) {
+      state.currentBitFilter = payload;
     },
   },
 };

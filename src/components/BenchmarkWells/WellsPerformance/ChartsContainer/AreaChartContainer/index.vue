@@ -3,29 +3,23 @@
     <info />
     <svg :view-box.camel="viewBox" preserveAspectRatio="xMidYMid meet">
       <g :style="stageStyle">
-        <line-chart-formation
+        <area-chart-line
+          :layout="layout"
+          :scale="scale"
+          :xDomain="xDomain"
+        />
+        <area-chart-label
           :layout="layout"
           :scale="scale"
         />
-        <line-chart-label
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-axis
+        <area-chart-axis
           v-for="(axis, index) in axes"
           :key="index + axis"
           :axis="axis"
           :layout="layout"
           :scale="scale"
         />
-        <benchmark-line
-          :scale="scale"
-        />
-        <line-chart-line
-          :layout="layout"
-          :scale="scale"
-        />
-        <line-chart-tooltip
+        <area-chart-tooltip
           :layout="layout"
           :scale="scale"
         />
@@ -36,24 +30,20 @@
 
 <script>
 import * as d3 from 'd3';
-import BenchmarkLine from './BenchmarkLine';
+import AreaChartAxis from './AreaChartAxis';
+import AreaChartLabel from './AreaChartLabel';
+import AreaChartLine from './AreaChartLine';
+import AreaChartTooltip from './AreaChartTooltip';
 import Info from './Info';
-import LineChartAxis from './LineChartAxis';
-import LineChartFormation from './LineChartFormation';
-import LineChartLabel from './LineChartLabel';
-import LineChartLine from './LineChartLine';
-import LineChartTooltip from './LineChartTooltip';
 
 export default {
-  name: 'line-chart-container',
+  name: 'area-chart-container',
   components: {
-    BenchmarkLine,
+    AreaChartAxis,
+    AreaChartLabel,
+    AreaChartLine,
+    AreaChartTooltip,
     Info,
-    LineChartAxis,
-    LineChartFormation,
-    LineChartLabel,
-    LineChartLine,
-    LineChartTooltip,
   },
   props: {
     verticalLayout: {
@@ -67,13 +57,17 @@ export default {
   },
   data() {
     return {
+      axes: ['left', 'top'],
       layout: {
-        width: 650,
-        marginRight: 20,
-        marginLeft: 50,
+        width: 150,
+        marginRight: 50,
+        marginLeft: 20,
         ...this.verticalLayout,
       },
-      axes: ['left', 'top'],
+      xDomain: {
+        min: -0.01,
+        max: 0.025,
+      },
     };
   },
   mounted() {
@@ -100,18 +94,14 @@ export default {
       return `${this.layout.width + this.layout.marginLeft + this.layout.marginRight}px`;
     },
     xMax() {
-      return this.$store.getters.xMax;
-    },
-    yMax() {
-      return this.$store.getters.maxDepth;
+      return this.$store.getters.maxSlope;
     },
   },
   methods: {
     getScaleX() {
       return d3.scaleLinear()
-        .domain([0, this.xMax * 1.25])
-        .range([0, this.layout.width])
-        .nice();
+        .domain([this.xDomain.min, this.xDomain.max])
+        .range([0, this.layout.width]);
     },
   },
   watch: {
@@ -125,10 +115,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass">
-.chart-container
-  display: flex
-  flex-direction: column
-  align-items: center
-</style>
