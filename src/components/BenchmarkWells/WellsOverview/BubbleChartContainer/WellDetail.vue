@@ -94,6 +94,8 @@ export default {
   background: #F8F8F8
   padding: 1em
   width: 250px
+  max-height: 350px
+  overflow: auto
 .well-detail-title-container
   display: flex
   font-weight: bold
