@@ -17,7 +17,7 @@ export default {
     },
     updateHover(state, payload) {
       Object.keys(payload).forEach((key) => {
-        state[key] = payload[key];
+        state[key] = payload[key] ? payload[key] : state[key];
       });
     },
   },
