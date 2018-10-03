@@ -48,7 +48,7 @@ export default {
   name: 'well-detail',
   data() {
     return {
-      expanded: true,
+      expanded: false,
       infoList: [
         {
           label: 'Location',
