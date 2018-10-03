@@ -133,9 +133,8 @@ export default {
   left: 4%
   background: #FDFDFD
   padding: 1em
-  width: 350px
-  max-height: 350px
-  opacity: .8
+  width: 300px
+  opacity: .9
   z-index: 1
   overflow: auto
 .well-detail-title-container
