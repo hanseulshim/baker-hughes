@@ -7,6 +7,7 @@ export default {
       id: 'all',
       label: 'Show All Bits',
     },
+    benchmarkWellsDetails: dataPhantom,
     currentWell: dataPhantom.includedWells[0],
     selectedWell: { wellName: '' },
     benchmarkName: dataPhantom.name,
