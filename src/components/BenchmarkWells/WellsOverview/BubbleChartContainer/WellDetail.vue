@@ -111,6 +111,7 @@ export default {
   display: flex
   justify-content: space-between
   margin-top: .5em
+  font-size: 85%
   .well-detail-list-label
     font-weight: bold
 .well-detail-bit-container
@@ -118,6 +119,7 @@ export default {
   border-top: 1px solid #C1C1C1
 .well-detail-bit-section
   margin-top: 1em
+  font-size: 85%
   .well-detail-bit-line
     display: flex
     justify-content: space-between
