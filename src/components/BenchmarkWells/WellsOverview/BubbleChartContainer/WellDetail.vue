@@ -42,7 +42,9 @@
         <div class="well-detail-bit-line">
           <span>Dull grade</span>
           <div class="well-detail-bit-line-dull-grade">
-            <span>{{bit.otherDullCharacteristics}}</span>
+            <span>{{bit.innerRows}}</span>
+            <span>{{bit.outerRows}}</span>
+            <span>{{bit.dullCharacteristics}}</span>
             <span>{{bit.reasonPulled}}</span>
           </div>
         </div>
