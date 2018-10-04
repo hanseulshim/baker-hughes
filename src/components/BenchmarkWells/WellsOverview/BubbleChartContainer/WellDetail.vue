@@ -42,7 +42,9 @@
         <div class="well-detail-bit-line">
           <span>Dull grade</span>
           <div class="well-detail-bit-line-dull-grade">
-            <span>{{bit.otherDullCharacteristics}}</span>
+            <span>{{bit.innerRows}}</span>
+            <span>{{bit.outerRows}}</span>
+            <span>{{bit.dullCharacteristics}}</span>
             <span>{{bit.reasonPulled}}</span>
           </div>
         </div>
@@ -94,6 +96,8 @@ export default {
   background: #F8F8F8
   padding: 1em
   width: 250px
+  max-height: 350px
+  overflow: auto
 .well-detail-title-container
   display: flex
   font-weight: bold
@@ -107,6 +111,7 @@ export default {
   display: flex
   justify-content: space-between
   margin-top: .5em
+  font-size: 85%
   .well-detail-list-label
     font-weight: bold
 .well-detail-bit-container
@@ -114,6 +119,7 @@ export default {
   border-top: 1px solid #C1C1C1
 .well-detail-bit-section
   margin-top: 1em
+  font-size: 85%
   .well-detail-bit-line
     display: flex
     justify-content: space-between

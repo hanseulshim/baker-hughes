@@ -7,6 +7,7 @@ export default {
       id: 'all',
       label: 'Show All Bits',
     },
+    benchmarkWellsDetails: dataPhantom,
     currentWell: dataPhantom.includedWells[0],
     selectedWell: { wellName: '' },
     benchmarkName: dataPhantom.name,
@@ -121,6 +122,10 @@ export default {
           Math.max(...well.benchmarkInputByPortionInfo.map(portion => portion.drilledHours)));
         const maxCost = maxTime * rootState.options.operatingCost;
         const sortedDrillBits = well.drillBits.sort((a, b) => a.depthIn - b.depthIn);
+        const coord = {
+          lat: parseFloat(well.latitude, 10),
+          lng: parseFloat(well.longitude, 10),
+        };
         depthArray.push(maxDepth);
         timeArray.push(maxTime);
         costArray.push(maxCost);
@@ -131,6 +136,7 @@ export default {
           maxCost,
           color: rootState.chartInfo.colors.benchmarkName[index],
           drillBits: sortedDrillBits,
+          coord,
           ...well,
         };
       });
