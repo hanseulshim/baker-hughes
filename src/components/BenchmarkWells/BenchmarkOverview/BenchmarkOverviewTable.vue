@@ -85,6 +85,9 @@ table.v-table
       border-bottom: 1px solid #5B5959 !important
     th
       font-weight: bold
+  tbody
+    td
+      height: 35px
 .active-well
   background: #ECECEC
 </style>
