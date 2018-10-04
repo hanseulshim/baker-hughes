@@ -2,7 +2,8 @@
   <v-data-table
     :headers="headers"
     :items="benchmarkNamesTable"
-    hide-actions
+    :rows-per-page-items="[10, 15, 20]"
+    rows-per-page-text="Wells per page:"
   >
     <template slot="items" slot-scope="props">
       <tr
