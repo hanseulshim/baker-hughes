@@ -1,8 +1,8 @@
 <template>
   <div class="benchmark-wells-section-container">
-    <benchmark-overview-title />
+    <benchmark-overview-title class="wells-section-spacer" />
     <benchmark-overview-map />
-    <benchmark-overview-table />
+    <benchmark-overview-table class="wells-section-spacer" />
   </div>
 </template>
 
@@ -24,4 +24,6 @@ export default {
 <style lang="sass">
 .benchmark-wells-section-container
   margin-top: 2em
+.wells-section-spacer
+  padding: 0 2em
 </style>

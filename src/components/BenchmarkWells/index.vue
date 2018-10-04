@@ -37,5 +37,7 @@ export default {
 #benchmark-name-container
   margin: 5% auto
 .charts-container
-  padding: 0 1em
+  padding: 0
+  .v-card__text
+    padding: 0
 </style>

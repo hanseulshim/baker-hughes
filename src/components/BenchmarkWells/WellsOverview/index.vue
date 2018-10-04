@@ -1,5 +1,5 @@
 <template>
-  <div class="benchmark-wells-section-container">
+  <div class="benchmark-wells-section-container wells-section-spacer">
     <div class="benchmark-wells-section-title">
       Wells Overview
     </div>
