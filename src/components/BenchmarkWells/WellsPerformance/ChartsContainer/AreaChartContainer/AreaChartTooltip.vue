@@ -112,7 +112,7 @@ export default {
     wellCoords() {
       return {
         x: this.scale.x(this.dataSlope.running_average_gradient_diff),
-        y: this.scale.y(this.depth),
+        y: this.scale.y(this.dataWell.startDepth),
       };
     },
   },
@@ -153,6 +153,7 @@ export default {
       const minDepth = well ? well.minDepth : Infinity;
       return (
         this.selectedWell.wellName &&
+        well.wellName === this.dataSlope.well &&
         this.dataWell.startDepth <= maxDepth &&
         this.dataWell.startDepth >= minDepth ? this.lineOpacity : 0);
     },
