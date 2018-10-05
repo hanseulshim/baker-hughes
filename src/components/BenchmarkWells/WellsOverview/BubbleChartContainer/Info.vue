@@ -9,7 +9,8 @@
             <i class="material-icons info-icon">info_outline</i>
             Time (hrs.) vs. Depth
           </div>
-          <div class="info-text">{{info}}</div>
+          <div class="info-text">{{info1}}</div>
+          <div class="info-text">{{info2}}</div>
         </v-card-text>
       </v-card>
     </v-menu>
@@ -21,7 +22,8 @@ export default {
   name: 'bubble-chart-info',
   data() {
     return {
-      info: 'This chart is plotted every 20 ft using bit sensor data. It shows the time (x-axis) the selected well took to reach each depth (y-axis.) Bit pull time was added to the bit data in the chart based on user input, “Trip Rate.” The grey “Benchmark Well” line combines the best 20 ft increment among all wells in the benchmark group into one line for comparison.',
+      info1: 'This chart reveals the efficiency of given wells within this benchmark across three measures. It shows the total time the well took (x-axis) and the total depth achieved (y-axis). The size of the bubble represents the estimated cost in $USD for the well.',
+      info2: 'If you click a well, additional data is revealed for that well including the above three metrics, as well as the depth that each bit used was pulled, and what the dull grade measures were. The dull grade measures include InnerRow count, OuterRow count, Dull Characteristics, and Reason Pulled.',
     };
   },
 };
