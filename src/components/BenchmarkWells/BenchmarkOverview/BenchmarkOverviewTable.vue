@@ -59,7 +59,7 @@ export default {
         time: numeral(well.maxTime).format('0,a'),
         cost: numeral(well.maxCost).format('0a'),
         efficiency: well.efficiencyScore,
-        link: 'https://www.google.com',
+        link: 'https://s3.amazonaws.com/beta.boostlabs/BakerHughes/0.1/index.html',
       }));
     },
     colors() {
